@@ -409,7 +409,11 @@ body { font-family:'Noto Sans KR',sans-serif; background:var(--light); color:var
       <div id="reportDone" class="hidden" style="padding:16px 0;text-align:center">
         <div style="font-size:36px;margin-bottom:10px">✅</div>
         <h3 style="color:var(--green);font-size:16px;margin-bottom:6px">리포트 신청이 완료되었습니다!</h3>
-        <p style="font-size:13px;color:#4A5568;line-height:1.6">입력하신 이메일로 맞춤 연금분석 리포트를<br>보내드리겠습니다.</p>
+        <p style="font-size:14px;color:#4A5568;line-height:1.8">
+          <strong>카카오톡 알림톡</strong>으로 맞춤 연금분석 리포트를<br>발송해 드립니다.<br><br>
+          📱 카카오톡을 확인해 주세요!<br>
+          <span style="font-size:12px;color:var(--gray)">(1~2분 내 금융집짓기 채널에서 도착합니다)</span>
+        </p>
       </div>
     </div>
 
@@ -471,7 +475,6 @@ function analyze() {
   const yearsToRetire = Math.max(retireAge - age, 1);
   const retireYears = Math.max(lifeExpect - retireAge, 1);
 
-  // 국민연금
   let nationalPension = npAmount;
   if (nationalPension === 0) {
     const npYears = parseInt(document.getElementById('npYears').value) || Math.max(age - 27, 0);
@@ -479,12 +482,10 @@ function analyze() {
     nationalPension = Math.round(income * 0.4 * Math.min(totalNpYears / 40, 1) * 0.5);
   }
 
-  // 퇴직연금
   const rpTotal = rpBalance + (rpMonthly * yearsToRetire * 12);
   const rpFutureValue = rpTotal * Math.pow(1.03, yearsToRetire);
   const retirePension = Math.round(rpFutureValue / (retireYears * 12));
 
-  // 개인연금
   const ppTotal = ppBalance + (ppMonthly * yearsToRetire * 12);
   const ppFutureValue = ppTotal * Math.pow(1.04, yearsToRetire);
   const privatePension = Math.round(ppFutureValue / (retireYears * 12));
@@ -492,7 +493,6 @@ function analyze() {
   const totalPension = nationalPension + retirePension + privatePension;
   const gap = Math.max(desired - totalPension, 0);
 
-  // Display
   document.getElementById('step1').classList.add('hidden');
   document.getElementById('step2').classList.add('hidden');
   document.querySelector('.step-indicator').style.display = 'none';
@@ -517,25 +517,24 @@ function analyze() {
   const totalGap = gap * retireYears * 12;
   const replacementRate = Math.round(totalPension / income * 100);
 
-  let insight = `<strong>${name}님</strong>은 현재 월 소득 ${income}만원 대비 은퇴 후 연금 소득은 월 ${totalPension}만원으로, <strong>소득대체율이 ${replacementRate}%</strong>입니다. `;
-  if (replacementRate < 50) { insight += `OECD 권고 소득대체율 70%에 크게 못 미치는 수준입니다. `; }
-  else if (replacementRate < 70) { insight += `OECD 권고 70%에는 아직 미달이지만 나쁘지 않은 수준입니다. `; }
+  let insight = '<strong>' + name + '님</strong>은 현재 월 소득 ' + income + '만원 대비 은퇴 후 연금 소득은 월 ' + totalPension + '만원으로, <strong>소득대체율이 ' + replacementRate + '%</strong>입니다. ';
+  if (replacementRate < 50) { insight += 'OECD 권고 소득대체율 70%에 크게 못 미치는 수준입니다. '; }
+  else if (replacementRate < 70) { insight += 'OECD 권고 70%에는 아직 미달이지만 나쁘지 않은 수준입니다. '; }
   if (gap > 0) {
-    insight += `은퇴 후 ${retireYears}년간 <strong>총 ${(totalGap / 10000).toFixed(1)}억원이 부족</strong>합니다. 지금부터 준비하면 이 격차를 줄일 수 있습니다.`;
+    insight += '은퇴 후 ' + retireYears + '년간 <strong>총 ' + (totalGap / 10000).toFixed(1) + '억원이 부족</strong>합니다. 지금부터 준비하면 이 격차를 줄일 수 있습니다.';
   } else {
-    insight += `현재 준비 상태가 양호합니다! 하지만 물가 상승과 의료비를 고려하면 추가 준비가 필요합니다.`;
+    insight += '현재 준비 상태가 양호합니다! 하지만 물가 상승과 의료비를 고려하면 추가 준비가 필요합니다.';
   }
   document.getElementById('insightText').innerHTML = insight;
 
   const needMonthly = Math.round(gap * retireYears * 12 / (yearsToRetire * 12));
-  let solution = `<strong>지금부터 매월 ${needMonthly}만원</strong>을 추가로 적립하면 은퇴 후 부족분을 충당할 수 있습니다.<br><br>`;
-  solution += `✅ <strong>연금보험</strong>: 세액공제 혜택 + 안정적 노후소득 확보<br>`;
-  solution += `✅ <strong>연금저축/IRP</strong>: 연 최대 900만원 세액공제<br>`;
-  solution += `✅ <strong>자산배분 포트폴리오</strong>: 은퇴까지 ${yearsToRetire}년, 적절한 위험-수익 배분 필요<br><br>`;
-  solution += `<em>정확한 상품 선택과 최적 배분은 전문가 상담에서 진행됩니다.</em>`;
+  let solution = '<strong>지금부터 매월 ' + needMonthly + '만원</strong>을 추가로 적립하면 은퇴 후 부족분을 충당할 수 있습니다.<br><br>';
+  solution += '✅ <strong>연금보험</strong>: 세액공제 혜택 + 안정적 노후소득 확보<br>';
+  solution += '✅ <strong>연금저축/IRP</strong>: 연 최대 900만원 세액공제<br>';
+  solution += '✅ <strong>자산배분 포트폴리오</strong>: 은퇴까지 ' + yearsToRetire + '년, 적절한 위험-수익 배분 필요<br><br>';
+  solution += '<em>정확한 상품 선택과 최적 배분은 전문가 상담에서 진행됩니다.</em>';
   document.getElementById('solutionText').innerHTML = solution;
 
-  // 데이터 저장 (리포트 신청용)
   window._pensionData = {
     name, age, income, retireAge, lifeExpect, desired,
     nationalPension, retirePension, privatePension,
@@ -583,24 +582,6 @@ function submitReport() {
 
   document.getElementById('reportForm').classList.add('hidden');
   document.getElementById('reportDone').classList.remove('hidden');
-
-  // 2초 후 리포트 페이지로 이동
-  const reportUrl = 'pension-report.html?name=' + encodeURIComponent(d.name||'고객')
-    + '&age=' + (d.age||'')
-    + '&income=' + (d.income||'')
-    + '&retire_age=' + (d.retireAge||'')
-    + '&life_expect=' + (d.lifeExpect||'')
-    + '&desired=' + (d.desired||'')
-    + '&np=' + (d.nationalPension||0)
-    + '&rp=' + (d.retirePension||0)
-    + '&pp=' + (d.privatePension||0)
-    + '&total_pension=' + (d.totalPension||0)
-    + '&gap=' + (d.gap||0)
-    + '&rate=' + (d.replacementRate||0)
-    + '&spouse=' + spouse
-    + '&rp_balance=' + (d.rpBalance||0)
-    + '&pp_monthly=' + (d.ppMonthly||0);
-  setTimeout(() => { window.location.href = reportUrl; }, 2000);
 }
 </script>
 </body>
