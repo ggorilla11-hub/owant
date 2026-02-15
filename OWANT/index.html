@@ -6,6 +6,9 @@
 <title>통합연금분석 | 오원트금융연구소</title>
 <meta property="og:title" content="은퇴 후 매달 얼마가 부족할까? 무료 통합연금분석">
 <meta property="og:description" content="국민연금+퇴직연금+개인연금 통합분석으로 노후 준비 상태를 확인하세요">
+<meta property="og:image" content="https://owant.netlify.app/og-pension.png">
+<meta property="og:url" content="https://owant.netlify.app">
+<meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -581,8 +584,7 @@ function submitReport() {
   document.getElementById('reportForm').classList.add('hidden');
   document.getElementById('reportDone').classList.remove('hidden');
 
-  // 3초 후 리포트 페이지로 이동
-  const d = window._pensionData || {};
+  // 2초 후 리포트 페이지로 이동
   const reportUrl = 'pension-report.html?name=' + encodeURIComponent(d.name||'고객')
     + '&age=' + (d.age||'')
     + '&income=' + (d.income||'')
