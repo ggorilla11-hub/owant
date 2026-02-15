@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>금융집짓기® 재무분석 리포트</title>
+<meta property="og:title" content="나의 금융집짓기® 결과">
+<meta property="og:description" content="AI머니야와 함께 부자지수를 확인해보세요!">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
+<style>
+:root {
+  --primary: #6C3CE1;
+  --primary-light: #8B5CF6;
+  --gold: #D4A853;
+  --navy: #0F2B4C;
+  --dark: #1A1A2E;
+  --success: #27AE60;
+  --warning: #F39C12;
+  --danger: #E74C3C;
+  --gray: #8896A7;
+  --light: #F5F7FA;
+  --white: #FFFFFF;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  max-width: 480px;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.report-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: #fff;
+  padding: 36px 22px 28px;
+  text-align: center;
+  position: relative;
+}
+.report-confetti { font-size: 28px; margin-bottom: 8px; }
+.report-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(108,60,225,0.25);
+  border: 1px solid rgba(108,60,225,0.4);
+  color: #A78BFA;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.report-title {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.report-subtitle {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+/* House Card */
+.house-card {
+  background: var(--white);
+  border-radius: 16px;
+  margin: -16px 16px 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  position: relative;
+}
+.house-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+.house-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.house-level-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  padding: 4px 11px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+.house-info { padding: 18px 20px 22px; }
+.house-name { font-size: 24px; font-weight: 900; color: var(--navy); margin-bottom: 5px; }
+.house-score-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, var(--gold), #E8B95A);
+  color: var(--navy);
+  padding: 5px 13px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.house-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #4A5568;
+}
+
+/* Section Card */
+.section-card {
+  background: var(--white);
+  border-radius: 16px;
+  margin: 0 16px 14px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.section-icon.gold { background: #FFF3CD; }
+.section-icon.blue { background: #DBEAFE; }
+.section-icon.green { background: #D1FAE5; }
+.section-title { font-size: 15px; font-weight: 700; color: var(--navy); }
+.section-subtitle { font-size: 11px; color: var(--gray); margin-top: 1px; }
+
+/* Wealth Formula */
+.wealth-formula {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.wealth-formula-title { font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+.wealth-formula-text { font-size: 13px; font-weight: 700; color: var(--navy); }
+
+/* Wealth Grades */
+.wealth-grade {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  transition: all 0.2s;
+}
+.wealth-grade.active {
+  background: var(--primary);
+  color: #fff;
+}
+.wealth-grade-icon { font-size: 20px; flex-shrink: 0; }
+.wealth-grade-info { flex: 1; }
+.wealth-grade-name { font-size: 13px; font-weight: 700; }
+.wealth-grade-range { font-size: 11px; opacity: 0.7; }
+.wealth-grade-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+.wealth-grade.active .wealth-grade-badge {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Debt Bar */
+.debt-bar-wrap { margin: 14px 0; }
+.debt-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.debt-bar-track {
+  height: 12px;
+  background: #EDF2F7;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.debt-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 1.2s ease;
+}
+.debt-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 10px;
+  margin-top: 14px;
+}
+.debt-status.safe { background: #D1FAE5; }
+.debt-status.warning { background: #FEF3C7; }
+.debt-status.danger { background: #FEE2E2; }
+.debt-status-icon { font-size: 22px; flex-shrink: 0; }
+.debt-status-title { font-size: 14px; font-weight: 700; color: var(--navy); }
+.debt-status-desc { font-size: 12px; line-height: 1.6; color: #4A5568; margin-top: 3px; }
+
+/* Budget Table */
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.budget-table th {
+  background: var(--navy);
+  color: #fff;
+  padding: 9px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+}
+.budget-table th:last-child, .budget-table td:last-child { text-align: right; }
+.budget-table th:nth-child(2), .budget-table td:nth-child(2) { text-align: right; }
+.budget-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #EDF2F7;
+}
+.budget-table tr:nth-child(even) { background: #F8FAFC; }
+.budget-table .total-row { font-weight: 700; background: #F0F4FF; }
+
+/* CTA */
+.cta-app {
+  background: linear-gradient(135deg, #6C3CE1, #4C1D95);
+  border-radius: 16px;
+  margin: 0 16px 14px;
+  padding: 26px 20px;
+  text-align: center;
+  color: #fff;
+}
+.cta-app h3 { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+.cta-app p { font-size: 13px; opacity: 0.85; line-height: 1.6; margin-bottom: 18px; }
+.cta-app .btn-app {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--white);
+  color: var(--primary);
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Share */
+.share-bar {
+  display: flex;
+  gap: 10px;
+  margin: 0 16px 14px;
+}
+.share-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+.share-btn.kakao { background: #FEE500; color: #3C1E1E; }
+.share-btn.sms { background: var(--success); color: #fff; }
+.share-btn.copy { background: #E2E8F0; color: var(--navy); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: bottom 0.3s ease;
+  z-index: 999;
+}
+.toast.show { bottom: 30px; }
+
+.footer {
+  text-align: center;
+  padding: 24px 16px 36px;
+  font-size: 11px;
+  color: var(--gray);
+  line-height: 1.8;
+}
+</style>
+</head>
+<body>
+
+<div id="report-wrapper"></div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// 금융주택 데이터
+const houseData = [
+  { level:1, name:'텐트', minScore:0, maxScore:0, image:'https://moneya-frontend.vercel.app/assets/house1-Cg76rqP7.jpg', desc:'아직 금융주택의 기초가 부족합니다. 하지만 걱정하지 마세요! 지금부터 시작하면 충분히 업그레이드할 수 있습니다. 비상예비자금 마련과 부채 정리부터 시작해보세요. 🌱' },
+  { level:2, name:'초가집', minScore:1, maxScore:50, image:'https://moneya-frontend.vercel.app/assets/house2-B1GiF-3L.jpg', desc:'기본적인 금융 기반이 갖춰지기 시작했습니다. 부채를 줄이고 비상예비자금을 마련하는 것이 우선입니다. 꾸준한 저축 습관이 중요해요! 🌱' },
+  { level:3, name:'한옥', minScore:51, maxScore:100, image:'https://moneya-frontend.vercel.app/assets/house3-CiiNxUBf.jpg', desc:'안정적인 재무 기반을 갖추셨습니다! 저축률을 조금 더 높이고 투자를 시작하면 양옥으로 업그레이드할 수 있어요. 🏠' },
+  { level:4, name:'양옥', minScore:101, maxScore:200, image:'https://moneya-frontend.vercel.app/assets/house4-ywz7gWNQ.jpg', desc:'훌륭한 재무 상태입니다! 체계적인 투자와 절세 전략으로 궁전을 향해 나아가세요. 파이어족도 꿈이 아닙니다! 🌟' },
+  { level:5, name:'궁전', minScore:201, maxScore:99999, image:'https://moneya-frontend.vercel.app/assets/house5-CLgrT-Xl.jpg', desc:'진정한 부자입니다! 토마스 스탠리 교수 기준 상위 부자에 해당합니다. 이 수준을 유지하면서 다음 세대를 위한 자산 이전도 고려해보세요. 🏰' }
+];
+
+const budgetRatios = {
+  1: { living:25, saving:50, pension:10, insurance:5, loan:10 },
+  2: { living:30, saving:40, pension:10, insurance:10, loan:10 },
+  3: { living:40, saving:30, pension:10, insurance:10, loan:10 },
+  4: { living:50, saving:20, pension:10, insurance:10, loan:10 },
+  5: { living:60, saving:10, pension:10, insurance:10, loan:10 }
+};
+
+const budgetLabels = { living:'🏠 생활비', saving:'💰 저축/투자', pension:'🏛️ 노후연금', insurance:'🛡️ 보장성보험', loan:'🏦 대출원리금' };
+
+function formatMoney(n) {
+  if (n >= 10000) { const u = Math.floor(n/10000); const r = n%10000; return r > 0 ? u+'억 '+r.toLocaleString()+'만원' : u+'억원'; }
+  return n.toLocaleString() + '만원';
+}
+function formatMoneyShort(n) {
+  if (Math.abs(n) >= 10000) return (n/10000).toFixed(1) + '억원';
+  return n.toLocaleString() + '만원';
+}
+
+function getParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    nickname: decodeURIComponent(p.get('nickname') || '고객'),
+    age: parseInt(p.get('age')) || 40,
+    income: parseInt(p.get('income')) || 500,
+    assets: parseInt(p.get('assets')) || 50000,
+    debt: parseInt(p.get('debt')) || 20000,
+    wealthIndex: parseInt(p.get('wealth_index')) || 0,
+    houseType: decodeURIComponent(p.get('house_type') || ''),
+    familyCount: parseInt(p.get('family_count')) || 3
+  };
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// 카카오 SDK 초기화
+Kakao.init('97b8ff67fce6e9b52985c6da425c617d');
+
+function shareKakao() {
+  const url = window.location.href;
+  const data = getParams();
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: '나의 금융집짓기® 결과',
+      description: data.nickname + '님의 부자지수: ' + (data.wealthIndex || '') + '점',
+      imageUrl: document.getElementById('rpt-house-img') ? document.getElementById('rpt-house-img').src : 'https://moneya-frontend.vercel.app/assets/house3-CiiNxUBf.jpg',
+      link: { mobileWebUrl: url, webUrl: url }
+    },
+    buttons: [{ title: '나도 진단받기', link: { mobileWebUrl: 'https://owant.netlify.app/diagnosis', webUrl: 'https://owant.netlify.app/diagnosis' } }]
+  });
+}
+function shareSMS() {
+  const url = window.location.href;
+  const text = '나의 금융집짓기® 결과를 확인해보세요! ' + url;
+  // iOS는 &body=, Android는 ?body=
+  const sep = /iPhone|iPad/i.test(navigator.userAgent) ? '&' : '?';
+  window.location.href = 'sms:' + sep + 'body=' + encodeURIComponent(text);
+}
+function copyLink() {
+  const url = window.location.href;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => showToast('링크가 복사되었습니다!')).catch(() => fallbackCopy(url));
+  } else {
+    fallbackCopy(url);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast('링크가 복사되었습니다!'); }
+  catch(e) { showToast('링크를 수동으로 복사해주세요'); }
+  document.body.removeChild(ta);
+}
+
+function renderReport() {
+  const d = getParams();
+  const netAsset = d.assets - d.debt;
+  let wi = d.wealthIndex;
+  if (!wi && d.income > 0 && d.age > 0) {
+    wi = Math.round((netAsset * 10) / (d.age * d.income * 12) * 100);
+  }
+  wi = Math.max(0, wi);
+  const dr = d.assets > 0 ? Math.round((d.debt / d.assets) * 1000) / 10 : 0;
+
+  let house = houseData[0];
+  if (d.houseType) { house = houseData.find(h => h.name === d.houseType) || houseData[0]; }
+  else { for (let h of houseData) { if (wi >= h.minScore && wi <= h.maxScore) { house = h; break; } } }
+
+  const fc = Math.min(Math.max(d.familyCount, 1), 5);
+  const budget = budgetRatios[fc];
+
+  // 부채비율 판정
+  let dClass='safe', dIcon='🎉', dTitle='훌륭합니다!', dDesc='무부채 상태입니다. 재정적 자유의 기초를 완성하셨습니다!', dColor='var(--success)';
+  if (dr > 0 && dr <= 20) { dIcon='✅'; dTitle='건전한 수준'; dDesc='부채비율 20% 이하로 건강한 재무 상태입니다. 이 상태를 유지하세요!'; }
+  else if (dr > 20 && dr <= 40) { dClass='warning'; dIcon='⚠️'; dTitle='관리 필요'; dDesc='부채비율 40% 이하는 관리가 필요한 수준입니다. 불필요한 대출을 줄이고, 상환 계획을 세워보세요.'; dColor='var(--warning)'; }
+  else if (dr > 40) { dClass='danger'; dIcon='🚨'; dTitle='즉시 조치 필요'; dDesc='부채비율이 40%를 초과했습니다. 신용대출부터 우선 상환하고, 지출을 줄여 부채 탈출 계획을 세우세요!'; dColor='var(--danger)'; }
+
+  const badges = ['시작','미흡','보통','양호','훌륭'];
+  const emojis = ['🏕️','🛖','🏠','🏡','🏰'];
+  const barW = Math.min(dr, 60) / 60 * 100;
+
+  // 예산 테이블 HTML
+  let budgetRows = '';
+  Object.keys(budgetLabels).forEach(key => {
+    const pct = budget[key];
+    const amt = Math.round(d.income * pct / 100);
+    budgetRows += `<tr><td>${budgetLabels[key]}</td><td>${pct}%</td><td>${amt.toLocaleString()}만원</td></tr>`;
+  });
+  budgetRows += `<tr class="total-row"><td>합계</td><td>100%</td><td>${d.income.toLocaleString()}만원</td></tr>`;
+
+  document.getElementById('report-wrapper').innerHTML = `
+    <div class="report-header">
+      <div class="report-confetti">🎉</div>
+      <div class="report-badge"><span>✨</span> 재무진단 완료</div>
+      <h1 class="report-title">${d.nickname}님의 금융집짓기®</h1>
+      <p class="report-subtitle">${d.age}세 · 순자산 ${formatMoneyShort(netAsset)}</p>
+    </div>
+
+    <div class="house-card">
+      <div class="house-image-wrap">
+        <img id="rpt-house-img" src="${house.image}" alt="${house.name}">
+        <div class="house-level-badge">${house.level}단계</div>
+      </div>
+      <div class="house-info">
+        <div class="house-name">${house.name}</div>
+        <div class="house-score-btn"><span>⭐</span><span>부자지수 ${wi}점</span></div>
+        <div class="house-desc">${house.desc}</div>
+      </div>
+    </div>
+
+    <!-- 부자지수 분석 -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon gold">⭐</div>
+        <div><div class="section-title">부자지수 분석</div><div class="section-subtitle">토마스 스탠리 교수의 부자 공식</div></div>
+      </div>
+      <div class="wealth-formula">
+        <div class="wealth-formula-title">📐 부자지수 계산 공식</div>
+        <div class="wealth-formula-text">(순자산 × 10) ÷ (나이 × 월급 × 12) × 100</div>
+      </div>
+      <div>
+        ${houseData.slice().reverse().map(h => `
+          <div class="wealth-grade ${h.level === house.level ? 'active' : ''}">
+            <div class="wealth-grade-icon">${emojis[h.level-1]}</div>
+            <div class="wealth-grade-info">
+              <div class="wealth-grade-name">${h.name}</div>
+              <div class="wealth-grade-range">${h.level===1?'0점':h.level===5?'200점 초과':h.minScore+'~'+h.maxScore+'점'}</div>
+            </div>
+            <div class="wealth-grade-badge">${h.level===house.level?'← 현재':badges[h.level-1]}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- 부채비율 분석 -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon blue">💳</div>
+        <div><div class="section-title">부채비율 분석</div><div class="section-subtitle">총자산 대비 부채 비율</div></div>
+      </div>
+      <div class="debt-bar-wrap">
+        <div class="debt-bar-label"><span>부채비율</span><strong>${dr}%</strong></div>
+        <div class="debt-bar-track"><div class="debt-bar-fill" id="debtFill" style="width:0%;background:${dColor}"></div></div>
+      </div>
+      <div class="debt-status ${dClass}">
+        <div class="debt-status-icon">${dIcon}</div>
+        <div><div class="debt-status-title">${dTitle}</div><div class="debt-status-desc">${dDesc}</div></div>
+      </div>
+    </div>
+
+    <!-- 가족수별 예산표 -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon green">📋</div>
+        <div><div class="section-title">${fc}인 가구 맞춤 예산 설계</div><div class="section-subtitle">오원트 금융집짓기® 예산 공식</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--gray);margin-bottom:12px">월 소득 ${d.income.toLocaleString()}만원 기준 권장 배분</p>
+      <table class="budget-table">
+        <thead><tr><th>항목</th><th>비율</th><th>권장 금액</th></tr></thead>
+        <tbody>${budgetRows}</tbody>
+      </table>
+    </div>
+
+    <!-- AI머니야 앱 CTA -->
+    <div class="cta-app">
+      <h3>📱 AI머니야로 관리하기</h3>
+      <p>AI가 매일 나의 재무 상태를 체크하고<br>맞춤 코칭을 해드립니다</p>
+      <button class="btn-app" onclick="window.open('https://moneya-frontend.vercel.app','_blank')">AI머니야 시작하기 →</button>
+    </div>
+
+    <!-- 공유 -->
+    <div class="share-bar">
+      <button class="share-btn kakao" onclick="shareKakao()">💬 카톡</button>
+      <button class="share-btn sms" onclick="shareSMS()">💌 문자</button>
+      <button class="share-btn copy" onclick="copyLink()">🔗 복사</button>
+    </div>
+
+    <div class="footer">
+      오원트금융연구소 | 대표: 오상열 (CFP®)<br>
+      금융집짓기®는 오원트금융연구소의 등록상표입니다.<br>
+      본 리포트는 금융집짓기® 재무진단 프로그램에서 제공하는 맞춤형 분석 결과입니다.<br>
+      생성일: ${new Date().toLocaleDateString('ko-KR')}
+    </div>
+  `;
+
+  // 부채비율 바 애니메이션
+  setTimeout(() => {
+    const fill = document.getElementById('debtFill');
+    if (fill) fill.style.width = barW + '%';
+  }, 500);
+}
+
+renderReport();
+</script>
+</body>
+</html>

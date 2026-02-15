@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>통합연금분석 리포트 | 오원트금융연구소</title>
+<meta property="og:title" content="나의 통합연금분석 결과">
+<meta property="og:description" content="은퇴 후 매달 부족한 금액을 확인해보세요!">
+<meta property="og:image" content="https://moneya-frontend.vercel.app/assets/house4-ywz7gWNQ.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
+<style>
+:root {
+  --primary: #1B6CB0;
+  --primary-dark: #0F2B4C;
+  --gold: #D4A853;
+  --navy: #0F2B4C;
+  --dark: #1A1A2E;
+  --success: #27AE60;
+  --warning: #F39C12;
+  --danger: #E74C3C;
+  --gray: #8896A7;
+  --light: #F5F7FA;
+  --white: #FFFFFF;
+  --blue-light: #EBF5FF;
+  --green-light: #E8F8F0;
+  --gold-light: #FFF9E6;
+  --red-light: #FEE2E2;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Noto Sans KR',sans-serif;
+  background:var(--light);
+  color:var(--dark);
+  max-width:480px;
+  margin:0 auto;
+  -webkit-font-smoothing:antialiased;
+}
+
+.report-header {
+  background:linear-gradient(135deg, #0F2B4C 0%, #1a3a5c 50%, #1B6CB0 100%);
+  color:#fff;
+  padding:36px 22px 28px;
+  text-align:center;
+  position:relative;
+}
+.report-confetti { font-size:28px; margin-bottom:8px; }
+.report-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(212,168,83,0.2); border:1px solid rgba(212,168,83,0.35);
+  color:var(--gold); padding:4px 12px; border-radius:20px;
+  font-size:11px; font-weight:500; margin-bottom:12px;
+}
+.report-title { font-size:22px; font-weight:900; margin-bottom:4px; }
+.report-subtitle { font-size:13px; opacity:.75; }
+
+/* Gap Card */
+.gap-card {
+  background:var(--white);
+  border-radius:16px;
+  margin:-16px 16px 14px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  overflow:hidden;
+  text-align:center;
+  padding:24px 20px;
+}
+.gap-label { font-size:13px; color:var(--gray); margin-bottom:4px; }
+.gap-amount { font-size:36px; font-weight:900; color:var(--danger); margin-bottom:4px; }
+.gap-amount.surplus { color:var(--success); }
+.gap-sub { font-size:12px; color:var(--gray); }
+.gap-total { display:inline-block; background:var(--red-light); color:var(--danger); padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700; margin-top:10px; }
+.gap-total.surplus { background:var(--green-light); color:var(--success); }
+
+/* Section Card */
+.section-card {
+  background:var(--white);
+  border-radius:16px;
+  margin:0 16px 14px;
+  padding:20px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.05);
+}
+.section-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.section-icon {
+  width:36px; height:36px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.section-icon.blue { background:#DBEAFE; }
+.section-icon.green { background:#D1FAE5; }
+.section-icon.gold { background:#FFF3CD; }
+.section-icon.red { background:#FEE2E2; }
+.section-icon.purple { background:#F3E8FF; }
+.section-title { font-size:15px; font-weight:700; color:var(--navy); }
+.section-subtitle { font-size:11px; color:var(--gray); margin-top:1px; }
+
+/* Pension Bar */
+.pension-row { margin-bottom:14px; }
+.pension-row-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.pension-row-name { font-size:13px; font-weight:600; color:#4A5568; }
+.pension-row-value { font-size:14px; font-weight:800; color:var(--navy); }
+.pension-bar-track { height:14px; background:#EDF2F7; border-radius:7px; overflow:hidden; position:relative; }
+.pension-bar-fill { height:100%; border-radius:7px; transition:width 1.2s ease; min-width:2px; }
+.pension-bar-fill.np { background:linear-gradient(90deg, #1B6CB0, #4A9FE5); }
+.pension-bar-fill.rp { background:linear-gradient(90deg, #27AE60, #6EE7B7); }
+.pension-bar-fill.pp { background:linear-gradient(90deg, #D4A853, #F0D78C); }
+.pension-bar-fill.total { background:linear-gradient(90deg, #6C3CE1, #A78BFA); }
+.pension-bar-fill.gap { background:linear-gradient(90deg, #E74C3C, #F87171); }
+
+/* Rate Meter */
+.rate-meter { text-align:center; padding:10px 0; }
+.rate-circle {
+  width:120px; height:120px; border-radius:50%;
+  margin:0 auto 12px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  position:relative;
+}
+.rate-circle::before {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  border:8px solid #EDF2F7;
+}
+.rate-circle::after {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  border:8px solid transparent;
+  border-top-color: var(--rate-color, var(--danger));
+  border-right-color: var(--rate-color, var(--danger));
+  transform: rotate(var(--rate-rotate, 0deg));
+}
+.rate-value { font-size:28px; font-weight:900; color:var(--navy); z-index:1; }
+.rate-label { font-size:11px; color:var(--gray); z-index:1; }
+.rate-status { font-size:14px; font-weight:700; margin-top:4px; }
+.rate-desc { font-size:12px; color:#4A5568; margin-top:6px; line-height:1.6; }
+
+/* Solution */
+.solution-item {
+  display:flex; gap:10px; align-items:flex-start;
+  padding:12px; border-radius:10px; margin-bottom:8px;
+  background:#F8FAFC;
+}
+.solution-icon { font-size:20px; flex-shrink:0; margin-top:1px; }
+.solution-text { font-size:13px; line-height:1.6; color:#4A5568; }
+.solution-text strong { color:var(--navy); }
+
+/* Monthly Need */
+.monthly-need {
+  background:linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color:#fff;
+  border-radius:12px;
+  padding:18px;
+  text-align:center;
+  margin-top:12px;
+}
+.monthly-need-label { font-size:12px; opacity:.8; margin-bottom:4px; }
+.monthly-need-amount { font-size:24px; font-weight:900; }
+
+/* CTA */
+.cta-card {
+  background:linear-gradient(135deg, #F5F3FF, #EDE9FE);
+  border:2px solid #8B5CF6;
+  border-radius:16px;
+  margin:0 16px 14px;
+  padding:24px 20px;
+  text-align:center;
+}
+.cta-card h3 { font-size:17px; font-weight:900; color:var(--navy); margin-bottom:8px; }
+.cta-card p { font-size:13px; color:#4A5568; line-height:1.6; margin-bottom:14px; }
+.btn { width:100%; padding:14px; border:none; border-radius:12px; font-size:16px; font-weight:700; font-family:inherit; cursor:pointer; }
+.btn-purple { background:linear-gradient(135deg, #6C3CE1, #7C3AED); color:#fff; }
+
+/* Service */
+.service-card {
+  background:var(--gold-light); border:2px solid var(--gold);
+  border-radius:16px; margin:0 16px 14px;
+  padding:24px 20px; text-align:center;
+}
+.service-card h3 { font-size:17px; font-weight:900; color:var(--navy); margin-bottom:8px; }
+.service-card p { font-size:13px; color:#4A5568; line-height:1.6; margin-bottom:14px; }
+.expert-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--white); padding:8px 14px; border-radius:10px;
+  font-size:12px; color:var(--navy); font-weight:500; margin-bottom:14px;
+}
+.btn-gold { background:linear-gradient(135deg, var(--gold), #E8B95A); color:var(--navy); }
+
+/* Share */
+.share-bar { display:flex; gap:8px; margin:0 16px 14px; }
+.share-btn {
+  flex:1; padding:12px; border:none; border-radius:12px;
+  font-size:14px; font-weight:700; font-family:inherit; cursor:pointer;
+}
+.share-btn.kakao { background:#FEE500; color:#3C1E1E; }
+.share-btn.sms { background:#27AE60; color:#fff; }
+.share-btn.copy { background:#E2E8F0; color:#4A5568; }
+
+/* Trust */
+.trust-bar { display:flex; justify-content:center; gap:18px; padding:16px 16px; font-size:11px; color:var(--gray); }
+.trust-item { text-align:center; }
+.trust-item .num { font-size:15px; font-weight:700; color:var(--navy); }
+
+.footer { text-align:center; padding:24px 20px; font-size:11px; color:var(--gray); line-height:1.8; }
+.disclaimer {
+  background:#FFF9E6; border:1px solid #F0D78C; border-radius:12px;
+  margin:0 16px 14px; padding:14px 16px;
+  font-size:12px; color:#92400E; line-height:1.7; text-align:center;
+}
+
+/* Toast */
+.toast {
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,0.8); color:#fff; padding:10px 20px; border-radius:20px;
+  font-size:13px; z-index:999; opacity:0; transition:opacity .3s;
+}
+.toast.show { opacity:1; }
+
+/* Retire Card */
+.retire-card { background:linear-gradient(135deg, #F0FDF9, #ECFDF5); border:1px solid #A7F3D0; }
+.retire-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:9px 0; border-bottom:1px solid #D1FAE5; font-size:13px; color:#4A5568;
+}
+.retire-row:last-of-type { border-bottom:none; }
+.retire-row-border { border-top:2px solid #6EE7B7; padding-top:12px; margin-top:4px; }
+.retire-val { font-weight:700; }
+.retire-val.teal { color:#0D9488; }
+.retire-val.red { color:#DC2626; }
+.fw700 { font-weight:700; }
+.retire-highlight {
+  display:flex; justify-content:space-between; align-items:center;
+  background:#fff; border:2px solid #0D9488; border-radius:12px;
+  padding:14px 16px; margin-top:12px;
+  font-size:14px; font-weight:700; color:#4A5568;
+}
+.retire-highlight-val { font-size:22px; font-weight:900; color:#0D9488; }
+.formula-toggle {
+  display:block; width:100%; text-align:left; background:none; border:none;
+  font-size:12px; color:#0D9488; font-weight:600; padding:10px 0 0;
+  cursor:pointer; font-family:inherit;
+}
+.formula-box {
+  background:#fff; border:1px solid #D1FAE5; border-radius:10px;
+  padding:14px; margin-top:8px;
+}
+.formula-line { font-size:12px; color:#4A5568; padding:3px 0; line-height:1.6; }
+.formula-note { font-size:11px; color:#9CA3AF; margin-top:8px; padding-top:8px; border-top:1px dashed #D1FAE5; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="report-header">
+  <div class="report-confetti">📊</div>
+  <div class="report-badge">✅ 분석 완료</div>
+  <div class="report-title" id="rpt-name">고객님의</div>
+  <div class="report-subtitle">통합연금분석 리포트</div>
+</div>
+
+<!-- 1. 표지 (Gap Card) - 순 은퇴일시금 기준 -->
+<div class="gap-card">
+  <div class="gap-label">은퇴 후 부족한 은퇴일시금</div>
+  <div class="gap-amount" id="rpt-gap">0억원</div>
+  <div class="gap-sub" id="rpt-gap-sub">원가계산방식 기준 순 은퇴일시금</div>
+  <div class="gap-total" id="rpt-gap-total">매월 저축 필요액: 0만원</div>
+</div>
+
+<!-- 2. 은퇴 준비 현황 요약 -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-icon green">📋</div>
+    <div><div class="section-title">은퇴 준비 현황 요약</div><div class="section-subtitle">입력하신 정보 기반</div></div>
+  </div>
+  <table style="width:100%;font-size:13px;border-collapse:collapse" id="rpt-summary-table">
+  </table>
+</div>
+
+<!-- 3. 3층 연금 구성 현황 -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-icon blue">🏛️</div>
+    <div><div class="section-title">3층 연금 구성 현황</div><div class="section-subtitle">국민연금 + 퇴직연금 + 개인연금</div></div>
+  </div>
+  <div class="pension-row">
+    <div class="pension-row-header"><span class="pension-row-name">🏛️ 국민연금 (1층)</span><span class="pension-row-value" id="rpt-np">0만원</span></div>
+    <div class="pension-bar-track"><div class="pension-bar-fill np" id="rpt-np-bar" style="width:0%"></div></div>
+  </div>
+  <div class="pension-row">
+    <div class="pension-row-header"><span class="pension-row-name">🏢 퇴직연금 (2층)</span><span class="pension-row-value" id="rpt-rp">0만원</span></div>
+    <div class="pension-bar-track"><div class="pension-bar-fill rp" id="rpt-rp-bar" style="width:0%"></div></div>
+  </div>
+  <div class="pension-row">
+    <div class="pension-row-header"><span class="pension-row-name">💰 개인연금 (3층)</span><span class="pension-row-value" id="rpt-pp">0만원</span></div>
+    <div class="pension-bar-track"><div class="pension-bar-fill pp" id="rpt-pp-bar" style="width:0%"></div></div>
+  </div>
+  <div style="border-top:1px dashed #E2E8F0;padding-top:12px;margin-top:6px">
+    <div class="pension-row" style="margin-bottom:8px">
+      <div class="pension-row-header"><span class="pension-row-name" style="font-weight:700;color:var(--primary)">✅ 연금 합계</span><span class="pension-row-value" style="color:var(--primary)" id="rpt-total">0만원</span></div>
+      <div class="pension-bar-track"><div class="pension-bar-fill total" id="rpt-total-bar" style="width:0%"></div></div>
+    </div>
+    <div class="pension-row" style="margin-bottom:0">
+      <div class="pension-row-header"><span class="pension-row-name" style="font-weight:700;color:var(--danger)">⚠️ 매월 부족액</span><span class="pension-row-value" style="color:var(--danger)" id="rpt-gap2">0만원</span></div>
+      <div class="pension-bar-track"><div class="pension-bar-fill gap" id="rpt-gap-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 은퇴설계 분석 결과 -->
+<div class="section-card retire-card">
+  <div class="section-header">
+    <div class="section-icon" style="background:#D1FAE5">🏖️</div>
+    <div><div class="section-title">은퇴설계 분석 결과</div><div class="section-subtitle">원가계산방식 기준</div></div>
+  </div>
+  <div class="retire-row"><span>경제활동 기간</span><span class="retire-val teal" id="rpt-eco-years">0년</span></div>
+  <div class="retire-row"><span>은퇴 후 기간</span><span class="retire-val teal" id="rpt-retire-years">0년</span></div>
+  <div class="retire-row"><span>월 부족액</span><span class="retire-val red" id="rpt-monthly-gap">0만원</span></div>
+  <div class="retire-row"><span>은퇴일시금 필요액</span><span class="retire-val red" id="rpt-lumpsum-need">0억원</span></div>
+  <div class="retire-row"><span>현재 퇴직연금 일시금</span><span class="retire-val teal" id="rpt-rp-lumpsum">0억원</span></div>
+  <div class="retire-row retire-row-border"><span class="fw700">순 은퇴일시금</span><span class="retire-val red fw700" id="rpt-net-lumpsum">0억원</span></div>
+  <div class="retire-highlight">
+    <span>💰 월 저축연금액</span>
+    <span class="retire-highlight-val" id="rpt-monthly-saving">0만원</span>
+  </div>
+  <button class="formula-toggle" onclick="toggleFormula()">📐 계산 방법 보기 ▼</button>
+  <div class="formula-box" id="formulaBox" style="display:none">
+    <div class="formula-line">① 월 부족액 = 희망생활비 - 국민연금 - 개인연금</div>
+    <div class="formula-line">② 은퇴일시금 = 월부족액 × 12 × 은퇴후기간</div>
+    <div class="formula-line">③ 순 은퇴일시금 = 은퇴일시금 - 퇴직연금 적립금</div>
+    <div class="formula-line">④ 월 저축연금액 = 순은퇴일시금 ÷ 경제활동기간 ÷ 12</div>
+  </div>
+</div>
+
+<!-- 5. 소득대체율 분석 -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-icon gold">📈</div>
+    <div><div class="section-title">소득대체율 분석</div><div class="section-subtitle">OECD 권고 기준 70%</div></div>
+  </div>
+  <div class="rate-meter">
+    <div class="rate-circle" id="rpt-rate-circle">
+      <div class="rate-value" id="rpt-rate">0%</div>
+      <div class="rate-label">소득대체율</div>
+    </div>
+    <div class="rate-status" id="rpt-rate-status"></div>
+    <div class="rate-desc" id="rpt-rate-desc"></div>
+  </div>
+</div>
+
+<!-- 6. 해결 방안 -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-icon purple">💡</div>
+    <div><div class="section-title">해결 방안 시뮬레이션</div><div class="section-subtitle">지금부터 준비하면 충분합니다</div></div>
+  </div>
+  <div id="rpt-solutions"></div>
+  <div class="monthly-need" id="rpt-monthly-need">
+    <div class="monthly-need-label">지금부터 매월 추가 적립 필요액</div>
+    <div class="monthly-need-amount" id="rpt-need-amount">0만원</div>
+  </div>
+</div>
+
+<!-- 면책사항 -->
+<div class="disclaimer">
+  ⚠️ 본 설계는 이해를 돕기 위한 일반적인 예시이므로 참고만 하시기 바랍니다. 이해를 돕기 위해 원가계산방식을 사용하였습니다.
+</div>
+
+<!-- CTA: AI머니야 -->
+<div class="cta-card">
+  <h3>📱 AI머니야로 관리하기</h3>
+  <p>AI가 매일 나의 재무 상태를 체크하고<br>맞춤 코칭을 해드립니다</p>
+  <button class="btn btn-purple" onclick="window.open('https://moneya-frontend.vercel.app','_blank')">AI머니야 시작하기 →</button>
+</div>
+
+<!-- 공유 -->
+<div class="share-bar">
+  <button class="share-btn kakao" onclick="shareKakao()">💬 카톡</button>
+  <button class="share-btn sms" onclick="shareSMS()">💌 문자</button>
+  <button class="share-btn copy" onclick="copyLink()">🔗 복사</button>
+</div>
+
+<!-- 유료 서비스 -->
+<div class="service-card">
+  <h3>🎯 유료 서비스 안내</h3>
+  <div class="expert-badge">👨‍💼 오상열 CFP · 20년 경력 · 2,000건+ 상담</div>
+  <p>맞춤형 연금 포트폴리오 설계와<br>전문가 상담을 받아보세요</p>
+  <button class="btn btn-gold" style="margin-bottom:10px" onclick="window.open('https://owant.netlify.app','_blank')">📞 1:1 전문가 상담 신청</button>
+  <button class="btn btn-gold" style="margin-bottom:10px" onclick="window.open('https://owant.netlify.app','_blank')">🎓 일반인 강의 신청</button>
+  <button class="btn btn-gold" onclick="window.open('https://owant.netlify.app','_blank')">🎓 전문가(FP) 강의 신청</button>
+</div>
+
+<div class="trust-bar">
+  <div class="trust-item"><div class="num">500회</div>강의</div>
+  <div class="trust-item"><div class="num">2,000+</div>상담</div>
+  <div class="trust-item"><div class="num">CFP</div>국제공인</div>
+  <div class="trust-item"><div class="num">20년</div>경력</div>
+</div>
+
+<button class="btn" style="margin:0 16px 14px;width:calc(100% - 32px);background:#E2E8F0;color:#4A5568" onclick="window.location.href='https://owant.netlify.app'">🔄 다시 분석하기</button>
+
+<div class="footer">
+  오원트금융연구소 | 대표: 오상열 (CFP®)<br>
+  금융집짓기®는 오원트금융연구소의 등록상표입니다.<br>
+  본 분석은 입력 정보 기반의 추정치이며, 정확한 설계는 전문가 상담을 통해 진행됩니다.
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// 카카오 SDK 초기화
+Kakao.init('97b8ff67fce6e9b52985c6da425c617d');
+
+function getParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    name: p.get('name') || '고객',
+    age: parseInt(p.get('age')) || 45,
+    income: parseInt(p.get('income')) || 400,
+    retireAge: parseInt(p.get('retire_age')) || 60,
+    lifeExpect: parseInt(p.get('life_expect')) || 90,
+    desired: parseInt(p.get('desired')) || 300,
+    np: parseInt(p.get('np')) || 0,
+    rp: parseInt(p.get('rp')) || 0,
+    pp: parseInt(p.get('pp')) || 0,
+    totalPension: parseInt(p.get('total_pension')) || 0,
+    gap: parseInt(p.get('gap')) || 0,
+    replacementRate: parseInt(p.get('rate')) || 0,
+    spouse: p.get('spouse') || '',
+    rpBalance: parseInt(p.get('rp_balance')) || 0,
+    ppMonthly: parseInt(p.get('pp_monthly')) || 0
+  };
+}
+
+function toggleFormula() {
+  const box = document.getElementById('formulaBox');
+  const btn = event.target;
+  if (box.style.display === 'none') {
+    box.style.display = 'block';
+    btn.textContent = '📐 계산 방법 보기 ▲';
+  } else {
+    box.style.display = 'none';
+    btn.textContent = '📐 계산 방법 보기 ▼';
+  }
+}
+
+function render() {
+  const d = getParams();
+  const yearsToRetire = Math.max(d.retireAge - d.age, 1);
+  const retireYears = Math.max(d.lifeExpect - d.retireAge, 1);
+  const totalGap = d.gap * retireYears * 12;
+
+  // Header
+  document.getElementById('rpt-name').textContent = d.name + '님의';
+
+  // ========== 은퇴설계 계산 (원가계산방식) - 표지에 사용 ==========
+  const ecoYears = yearsToRetire;
+  const retYears = retireYears;
+  const monthlyGap2 = d.desired - d.np - d.pp;
+  const lumpsumNeed = monthlyGap2 * 12 * retYears;
+  const rpLumpsum = d.rpBalance;
+  const netLumpsum = lumpsumNeed - rpLumpsum;
+  const monthlySaving = ecoYears > 0 ? Math.round(netLumpsum / ecoYears / 12) : 0;
+
+  // 1. 표지 Gap Card - 순 은퇴일시금 기준
+  const gapEl = document.getElementById('rpt-gap');
+  if (netLumpsum > 0) {
+    gapEl.textContent = (netLumpsum / 10000).toFixed(1) + '억원';
+    gapEl.className = 'gap-amount';
+    document.getElementById('rpt-gap-total').textContent = '매월 저축 필요액: ' + monthlySaving.toLocaleString() + '만원';
+    document.getElementById('rpt-gap-total').className = 'gap-total';
+  } else {
+    gapEl.textContent = '부족액 없음 ✅';
+    gapEl.className = 'gap-amount surplus';
+    document.getElementById('rpt-gap-total').textContent = '현재 준비 상태 양호!';
+    document.getElementById('rpt-gap-total').className = 'gap-total surplus';
+  }
+
+  // Pension Bars
+  const maxVal = Math.max(d.desired, d.totalPension, 1);
+  document.getElementById('rpt-np').textContent = d.np.toLocaleString() + '만원';
+  document.getElementById('rpt-rp').textContent = d.rp.toLocaleString() + '만원';
+  document.getElementById('rpt-pp').textContent = d.pp.toLocaleString() + '만원';
+  document.getElementById('rpt-total').textContent = d.totalPension.toLocaleString() + '만원';
+  document.getElementById('rpt-gap2').textContent = d.gap.toLocaleString() + '만원';
+
+  setTimeout(() => {
+    document.getElementById('rpt-np-bar').style.width = (d.np / maxVal * 100) + '%';
+    document.getElementById('rpt-rp-bar').style.width = (d.rp / maxVal * 100) + '%';
+    document.getElementById('rpt-pp-bar').style.width = (d.pp / maxVal * 100) + '%';
+    document.getElementById('rpt-total-bar').style.width = (d.totalPension / maxVal * 100) + '%';
+    document.getElementById('rpt-gap-bar').style.width = (d.gap / maxVal * 100) + '%';
+  }, 300);
+
+  // Rate
+  const rate = d.replacementRate;
+  document.getElementById('rpt-rate').textContent = rate + '%';
+  const statusEl = document.getElementById('rpt-rate-status');
+  const descEl = document.getElementById('rpt-rate-desc');
+
+  if (rate >= 70) {
+    statusEl.innerHTML = '<span style="color:var(--success)">✅ 양호</span>';
+    descEl.textContent = 'OECD 권고 소득대체율 70% 이상을 달성하고 있습니다. 하지만 물가 상승과 의료비를 고려하면 추가 준비가 필요합니다.';
+  } else if (rate >= 50) {
+    statusEl.innerHTML = '<span style="color:var(--warning)">⚠️ 보통</span>';
+    descEl.textContent = 'OECD 권고 70%에는 미달이지만 나쁘지 않은 수준입니다. 추가 준비를 통해 안정적인 노후를 만들 수 있습니다.';
+  } else {
+    statusEl.innerHTML = '<span style="color:var(--danger)">🚨 부족</span>';
+    descEl.textContent = 'OECD 권고 소득대체율 70%에 크게 못 미치는 수준입니다. 적극적인 노후 준비가 필요합니다.';
+  }
+
+  // Summary Table
+  const spouseMap = { single:'미혼/독신', married:'기혼' };
+  const rows = [
+    ['현재 나이', d.age + '세'],
+    ['월 소득', d.income.toLocaleString() + '만원'],
+    ['희망 은퇴 나이', d.retireAge + '세'],
+    ['은퇴까지 남은 기간', yearsToRetire + '년'],
+    ['은퇴 후 희망 생활비', d.desired.toLocaleString() + '만원/월'],
+    ['기대수명', d.lifeExpect + '세'],
+    ['은퇴 후 생활 기간', retireYears + '년'],
+  ];
+  if (d.spouse) rows.push(['배우자', spouseMap[d.spouse] || d.spouse]);
+
+  const table = document.getElementById('rpt-summary-table');
+  rows.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = i < rows.length - 1 ? '1px solid #F1F5F9' : 'none';
+    tr.innerHTML = '<td style="padding:9px 0;color:var(--gray);font-weight:500">' + r[0] + '</td><td style="padding:9px 0;text-align:right;font-weight:700;color:var(--navy)">' + r[1] + '</td>';
+    table.appendChild(tr);
+  });
+
+  // Solutions
+  const solDiv = document.getElementById('rpt-solutions');
+  const solutions = [
+    { icon:'🏦', title:'연금보험', desc:'세액공제 혜택과 함께 안정적인 노후소득을 확보할 수 있습니다.' },
+    { icon:'💰', title:'연금저축/IRP', desc:'연 최대 <strong>900만원 세액공제</strong> 혜택을 받을 수 있습니다.' },
+    { icon:'📊', title:'자산배분 포트폴리오', desc:'은퇴까지 <strong>' + yearsToRetire + '년</strong>, 적절한 위험-수익 배분이 필요합니다.' },
+  ];
+  solutions.forEach(s => {
+    solDiv.innerHTML += '<div class="solution-item"><div class="solution-icon">' + s.icon + '</div><div class="solution-text"><strong>' + s.title + '</strong><br>' + s.desc + '</div></div>';
+  });
+
+  // ========== 4. 은퇴설계 분석 결과 렌더링 ==========
+
+  document.getElementById('rpt-eco-years').textContent = ecoYears + '년';
+  document.getElementById('rpt-retire-years').textContent = retYears + '년';
+  document.getElementById('rpt-monthly-gap').textContent = monthlyGap2.toLocaleString() + '만원';
+  document.getElementById('rpt-lumpsum-need').textContent = (lumpsumNeed / 10000).toFixed(1) + '억원';
+  document.getElementById('rpt-rp-lumpsum').textContent = (rpLumpsum / 10000).toFixed(1) + '억원';
+  document.getElementById('rpt-net-lumpsum').textContent = (netLumpsum / 10000).toFixed(1) + '억원';
+  document.getElementById('rpt-monthly-saving').textContent = monthlySaving > 0 ? monthlySaving.toLocaleString() + '만원' : '추가 적립 불필요';
+
+  // Monthly need (해결방안 섹션)
+  document.getElementById('rpt-need-amount').textContent = monthlySaving > 0 ? '매월 ' + monthlySaving.toLocaleString() + '만원' : '추가 적립 불필요';
+
+  // 월 저축연금액이 1원이라도 있으면 팁 추가
+  if (monthlySaving > 0) {
+    const tipsHtml = '<div style="margin-top:14px;padding:14px;background:#F0FDF9;border:1px solid #A7F3D0;border-radius:10px">'
+      + '<div style="font-size:13px;font-weight:700;color:#0D9488;margin-bottom:8px">💡 부담을 줄이는 방법</div>'
+      + '<div style="font-size:13px;color:#4A5568;line-height:1.8">'
+      + '1️⃣ 은퇴시기를 지금보다 몇 년 후로 연기해보세요<br>'
+      + '2️⃣ 은퇴 후 희망생활비를 조금 낮추어 보세요'
+      + '</div></div>';
+    document.getElementById('rpt-solutions').insertAdjacentHTML('beforeend', tipsHtml);
+  }
+}
+
+render();
+
+// Share Functions
+function shareKakao() {
+  const url = window.location.href;
+  const d = getParams();
+  Kakao.Share.sendDefault({
+    objectType:'feed',
+    content:{
+      title:'나의 통합연금분석 결과',
+      description: d.name + '님의 은퇴 준비 현황을 확인해보세요!',
+      imageUrl:'https://moneya-frontend.vercel.app/assets/house4-ywz7gWNQ.jpg',
+      link:{ mobileWebUrl:url, webUrl:url }
+    },
+    buttons:[{ title:'나도 분석받기', link:{ mobileWebUrl:'https://owant.netlify.app', webUrl:'https://owant.netlify.app' } }]
+  });
+}
+function shareSMS() {
+  const url = window.location.href;
+  const text = '나의 통합연금분석 결과를 확인해보세요! ' + url;
+  const sep = /iPhone|iPad/i.test(navigator.userAgent) ? '&' : '?';
+  window.location.href = 'sms:' + sep + 'body=' + encodeURIComponent(text);
+}
+function copyLink() {
+  const url = window.location.href;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => showToast('링크가 복사되었습니다!')).catch(() => fallbackCopy(url));
+  } else {
+    fallbackCopy(url);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast('링크가 복사되었습니다!'); }
+  catch(e) { showToast('링크를 수동으로 복사해주세요'); }
+  document.body.removeChild(ta);
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
