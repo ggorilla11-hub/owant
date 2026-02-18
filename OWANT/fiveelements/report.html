@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>금융오행 리포트 | 금융집짓기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D4A853;--dark:#1A1A2E;--gray:#8896A7;--white:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;min-height:100vh;}
+.report{max-width:480px;margin:0 auto;padding:24px 16px;}
+.report-header{text-align:center;padding:32px 0 24px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:24px;}
+.report-badge{display:inline-block;background:rgba(212,168,83,0.15);border:1px solid rgba(212,168,83,0.3);color:var(--gold);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:500;margin-bottom:12px;}
+.report-emoji{font-size:56px;margin-bottom:8px;}
+.report-label{font-size:12px;color:var(--gray);margin-bottom:4px;}
+.report-title{font-family:'Black Han Sans';font-size:28px;margin-bottom:6px;}
+.report-sub{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;}
+.user-info{display:flex;justify-content:center;gap:12px;background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;margin-bottom:24px;flex-wrap:wrap;}
+.user-tag{font-size:12px;color:var(--gray);background:rgba(255,255,255,0.06);padding:4px 10px;border-radius:8px;}
+.ohaeng-visual{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center;margin-bottom:24px;}
+.ohaeng-ring{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px 0;}
+.ohaeng-item{width:52px;height:52px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;border:2px solid rgba(255,255,255,0.1);opacity:.35;}
+.ohaeng-item.active{opacity:1;transform:scale(1.3);border-color:var(--gold);box-shadow:0 0 14px rgba(212,168,83,0.4);}
+.ohaeng-item .oe{font-size:18px;}
+.section{margin-bottom:24px;}
+.section-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid rgba(212,168,83,0.3);}
+.insight-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;}
+.insight-num{background:var(--gold);color:var(--dark);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.insight-text{font-size:14px;line-height:1.7;color:rgba(255,255,255,0.85);}
+.insight-text strong{color:var(--gold);}
+.tip-card{background:rgba(212,168,83,0.06);border:1px solid rgba(212,168,83,0.15);border-radius:14px;padding:16px;margin-bottom:10px;}
+.tip-label{font-size:11px;color:var(--gold);font-weight:700;margin-bottom:8px;}
+.tip-items{list-style:none;padding:0;}
+.tip-items li{font-size:13px;line-height:1.8;color:rgba(255,255,255,0.8);padding-left:16px;position:relative;}
+.tip-items li::before{content:'✓';position:absolute;left:0;color:var(--gold);}
+.story-card{background:linear-gradient(135deg,rgba(27,108,176,0.15),rgba(108,60,225,0.1));border:1px solid rgba(27,108,176,0.2);border-radius:16px;padding:20px;margin-bottom:10px;}
+.story-quote{font-size:14px;line-height:1.8;color:rgba(255,255,255,0.8);font-style:italic;margin-bottom:12px;}
+.story-quote::before{content:'"';font-size:28px;color:var(--gold);font-family:Georgia;line-height:0;vertical-align:-8px;margin-right:4px;}
+.story-profile{display:flex;align-items:center;gap:10px;}
+.story-avatar{width:36px;height:36px;border-radius:50%;background:rgba(212,168,83,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.story-name{font-size:13px;font-weight:600;}
+.story-desc{font-size:11px;color:var(--gray);}
+.action-card{background:linear-gradient(135deg,rgba(212,168,83,0.12),rgba(212,168,83,0.05));border:2px solid rgba(212,168,83,0.3);border-radius:16px;padding:20px;text-align:center;}
+.action-badge{display:inline-block;background:var(--gold);color:var(--dark);padding:4px 12px;border-radius:12px;font-size:11px;font-weight:700;margin-bottom:10px;}
+.action-title{font-family:'Black Han Sans';font-size:20px;margin-bottom:8px;}
+.action-desc{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;}
+.action-highlight{font-size:15px;font-weight:700;color:var(--gold);margin-top:8px;}
+.house-visual{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center;margin-bottom:10px;}
+.house-label{font-size:12px;color:var(--gray);margin-bottom:10px;}
+.house-layers{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:10px;}
+.house-layer{padding:8px 16px;border-radius:6px;font-size:12px;font-weight:500;width:fit-content;text-align:center;}
+.house-layer.active{border:2px solid var(--gold);box-shadow:0 0 15px rgba(212,168,83,0.4);font-weight:700;}
+.house-roof{background:rgba(231,76,60,0.2);color:#E74C3C;min-width:140px;}
+.house-pillar{background:rgba(27,108,176,0.2);color:#5DADE2;min-width:200px;}
+.house-base{background:rgba(39,174,96,0.2);color:#27AE60;min-width:260px;}
+.house-note{font-size:11px;color:var(--gray);line-height:1.5;}
+.cta-section{text-align:center;padding:24px 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:8px;}
+.cta-text{font-size:13px;color:var(--gray);margin-bottom:14px;line-height:1.6;}
+.btn-app{display:block;width:100%;padding:15px;border-radius:14px;font-size:15px;font-weight:700;border:none;cursor:pointer;margin-bottom:10px;text-decoration:none;text-align:center;}
+.btn-primary{background:linear-gradient(135deg,var(--gold),#c4993d);color:var(--dark);}
+.btn-secondary{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.12);}
+.report-footer{text-align:center;padding:20px 0;font-size:11px;color:rgba(255,255,255,0.3);line-height:1.6;}
+.no-result{text-align:center;padding:60px 20px;}
+.no-result h2{font-family:'Black Han Sans';font-size:24px;margin-bottom:12px;}
+.no-result p{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px;}
+</style>
+</head>
+<body>
+<div class="report" id="reportContainer"></div>
+<script>
+const elementNames={'수':'수(水)','목':'목(木)','화':'화(火)','토':'토(土)','금':'금(金)'};
+const icons={'수':'💧','목':'🌲','화':'🔥','토':'🏠','금':'🛡️'};
+
+const reportData={
+  '수':{
+    emoji:'💧',title:'수(水) — 현금흐름',sub:'돈을 벌다: 물처럼 끊임없이 흐르는 소득 파이프라인을 만드세요',
+    houseActive:'base',houseLabel:'기초공사 (현금흐름·비상자금)',
+    insights:[
+      {text:'한국 직장인의 <strong>43%</strong>가 월급 외 추가 소득이 전혀 없습니다. 소득원이 하나뿐이면 그것이 끊길 때 즉시 위기에 처합니다.'},
+      {text:'<strong>현금흐름(Cash Flow)</strong>은 금융의 혈액입니다. 지출은 계속되는데 소득이 멈추면 어떤 자산도 지킬 수 없습니다.'},
+      {text:'금융집짓기에서 현금흐름은 <strong>기초공사</strong>에 해당합니다. 물이 마르면 나무(저축)도, 불(투자)도 시작할 수 없습니다.'}
+    ],
+    tips:['주수입을 안정화하고 추가 소득원을 만드세요','부업·투잡·콘텐츠 수익 등 파이프라인을 다각화하세요','CMA·MMF 등 유동성 자산으로 현금흐름을 관리하세요','월 현금흐름표를 작성해서 들어오고 나가는 돈을 파악하세요'],
+    stories:[
+      {emoji:'👨',name:'김○○님 (35세, 직장인)',desc:'월급 외 부수입 월 80만원 달성',quote:'블로그와 전자책으로 부수입을 만들었어요. 월급에만 의존하던 때보다 훨씬 안정감이 생겼습니다. 소득의 파이프라인이 2개가 되니 마음이 달라져요.'},
+      {emoji:'👩',name:'이○○님 (29세, 프리랜서)',desc:'불규칙 소득을 안정화',quote:'프리랜서라 소득이 들쑥날쑥했는데, 3개월 평균 현금흐름표를 만들고 CMA에 여유자금을 넣어두니 정신적으로 안정됐어요.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'월 현금흐름표를 작성하세요',detail:'1. 모든 소득원 정리 (급여, 부수입, 이자 등)\n2. 모든 지출 정리 (고정비, 변동비)\n3. 순현금흐름 = 소득 - 지출\n4. 부수입 아이디어 3개 적기',highlight:'👉 AI머니야에서 현금흐름 자동 분석을 받아보세요'}
+  },
+  '목':{
+    emoji:'🌲',title:'목(木) — 저축',sub:'돈을 모으다: 나무의 뿌리처럼 체계적 저축으로 시드머니를 만드세요',
+    houseActive:'pillar',houseLabel:'기둥공사 (저축)',
+    insights:[
+      {text:'같은 연령대의 <strong>68%</strong>가 종잣돈 부족을 가장 큰 고민으로 꼽았습니다. 저축 없이는 어떤 투자도 시작할 수 없습니다.'},
+      {text:'월 소득의 <strong>30% 이상</strong>을 저축하면 <strong>3년 안에 1억</strong>을 만들 수 있습니다. 핵심은 먼저 저축하고 나머지를 쓰는 구조입니다.'},
+      {text:'금융집짓기에서 저축은 <strong>기둥공사</strong>입니다. 나무가 뿌리 없이 자랄 수 없듯이, 저축 없이는 투자의 기둥을 세울 수 없습니다.'}
+    ],
+    tips:['가로저축: 목적별로 통장을 나눠 동시에 저축하세요','조기저축: 1년이라도 빨리 시작하면 복리 효과가 커집니다','강제저축: 급여일 자동이체로 의지에 의존하지 마세요','장기저축투자: 3년 이상은 적금보다 펀드·ETF가 유리합니다'],
+    stories:[
+      {emoji:'👩',name:'박○○님 (27세, 직장인)',desc:'월급 280만원에서 시작',quote:'매달 100만원 저축이 불가능하다고 생각했어요. 가로저축을 시작하니 목적별로 나눠 저축하게 되고, 2년 만에 2,200만원을 모았습니다.'},
+      {emoji:'👨',name:'최○○님 (32세, 사업가)',desc:'불규칙한 소득에서 시작',quote:'소득이 들쭉날쭉해서 저축이 안 됐는데, 강제저축 구조를 만드니까 1년 만에 1,500만원이 모였습니다.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'통장을 목적별로 분리하세요 (가로저축)',detail:'1. 급여통장 → 비상금통장 → 목돈저축통장 → 생활비통장\n2. 자동이체를 급여일 다음날로 설정\n3. 연금저축펀드 월 50만원 시작',highlight:'👉 AI머니야에서 나만의 저축 구조를 설계해보세요'}
+  },
+  '화':{
+    emoji:'🔥',title:'화(火) — 투자',sub:'돈을 불리다: 불처럼 분산투자로 자산을 증식하세요',
+    houseActive:'roof',houseLabel:'지붕공사 (투자)',
+    insights:[
+      {text:'<strong>분산투자</strong>한 포트폴리오는 단일 자산 투자보다 연평균 <strong>2~3%</strong> 높은 수익률을 기록합니다. 시간이 곧 돈입니다.'},
+      {text:'<strong>시간분산, 위험분산, 투자처분산, 공간분산</strong> — 4가지 분산이 투자의 핵심입니다. 한 곳에 몰빵은 도박입니다.'},
+      {text:'금융집짓기에서 투자는 <strong>지붕공사</strong>입니다. 기초(보험)와 기둥(저축)이 튼튼해야 지붕을 올릴 수 있습니다.'}
+    ],
+    tips:['100-나이 법칙: 30세면 위험자산 70%, 안전자산 30%','ETF 적립식 투자로 시간분산 효과를 누리세요','국내+해외+채권+금으로 공간분산하세요','연 1회 리밸런싱으로 포트폴리오를 관리하세요'],
+    stories:[
+      {emoji:'👨',name:'정○○님 (34세, 직장인)',desc:'ETF 적립식 3년차',quote:'매월 50만원씩 S&P500 ETF에 넣기 시작했어요. 3년 만에 원금 1,800만원이 2,300만원이 됐습니다. 시간분산의 힘을 실감해요.'},
+      {emoji:'👩',name:'한○○님 (40세, 맞벌이)',desc:'분산투자로 안정적 수익',quote:'주식에만 넣다가 크게 잃고 배웠어요. 국내 ETF 30%, 해외 ETF 30%, 채권 20%, 금 20%로 분산했더니 변동성이 확 줄었습니다.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'ETF 적립식 자동투자를 시작하세요',detail:'1. 증권 계좌 개설 (수수료 무료)\n2. S&P500 또는 KOSPI200 ETF 선택\n3. 매월 자동매수 설정\n4. 최소 3년 이상 유지',highlight:'👉 AI머니야에서 포트폴리오 분석을 받아보세요'}
+  },
+  '토':{
+    emoji:'🏠',title:'토(土) — 부동산',sub:'돈을 굴리다: 흙처럼 안정적인 부동산으로 자산을 운용하세요',
+    houseActive:'roof',houseLabel:'지붕공사 (부동산)',
+    insights:[
+      {text:'한국 가계자산의 <strong>75%</strong>가 부동산입니다. 부동산은 한국인에게 가장 친숙하면서도 가장 큰 비중을 차지하는 자산입니다.'},
+      {text:'<strong>월세 수익</strong>은 근로소득을 대체하는 가장 안정적인 패시브 인컴입니다. 임대수익률과 입지 분석이 핵심입니다.'},
+      {text:'금융집짓기에서 부동산은 <strong>지붕공사</strong>에 해당합니다. 불(투자)이 타고 남은 재가 흙(토)이 되듯, 축적된 자산을 안정적으로 운용하는 단계입니다.'}
+    ],
+    tips:['실거주용 주택 마련을 최우선으로 고려하세요','수익형 부동산은 입지와 임대수익률을 꼼꼼히 분석하세요','REITs(부동산투자신탁)로 소액 부동산 투자를 시작하세요','대출 비율은 자산의 50% 이하로 관리하세요'],
+    stories:[
+      {emoji:'👨',name:'강○○님 (45세, 자영업)',desc:'오피스텔 2채로 월세 수익',quote:'10년간 모은 돈으로 역세권 오피스텔 2채를 매입했어요. 월 120만원 임대수익이 꾸준히 들어오니 노후 걱정이 줄었습니다.'},
+      {emoji:'👩',name:'윤○○님 (33세, 직장인)',desc:'REITs로 소액 부동산 투자',quote:'부동산 살 돈은 없었지만 REITs로 매월 10만원씩 투자하기 시작했어요. 배당도 받고 부동산 시장도 공부하게 됐습니다.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'부동산 투자 공부를 시작하세요',detail:'1. 내 주변 아파트 실거래가 조회\n2. REITs 상품 3개 비교 분석\n3. 임대수익률 계산법 익히기\n4. 부동산 관련 유튜브 채널 구독',highlight:'👉 AI머니야에서 자산배분 분석을 받아보세요'}
+  },
+  '금':{
+    emoji:'🛡️',title:'금(金) — 보험/절세',sub:'돈을 지키다: 금속처럼 단단하게 자산을 보호하고 절세하세요',
+    houseActive:'base',houseLabel:'기초공사 (보험·리스크 관리)',
+    insights:[
+      {text:'한국인의 <strong>92%</strong>가 보험에 가입해 있지만, 제대로 된 보장 분석을 받은 사람은 <strong>15%</strong>에 불과합니다. 보험료만 내고 보장은 못 받는 경우가 태반입니다.'},
+      {text:'<strong>절세</strong>만 잘해도 연 <strong>100~400만원</strong>을 아낄 수 있습니다. 연금저축, IRP, ISA는 절세 3종 세트입니다.'},
+      {text:'금융집짓기에서 보험·절세는 <strong>기초공사</strong>입니다. 기초가 튼튼해야 지진(리스크)에도 집이 무너지지 않습니다.'}
+    ],
+    tips:['보장성보험을 먼저 점검하세요 (실비, 암, 치명적질환)','연금저축펀드 연 600만원 + IRP 연 300만원 = 세액공제 최대화','사업자라면 법인 절세 전략을 꼭 검토하세요','상속·증여 계획은 50대부터 시작하세요'],
+    stories:[
+      {emoji:'👩',name:'서○○님 (38세, 맞벌이)',desc:'보험 리모델링으로 월 15만원 절약',quote:'보험을 10개나 들고 있었는데 분석해보니 중복이 5개였어요. 리모델링하니 보장은 더 좋아지고 월 15만원을 아꼈습니다.'},
+      {emoji:'👨',name:'조○○님 (42세, 사업가)',desc:'절세로 연 350만원 환급',quote:'연금저축+IRP+ISA를 세팅하니 연말정산에서 350만원이 돌아왔어요. 절세가 곧 투자 수익이라는 걸 체감했습니다.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'보험증권 전체를 한 곳에 모아 점검하세요',detail:'1. 내보험다보여(insure.or.kr)에서 전체 보험 조회\n2. 중복 보장 확인\n3. 부족한 보장 파악\n4. 연금저축·IRP 가입 여부 확인',highlight:'👉 AI머니야에서 보험 분석을 받아보세요'}
+  }
+};
+
+function getParam(n){return new URLSearchParams(window.location.search).get(n);}
+
+function renderReport(){
+  const type=getParam('type')||'수';
+  const nickname=getParam('nickname')||'';
+  const stem=getParam('stem')||'';
+  const myel=getParam('myel')||'';
+  const r=reportData[type];
+  if(!r){document.getElementById('reportContainer').innerHTML='<div class="no-result"><h2>리포트를 찾을 수 없습니다</h2><p>올바른 링크로 다시 접속해주세요.</p><a href="https://owant.netlify.app/fiveelements/" class="btn-app btn-primary">금융오행 진단 하러 가기</a></div>';return;}
+
+  const els=['수','목','화','토','금'];
+  const ics=['💧','🌲','🔥','🏠','🛡️'];
+  let ringHTML='';
+  els.forEach((e,i)=>{
+    const act=e===type;
+    ringHTML+=`<div class="ohaeng-item ${act?'active':''}" style="${act?'background:rgba(212,168,83,0.3);border-color:var(--gold)':''}"><div class="oe">${ics[i]}</div><div>${elementNames[e]}</div></div>`;
+  });
+
+  let insHTML=r.insights.map((ins,i)=>`<div class="insight-card"><div class="insight-num">${i+1}</div><div class="insight-text">${ins.text}</div></div>`).join('');
+  let tipHTML=r.tips.map(t=>`<li>${t}</li>`).join('');
+  let storyHTML=r.stories.map(s=>`<div class="story-card"><div class="story-quote">${s.quote}</div><div class="story-profile"><div class="story-avatar">${s.emoji}</div><div><div class="story-name">${s.name}</div><div class="story-desc">${s.desc}</div></div></div></div>`).join('');
+
+  const houseHTML=`<div class="house-visual"><div class="house-label">금융집짓기® 모형 — ${r.houseLabel} 영역</div><div class="house-layers"><div class="house-layer house-roof ${r.houseActive==='roof'?'active':''}">🏠 지붕: 투자 + 세금 + 부동산</div><div class="house-layer house-pillar ${r.houseActive==='pillar'?'active':''}">🏗️ 기둥: 은퇴 + 저축 + 부채상환</div><div class="house-layer house-base ${r.houseActive==='base'?'active':''}">🧱 기초: 보험 + 비상예비자금</div></div><div class="house-note">${type==='수'||type==='금'?'기초가 튼튼해야 집이 무너지지 않습니다':type==='목'?'기둥이 없으면 방이 만들어지지 않습니다':'기초와 기둥이 있어야 지붕을 올릴 수 있습니다'}</div></div>`;
+
+  document.getElementById('reportContainer').innerHTML=`
+    <div class="report-header"><div class="report-badge">금융오행 맞춤 리포트</div><div class="report-emoji">${r.emoji}</div><div class="report-label">당신의 돈을 부르는 금융오행</div><div class="report-title">${r.title}</div><div class="report-sub">${r.sub}</div></div>
+    ${nickname||stem?`<div class="user-info">${nickname?`<span class="user-tag">👤 ${nickname}님</span>`:''}${stem?`<span class="user-tag">📜 일간: ${stem}(${elementNames[myel]||''})</span>`:''}${'<span class="user-tag">💰 재성: '+elementNames[type]+'</span>'}</div>`:''}
+    <div class="ohaeng-visual"><div style="font-size:12px;opacity:.5;margin-bottom:8px;">금융오행 — 나의 재물운</div><div class="ohaeng-ring">${ringHTML}</div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;line-height:1.6;">📜 정통 명리학: 일간 오행의 상극이 재성(財星)입니다<br>🎯 금융오행: 재성을 현대 재테크 관점에서 해석한 것입니다 (재미로 봐주세요!)</div></div>
+    ${houseHTML}
+    <div class="section"><div class="section-title"><span>📜</span> 정통 명리학 해석</div>
+    <div class="insight-card"><div class="insight-num">☯</div><div class="insight-text">${nickname?nickname+'님의 ':''}일간(日干)은 <strong>${stem?stem+'('+elementNames[myel||type]+')':'해당 오행'}</strong>입니다. 명리학에서 <strong>재성(財星)</strong>은 일간이 극하는 오행으로, ${myel?elementNames[myel]+'극'+elementNames[type]:''} 관계에 의해 재성은 <strong>${elementNames[type]}</strong>입니다.</div></div>
+    <div class="insight-card"><div class="insight-num">⚖️</div><div class="insight-text">오행 상극: 목극토, 토극수, 수극화, 화극금, 금극목 — 이것은 5천년 동양철학의 핵심 원리입니다. 재성은 내가 통제하고 다스릴 수 있는 기운으로, 재물과 관련됩니다.</div></div>
+    </div>
+    <div class="section"><div class="section-title"><span>🎯</span> 금융오행 해석 <span style="font-size:11px;opacity:.5;font-weight:400;">(재미로 봐주세요!)</span></div><div style="background:rgba(212,168,83,0.06);border:1px solid rgba(212,168,83,0.15);border-radius:14px;padding:14px;margin-bottom:14px;font-size:13px;line-height:1.7;color:rgba(255,255,255,0.7);">금융오행은 정통 명리학의 재성 개념을 현대 재테크 관점에서 <strong style="color:var(--gold)">재미있게 해석</strong>한 것입니다. 실제 투자 결정은 전문가 상담을 권장합니다.</div>${insHTML}</div>
+    <div class="section"><div class="section-title"><span>💡</span> CFP 오상열 대표의 실전 팁</div><div class="tip-card"><div class="tip-label">🏆 20년 경력 CFP의 핵심 전략</div><ul class="tip-items">${tipHTML}</ul></div></div>
+    <div class="section"><div class="section-title"><span>👥</span> 같은 오행 사람들의 이야기</div>${storyHTML}</div>
+    <div class="section"><div class="section-title"><span>🎯</span> 지금 바로 실행하세요</div><div class="action-card"><div class="action-badge">ACTION PLAN</div><div class="action-title">${r.action.title}</div><div class="action-desc">${r.action.desc}</div><div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;margin:10px 0;white-space:pre-line;">${r.action.detail}</div><div class="action-highlight">${r.action.highlight}</div></div></div>
+    <div class="cta-section"><div class="cta-text">더 정확한 맞춤 전략이 필요하다면<br>AI머니야에서 확인하세요</div><a href="https://moneya-frontend.vercel.app" class="btn-app btn-primary">🤖 AI머니야 앱 바로가기</a><a href="https://owant.netlify.app/fiveelements/" class="btn-app btn-secondary">🔄 금융오행 다시 진단하기</a><a href="https://owant.netlify.app/" class="btn-app btn-secondary">📊 무료 통합연금분석 받기</a></div>
+    <div class="report-footer">© 2025 오원트금융연구소 | CFP 오상열<br>금융집짓기® 는 오원트금융연구소의 등록상표입니다</div>`;
+}
+renderReport();
+</script>
+</body>
+</html>

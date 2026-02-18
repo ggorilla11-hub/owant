@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>금융오행 진단 | 나의 금융 DNA는?</title>
+<meta property="og:title" content="금융오행 - 5천년 동양철학으로 찾는 재테크 성공코드">
+<meta property="og:description" content="사주 만세력으로 나만의 금융 DNA를 진단하세요">
+<meta property="og:url" content="https://owant.netlify.app/fiveelements/">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#D4A853;--dark:#1A1A2E;--gray:#8896A7;--white:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--dark);color:#fff;-webkit-font-smoothing:antialiased;}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2d1b4e 50%,#1a1a2e 100%);padding:50px 20px 35px;text-align:center;position:relative;overflow:hidden;}
+.hero-badge{display:inline-block;background:rgba(212,168,83,0.15);border:1px solid rgba(212,168,83,0.3);color:var(--gold);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:14px;}
+.hero h1{font-family:'Black Han Sans';font-size:26px;line-height:1.4;margin-bottom:10px;}
+.hero h1 span{color:var(--gold);}
+.hero p{font-size:14px;opacity:.8;line-height:1.6;margin-bottom:20px;}
+.hero-icons{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+.hero-icon{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 12px;text-align:center;min-width:58px;}
+.hero-icon .em{font-size:22px;} .hero-icon .nm{font-size:9px;opacity:.6;margin-top:3px;}
+.elements-intro{background:linear-gradient(180deg,#16213e,#1a1a2e);padding:30px 20px;}
+.elements-title{text-align:center;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:20px;}
+.el-card{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;margin-bottom:10px;}
+.el-card .icon{font-size:28px;flex-shrink:0;} .el-card .name{font-size:14px;font-weight:700;margin-bottom:2px;} .el-card .desc{font-size:12px;opacity:.6;line-height:1.5;}
+.form-section{background:linear-gradient(180deg,#1a1a2e,#16213e);padding:30px 20px;}
+.form-title{text-align:center;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+.form-sub{text-align:center;font-size:12px;opacity:.5;margin-bottom:20px;}
+.form-row{margin-bottom:14px;} .form-label{font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:5px;display:block;}
+.form-input,.form-select{width:100%;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:15px;outline:none;-webkit-appearance:none;}
+.form-input:focus,.form-select:focus{border-color:var(--gold);} .form-input::placeholder{color:rgba(255,255,255,0.3);}
+.form-select option{background:#1a1a2e;color:#fff;}
+.toggle-group{display:flex;gap:8px;}
+.toggle-btn{flex:1;padding:10px 8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:rgba(255,255,255,0.6);font-size:13px;font-weight:500;text-align:center;cursor:pointer;transition:all 0.3s;}
+.toggle-btn.active{background:rgba(212,168,83,0.2);border-color:var(--gold);color:var(--gold);font-weight:700;}
+.form-row-inline{display:flex;gap:8px;} .form-row-inline>*{flex:1;}
+.btn-cta{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#F59E0B);border:none;border-radius:14px;color:#fff;font-size:17px;font-weight:800;cursor:pointer;margin-top:20px;box-shadow:0 6px 20px rgba(212,168,83,0.3);}
+.loading-section{display:none;text-align:center;padding:80px 20px;background:linear-gradient(135deg,#1a1a2e,#2d1b4e);min-height:60vh;}
+.loading-section.active{display:block;}
+.spinner{width:60px;height:60px;border:4px solid rgba(212,168,83,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.result-section{display:none;} .result-section.active{display:block;}
+.result-header{padding:40px 20px 24px;text-align:center;}
+.result-icon-big{font-size:64px;margin-bottom:8px;}
+.result-label{font-size:12px;opacity:.6;margin-bottom:4px;}
+.result-title{font-family:'Black Han Sans';font-size:30px;margin-bottom:4px;}
+.result-sub{font-size:14px;opacity:.8;line-height:1.5;}
+.result-detail{padding:0 20px 24px;}
+.r-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;margin-bottom:14px;}
+.r-card-title{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:10px;}
+.r-card p{font-size:13px;line-height:1.7;opacity:.8;} .r-card .hl{color:var(--gold);font-weight:600;}
+.ohaeng-ring{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px 0;}
+.oh-item{width:54px;height:54px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;border:2px solid rgba(255,255,255,0.1);opacity:.35;}
+.oh-item.active{opacity:1;transform:scale(1.25);border-color:var(--gold);box-shadow:0 0 14px rgba(212,168,83,0.4);}
+.oh-item .oe{font-size:18px;}
+.action-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.a-tag{background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--gold);}
+.wealth-section{background:linear-gradient(180deg,rgba(212,168,83,0.05),transparent);border:2px solid rgba(212,168,83,0.2);border-radius:20px;padding:24px 16px;margin:0 20px 24px;text-align:center;}
+.wealth-icon{font-size:48px;margin-bottom:6px;}
+.wealth-label{font-size:12px;opacity:.5;margin-bottom:4px;}
+.wealth-name{font-family:'Black Han Sans';font-size:24px;color:var(--gold);margin-bottom:4px;}
+.wealth-desc{font-size:13px;opacity:.7;line-height:1.5;}
+.db-section{display:none;} .db-section.active{display:block;}
+.db-card{background:linear-gradient(180deg,#16213e,#1a1a2e);padding:40px 20px;text-align:center;}
+.db-title{font-family:'Black Han Sans';font-size:24px;line-height:1.4;margin-bottom:10px;}
+.db-sub{font-size:14px;opacity:.7;margin-bottom:16px;line-height:1.5;}
+.db-benefit{background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.25);border-radius:12px;padding:14px;font-size:13px;color:var(--gold);margin-bottom:24px;line-height:1.5;}
+.db-fg{margin-bottom:14px;text-align:left;} .db-fl{font-size:13px;opacity:.7;margin-bottom:5px;display:block;}
+.db-fi{width:100%;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:15px;outline:none;}
+.db-fi:focus{border-color:var(--gold);}
+.consent-box{margin:16px 0;text-align:left;}
+.consent-label{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.7;cursor:pointer;}
+.consent-label input{width:18px;height:18px;accent-color:var(--gold);}
+.btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#F59E0B);border:none;border-radius:14px;color:#fff;font-size:17px;font-weight:800;cursor:pointer;}
+.btn-submit:disabled{opacity:0.4;cursor:not-allowed;}
+.complete-section{display:none;} .complete-section.active{display:block;}
+.complete-card{background:linear-gradient(135deg,#2d1b4e,#1a1a2e);padding:60px 20px;text-align:center;min-height:100vh;}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+</style>
+</head>
+<body>
+
+<div class="hero" id="heroSection">
+  <div class="hero-badge">🔮 5천년 동양철학 × 현대 재테크</div>
+  <h1>돈을 부르는<br>나의 <span>금융오행</span>은?</h1>
+  <p>사주 만세력으로 나만의 금융 DNA를 발견하고<br>맞춤 재테크 전략을 확인하세요</p>
+  <div class="hero-icons">
+    <div class="hero-icon"><div class="em">💧</div><div class="nm">수·현금</div></div>
+    <div class="hero-icon"><div class="em">🌲</div><div class="nm">목·저축</div></div>
+    <div class="hero-icon"><div class="em">🔥</div><div class="nm">화·투자</div></div>
+    <div class="hero-icon"><div class="em">🏠</div><div class="nm">토·부동산</div></div>
+    <div class="hero-icon"><div class="em">🛡️</div><div class="nm">금·절세</div></div>
+  </div>
+</div>
+
+<div class="elements-intro" id="introSection">
+  <div class="elements-title">⚖️ 5천년 금융오행의 비밀</div>
+  <div class="el-card"><div class="icon">💧</div><div><div class="name" style="color:#60a5fa">수(水) - 현금흐름</div><div class="desc">돈을 벌다 — 물처럼 끊임없이 흘러야 하는 현금흐름 관리</div></div></div>
+  <div class="el-card"><div class="icon">🌲</div><div><div class="name" style="color:#4ade80">목(木) - 저축</div><div class="desc">돈을 모으다 — 나무의 뿌리처럼 체계적 저축으로 기반 마련</div></div></div>
+  <div class="el-card"><div class="icon">🔥</div><div><div class="name" style="color:#f87171">화(火) - 투자</div><div class="desc">돈을 불리다 — 불처럼 분산투자로 자산 증식</div></div></div>
+  <div class="el-card"><div class="icon">🏠</div><div><div class="name" style="color:#fbbf24">토(土) - 부동산</div><div class="desc">돈을 굴리다 — 흙처럼 안정적인 부동산 투자</div></div></div>
+  <div class="el-card"><div class="icon">🛡️</div><div><div class="name" style="color:#d1d5db">금(金) - 보험/절세</div><div class="desc">돈을 지키다 — 금속처럼 단단하게 자산 보호</div></div></div>
+</div>
+
+<div class="form-section" id="formSection">
+  <div class="form-title">🔮 정확한 금융오행 진단</div>
+  <div class="form-sub">정통 만세력으로 나만의 자산관리 철학을 찾아보세요</div>
+  <div class="form-row"><div class="form-label">📝 성함</div><input type="text" class="form-input" id="userName" placeholder="이름을 입력해주세요"></div>
+  <div class="form-row"><div class="form-label">👫 성별</div><div class="toggle-group"><div class="toggle-btn" onclick="sel(this,'gender','남자')">남자</div><div class="toggle-btn" onclick="sel(this,'gender','여자')">여자</div></div></div>
+  <div class="form-row"><div class="form-label">📅 달력 구분</div><div class="toggle-group"><div class="toggle-btn active" onclick="sel(this,'calendar','양력')">양력 (일반)</div><div class="toggle-btn" onclick="sel(this,'calendar','음력')">음력</div></div></div>
+  <div class="form-row"><div class="form-label">📅 생년월일</div><div class="form-row-inline"><select class="form-select" id="bY"></select><select class="form-select" id="bM"></select><select class="form-select" id="bD"></select></div></div>
+  <div class="form-row"><div class="form-label">⏰ 태어난 시간</div><select class="form-select" id="bT"><option value="">시간 선택</option><option value="자">자시(23-01)</option><option value="축">축시(01-03)</option><option value="인">인시(03-05)</option><option value="묘">묘시(05-07)</option><option value="진">진시(07-09)</option><option value="사">사시(09-11)</option><option value="오">오시(11-13)</option><option value="미">미시(13-15)</option><option value="신">신시(15-17)</option><option value="유">유시(17-19)</option><option value="술">술시(19-21)</option><option value="해">해시(21-23)</option><option value="모름">모름</option></select></div>
+  <button class="btn-cta" onclick="analyze()">✨ 금융오행 확인하기 ✨</button>
+</div>
+
+<div class="loading-section" id="loadingSection"><div class="spinner"></div><div style="font-size:16px;color:var(--gold);margin-bottom:8px;">🔮 정밀 만세력으로 분석 중...</div><div style="font-size:13px;opacity:.5;">당신의 금융 DNA를 분석하고 있습니다</div></div>
+
+<div class="result-section" id="resultSection">
+  <div class="result-header" id="rHeader">
+    <div class="result-icon-big" id="rIcon"></div>
+    <div class="result-label">정통 만세력 분석 결과 — 당신의 오행</div>
+    <div class="result-title" id="rTitle"></div>
+    <div class="result-sub" id="rSub"></div>
+  </div>
+  <div class="result-detail">
+    <div class="r-card"><div class="r-card-title">📜 나의 오행 (일간)</div><p id="rMyEl"></p></div>
+    <div style="text-align:center;padding:10px 0;"><div style="font-size:24px;">⬇️</div><div style="font-size:12px;opacity:.5;">상극(재성)으로 본 재물운</div></div>
+  </div>
+  <div class="wealth-section">
+    <div class="wealth-icon" id="wIcon"></div>
+    <div class="wealth-label">💰 당신의 재물운 (재성·財星)</div>
+    <div class="wealth-name" id="wName"></div>
+    <div class="wealth-desc" id="wDesc"></div>
+  </div>
+  <div class="result-detail">
+    <div style="background:rgba(212,168,83,0.06);border:1px solid rgba(212,168,83,0.15);border-radius:14px;padding:14px;margin-bottom:14px;font-size:12px;line-height:1.6;color:rgba(255,255,255,0.5);text-align:center;">🎯 금융오행은 정통 명리학의 재성 개념을 현대 재테크 관점에서 재미있게 해석한 것입니다</div>
+    <div class="r-card"><div class="r-card-title">🎯 금융오행 전략</div><p id="rStrategy"></p></div>
+    <div class="r-card"><div class="r-card-title">⚡ 핵심 실행 액션</div><div id="rActions"></div></div>
+    <div style="text-align:center;margin-top:10px;">
+      <div class="ohaeng-ring" id="oRing"></div>
+      <div style="font-size:11px;opacity:.4;" id="oNote"></div>
+    </div>
+  </div>
+  <div style="padding:0 20px 30px;background:#1a1a2e;"><button class="btn-cta" onclick="showDB()">📋 맞춤 금융오행 리포트 받기</button></div>
+</div>
+
+<div class="db-section" id="dbSection"><div class="db-card">
+  <div class="db-title">맞춤 금융오행 전략을<br>보내드릴게요!</div>
+  <div class="db-sub" id="dbText"></div>
+  <div class="db-benefit">🎁 지금 신청하면<br>AI머니야 프리미엄 14일 무료 + 세미나 초대</div>
+  <div class="db-fg"><div class="db-fl">전화번호 *</div><input type="tel" class="db-fi" id="dbPhone" placeholder="010-0000-0000"></div>
+  <div class="db-fg"><div class="db-fl">이메일</div><input type="email" class="db-fi" id="dbEmail" placeholder="example@email.com"></div>
+  <div class="consent-box"><label class="consent-label"><input type="checkbox" id="ck" onchange="document.getElementById('sbBtn').disabled=!this.checked"><span>개인정보 수집·이용에 동의합니다</span></label></div>
+  <button class="btn-submit" id="sbBtn" disabled onclick="submitDB()">무료 금융오행 리포트 신청하기</button>
+</div></div>
+
+<div class="complete-section" id="completeSection"><div class="complete-card">
+  <div style="font-size:60px;margin-bottom:16px;">🎉</div>
+  <div style="font-family:'Black Han Sans';font-size:24px;margin-bottom:10px;" id="cName"></div>
+  <div style="font-size:14px;opacity:.8;line-height:1.6;">맞춤 금융오행 전략 리포트를<br>이메일과 카카오톡으로 보내드리겠습니다!</div>
+  <div style="margin-top:24px;"><a id="rptLink" href="#" onclick="window.open(this.href);return false;" style="display:inline-block;padding:16px 32px;background:linear-gradient(135deg,var(--gold),#F59E0B);color:#fff;border-radius:14px;font-size:17px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(212,168,83,0.4);">📋 내 금융오행 리포트 보기</a></div>
+  <div style="margin-top:12px;font-size:12px;opacity:.5;">오원트금융연구소 | CFP 오상열 대표</div>
+</div></div>
+<div class="confetti-container" id="cc"></div>
+
+<script>
+var KoreanLunarCalendar=function(){"use strict";var a={KOREAN_LUNAR_MIN_VALUE:10000101,KOREAN_LUNAR_MAX_VALUE:20501118,KOREAN_SOLAR_MIN_VALUE:10000213,KOREAN_SOLAR_MAX_VALUE:20501231,KOREAN_LUNAR_BASE_YEAR:1e3,SOLAR_LUNAR_DAY_DIFF:43,LUNAR_SMALL_MONTH_DAY:29,LUNAR_BIG_MONTH_DAY:30,SOLAR_SMALL_YEAR_DAY:365,SOLAR_BIG_YEAR_DAY:366,SOLAR_DAYS:[31,28,31,30,31,30,31,31,30,31,30,31,29],KOREAN_CHEONGAN:[44049,51012,48337,51221,47924,44592,44221,49888,51076,44228].map((function(a){return String.fromCharCode(a)})),KOREAN_GANJI:[51088,52629,51064,47896,51652,49324,50724,48120,49888,50976,49696,54644].map((function(a){return String.fromCharCode(a)})),KOREAN_GAPJA_UNIT:[45380,50900,51068].map((function(a){return String.fromCharCode(a)})),CHINESE_CHEONGAN:[30002,20057,19993,19969,25098,24049,24218,36763,22764,30328].map((function(a){return String.fromCharCode(a)})),CHINESE_GANJI:[23376,19985,23493,21359,36784,24051,21320,26410,30003,37193,25100,20133].map((function(a){return String.fromCharCode(a)})),CHINESE_GAPJA_UNIT:[24180,26376,26085].map((function(a){return String.fromCharCode(a)})),INTERCALATION_STR:[50980,38287].map((function(a){return String.fromCharCode(a)})),KOREAN_LUNAR_DATA:[2194016855,2197734699,2193886506,2194017621,3271595437,2193884522,2194016621,2197837021,3267626157,2193885773,2197827149,2193885990,3271600982,2194016981,2193883994,2197842298,3267758427,2193884315,2197834395,2193885771,3271674533,2193884842,2194016981,2197852893,3267625653,2194016599,2197705902,2194017431,3267626571,2197759306,2194017705,2197857974,3267757677,2193883758,2197907758,2193885486,3267628182,2197835157,2193886538,2197867881,3267627864,2194148715,2197918315,2193883741,3267627307,2197838507,2193885845,2193886026,3271696043,2193883861,2197927258,2194015419,3267625563,2197845303,2193884459,2193884821,3271571285,2193884842,2198063797,2193883765,3267626166,2197850718,2193885782,2193886502,3271581350,2194017621,2193884586,2197822826,3267758445,2197861551,2193884317,2193885773,3271589165,2193885862,2194017109,2197833173,3267625818,2194016605,2197885299,2193884251,3271596623,2193884747,2193885861,2197842793,3267757749,2193883866,2197826230,2194016567,3271476375,2194017431,2193884747,2197718698,3267759525,2193884596,2198030957,2193883822,3267628641,2197826862,2193886358,2197855565,2193886538,2194017637,2197906837,2194015581,3267625581,2197826141,2193885483,2197858967,3267627669,2193886026,2197850970,2194016981,3267757403,2197832375,2193884247,2193884459,3271564587,2193884821,2197853997,2193884586,3267758773,2197837037,2193884342,2194016855,3271504974,2193886502,2197929618,2194017621,3267626410,2197850554,2194016621,2193884334,3271576221,2193885773,2193886501,2197827365,3267627860,2198056297,2193883866,2194016605,3271648411,2193884315,2193885771,2197834571,3267626661,2197863251,2193884852,2194016950,3271657814,2194016663,2193884311,2197833367,3267626315,2197735077,2194017701,2193884588,3271797429,2193883758,2193885486,2197843118,3267628182,2193886538,2197827402,2194017621,3271603563,2194015579,2193883741,2197846333,3267627303,2193885845,2197904661,2193886026,3267758933,2197885653,2194015451,2197721694,3267758679,2193884459,2197842603,2193884821,3267626666,2197830570,2194016949,2197861559,3267626158,2194016855,2197714222,2193886502,3267759763,2197837525,2193884586,2194016693,3271566701,2193884334,2197924429,2193885773,3267628326,2197843301,2193886034,2194017642,3271567066,2194016605,2197931165,2193884315,3267627595,2197850795,2193884837,2193886036,3271576500,2194016950,2194016603,2197824823,3267626135,2197853775,2193884491,2193884837,3271653061,2193884588,2194016950,2197895278,3267627310,2197867671,2193886358,2193886538,3271593386,2194017109,2193884522,2197969627,3267625565,2193885486,2197826859,2193885845,3271597389,2193885994,2194017109,2197845365,3267626202,2194016859,2197833047,2193884459,3271674515,2193884819,2193884842,2197850842,3267758821,2193884342,2197834414,2194016855,3267626279,2197759270,2194017875,2197857995,3267626410,2194015661,2197906605,2193884334,3267627598,2197835085,2193886502,2197863763,3267627858,2194017130,2197919082,2194015575,3267626141,2197903899,2193885771,2193885861,3271564965,2193886034,2197863258,2194016950,3267758427,2197841079,2193884311,2193884747,3271571275,2193884837,2197862067,2193884588,3267758774,2197914285,2193884318,2193885773,3271581003,2193885989,2193886034,2197892690,3267758938,2197858654,2194016603,2193884315,3271584343,2193885771,2193885861,2197834661,3267626708,2197867222,2194016950,2194016567,2197849247,2193884311,2193884747,2197706442,3267759525,2193884586,2197822828,2194016878,3271604527,2193885486,2193886358,2197847381,3267628362,2194017621,2197894485,2193884522,3267758701,2197822045,2193885483,2197850715,3267627669,2193885994,2197904170,2194016981,3267626202,2197822650,2194016855,2197853487,3267626279,2193884819,2197845683,2193884842,3267758773,2197828981,2193884342,2197867111,3267627566,2193886486,2197851798,2193886538,3267759530,2197837290,2194015597,2193884334,3271632989,2193885741,2197859607,2193885861,3267627858,2197847412,2194016986,2194015581,3271570747,2193884251,2193885739,2197887531,3267627685,2197855061,2193884850,2194016982,3271644470,2194016567,2193884247,2197830231,3267626283,2197727910,2194017685,2193884586,3271654060,2194016878,2193884462,2197830830,3267627606,2197863723,2193886506,2194017621,3271595437,2193884522,2194016877,2197837149,3267626283,2193885837,2197827157,2193885994,3271600982,2194016981,2193884378,2197842554,3267758679,2193884443,2197899799,2193884755,3271673513,2193884586,2194016949,2197852861,3267625654,2194016823,2197706030,2193886486,2194017867,2197698386,2194017706,2197927348,3267757421,2193883822,2197846589,2193885741,3267628309,2197835157,2193886034,2197867369,3267758810,2194015581,2197918299,2193884251,3267627563,2197838507,2193885845,2193886034,3271564970,2194016950,2197865819,2194015415,3267626071,2197845303,2193884459,2193884821,3271640725,2193884586,2197867189,2194016878,3267626158,2197850718,2193885782,2193886506,3271585450,2194017621,2193884522,2197891418,3267758429,2197861551,2193884315,2193885773,3271589165,2193885994,2194017109,2197833173,3267625690,2194016603,2197885271,2193884315,3271596623,2193884747,2193884841,2197842666,3267757749,2193883830,2197826222,2194016567,3271537814,2193886358,2194017867,2197714610,3267759530,2194015661,2197828461,2193883758,3267627310,2197826861,2193886357,2197855565,3267627850,2194017129,2197906778,2194015579,3267625565,2197826139,2193885483,2197858967,3267626645,2193885002,2197850970,2194016950,3267757371,2197832375,2193883735,2193884459,3271564587,2193884821,2197853869,2193884586,3267758773,2197837037,2193884334,2194016855,3271504974,2193886506,2197929364,2194017109,2193884522,2197846394,2194016605,2193884334,3271576219,2193885773,2193886501,2197887658,3267758933,2197853549,2193883866,2194016603,3271578807,2193884311,2193885771,2197834571,3267626665,2197867221,2194015669,2193883830,3271592286,2194016559,2193884311,2197702294,3267628362,2197868197,2194017641,2194015597,3271664309,2193883758,2193885486,2197843117,3267628181,2193886538,2197827402,2194017113,3271607661,2194015579,2193883741,2197846331,3267627307,2193885845,2197904149,2193884874,3267758805,2197885622,2194015419,2197852767,3267625559,2193884459,2197711530,2194017941,3267626666,2197830570,2194016949,2197861559,3267626158,2194016855,2197714221,2193886502,3267759509,2197837269,2193884522,2194016621,3271566685,2193884334,2197858895,2193885773,3267628325,2197843305,2194017109,2193883994,3271568058,2194016603,2197931163,2193884311,3267627595,2197850923,2193884837,2193884884,3271772853,2193883830,2194016567,2197824815,3267626135,2197722702,2193886538,2194017957,3271648937,2194015597,2193883830,2197895262,3267627310,2197863575,2193885845,2193886538,3271593386,2194017101,2194015595,2197832411,3267625565,2193885485,2197826859,2193885845,3271596877,2193884842,2194016981,2197841269,3267757243,2193883739,2197894231,2193884459,3271539348,2194017941,2193884842,2197850842,3267758517,2193884342,2197834414,2194016847,3267495206,2197892390,2194017621,2197923241,3267626346,2194016621,2197906589,2193884318,3267627597,2197835085,2193886501,2197863763,3267627860,2194017114,2197915994,2194016603,3267626139,2197834391,2193885771,2193885861,3271564965,2193884884,2197994203,2193883830,3267758391,2197841071,2193884311,2193884747,3271440202,2194017701,2197862069,2194015597,3267625646,2197846334,2193885486,2193886358,3271646485,2193886538,2194017701,2197894485,3267626346,2197846650,2194016861,2193885485,3271584427,2193885845,2193886026,2197834666,3267758805,2193884506,2197891258,2194016859,3271587127,2193884459,2193884819,2197903125,3267626666,2194016981,2197829045,2193884342,3271592542,2193885774,2193886502,2197843622,3267628370,2194017706,2197898858,2194015597,3267626158,2197830301,2193885773,2197847339,3267627813,2193886546,2197904724,2194017114,3267757405,2197828955,2193884315,2197845591,2193885771,2193885861,2197842789,2193884882,3267758810,2197833142,2194016567,2193884311,3271571095,2193884749,2197714602,2194017701,3267626410,2197838572,2194016942,2193885486,3271572782,2193886358,2197916997,2193886538,3267759445,2197906837,2193884522,2194016877,3271574877,2193884461,2193885845,2197896341,3267627850,2197912394,2194016981,2193884506,3271645754,2194016859,2193884459,2197899799,3267626643,2197853867,2193884842,2194016949,3271582965,2193884342,2194016855,2197701934,3267628310,2194017939,2197698386,2194017706,3271652778,2194015597,2193884334,2197903901,3267627565,2193886485,2197835173,2193886034,3271597418,2194016986,2194015581,2197906075,3267626075,2193885739,2197838635,2193885845,3267627858,2197891762,2194016982,2197910870,3267757367,2193884247,2197837399,2193884459,3267626645,2197829525,2193884586,2197858998,3267758701,2193884334,2197842542,2193885782,3267628330,2197839530,2194017621,2193884586,3271572330,2194016877,2197845181,2193884331,3267627661,2197839189,2193885994,2194017109,3271574997,2193884378,2194016605,2197824855,3267626139,2197842583,2193884747,2193884841,2197834666,2194015925,2193883834,2197826230,3267758391,2197710126,2193886486,2194017867,3271448274,2194017705,2194015669,2197828461,3267625646,2193885742,2197827117,2193886357,3271585109,2193886034,2194017129,2197833178,3267757405,2193883741,2197830235,2193885739,3271654027,2193885845,2193886026,2197904170,3267758805,2194015579,2197832375,2193883735,3271595311,2193884459,2193884821,2197841621,3267626410,2194016949,2197833069,2193884334,3267758679,2197763158,2193886506,2197913226,3267759445,2193884586,2197838554,2194016605,3267626158,2197834411,2193885773,2197851435,3267627817,2194017109,2197845365,2193883866,3267758429,2197837015,2193884315,2193885771,3271637579,2193884841,2197850841,2194015925,3267625654,2197903670,2194016567,2193884311,3271444118,2193886794,2197860006,2194017705,3267757485,2197906093,2193883822,2193885486,3271580845,2193886357,2193886538,2197896522,3267758953,2197845370,2194015579,2193883741,3271579995,2193885483,2193885845,2197835157,3267627850,2194017109,2197825237,2194015579,3271582327,2193883735,2193884459,2197707434,3267759765,2193884842,2197830570,2194016949,2197849277,2193884334,2194016855,2197706061,3267628326,2194017685,2197898837,2193884522,3267758509,2197824861,2193884334,2197842523,3267627597,2193886501,2197839273,2194017109,3267626346,2197826266,2194016605,2197845179,3267626139,2193885771,2197838667,2193884841,3267627732,2197965749,2193883830,2194016603,3271566647,2193884311,2197710422,2193886794,3267759781,2197903017,2194015669,2193883830,3271637166,2193885486,2197912717,2193886357,3267628362,2197908874,2194017129,2194015597,3271639643,2193883741,2193885485,2197826859,3267627669,2197847381,2193886026,2194017109,3271644501,2194015451,2193883739,2197895255,3267626283,2197850779,2193884821,2193884842,3271584490,2194016949,2193884342,2197834414,3267758679,2193884455,2197698342,2194017685,3271587509,2193884522,2194016685,2197837021,3267626158,2193885774,2197835085,2193886501,3271593305,2193886036,2194017642,2197907802,3267758427,2193884315,2197834395,2193885771,3271600935,2193884837,2193884884,2197973877,3267625654,2194016603,2197836983,2193884311,3267626571,2197698378,2194017957,2197849817,3267757485,2193883830,2197838190,2193885486,3267628182,2197835413,2193886538,2194017701,3271567189,2193884524,2197977787,2193883741,3267627309,2197839019,2193885845,2193886026,3271637834,2194017109,2197853533,2193884346,3267758683,2197837143,2193884459,2193885845,3271576469,2193884842,2194016981,2197825205,3267626166,2197842542,2194016855,2193884455,3271448230,2194017683,2193884586,2197830506,3267758445,2197861551,2193884334,2193885773,3271650573,2193886501,2193886546,2197839316,3267758954,2194016621,2197824859,2193884315,3271588439,2193885771,2193885989,2197904165,3267626708,2194016986,2197895350]};return function(){function t(){this.solarCalendar={year:0,month:0,day:0},this.lunarCalendar={year:0,month:0,day:0,intercalation:!1},this.gapjaYearInx=[0,0,0],this.gapjaMonthInx=[0,0,1],this.gapjaDayInx=[0,0,2]}return t.prototype.getLunarData=function(t){return a.KOREAN_LUNAR_DATA[t-a.KOREAN_LUNAR_BASE_YEAR]},t.prototype.getLunarIntercalationMonth=function(a){return a>>12&15},t.prototype.getLunarDays=function(a){return this.getLunarData(a)>>17&511},t.prototype.getLunarDays2=function(t,r,n){var e=this.getLunarData(t);return n&&this.getLunarIntercalationMonth(e)==r?(e>>16&1)>0?a.LUNAR_BIG_MONTH_DAY:a.LUNAR_SMALL_MONTH_DAY:(e>>12-r&1)>0?a.LUNAR_BIG_MONTH_DAY:a.LUNAR_SMALL_MONTH_DAY},t.prototype.getLunarDaysBeforeBaseYear=function(t){for(var r=0,n=a.KOREAN_LUNAR_BASE_YEAR;n<t+1;n++)r+=this.getLunarDays(n);return r},t.prototype.getLunarDaysBeforeBaseMonth=function(t,r,n){var e=0;if(t>=a.KOREAN_LUNAR_BASE_YEAR&&r>0){for(var o=1;o<r+1;o++)e+=this.getLunarDays2(t,o,!1);if(n){var A=this.getLunarIntercalationMonth(this.getLunarData(t));A>0&&A<r+1&&(e+=this.getLunarDays2(t,A,!0))}}return e},t.prototype.getLunarAbsDays=function(a,t,r,n){var e=0;return e=this.getLunarDaysBeforeBaseYear(a-1)+this.getLunarDaysBeforeBaseMonth(a,t-1,!0)+r,n&&this.getLunarIntercalationMonth(this.getLunarData(a))==t&&(e+=this.getLunarDays2(a,t,!1)),e},t.prototype.isSolarIntercalationYear=function(a){return(a>>30&1)>0},t.prototype.getSolarDays=function(t){var r=this.getLunarData(t);return this.isSolarIntercalationYear(r)?a.SOLAR_BIG_YEAR_DAY:a.SOLAR_SMALL_YEAR_DAY},t.prototype.getSolarDays2=function(t,r){var n=this.getLunarData(t);return 2==r&&this.isSolarIntercalationYear(n)?a.SOLAR_DAYS[12]:a.SOLAR_DAYS[r-1]},t.prototype.getSolarDayBeforeBaseYear=function(t){for(var r=0,n=a.KOREAN_LUNAR_BASE_YEAR;n<t+1;n++)r+=this.getSolarDays(n);return r},t.prototype.getSolarDaysBeforeBaseMonth=function(a,t){for(var r=0,n=1;n<t+1;n++)r+=this.getSolarDays2(a,n);return r},t.prototype.getSolarAbsDays=function(t,r,n){var e=0;return e=this.getSolarDayBeforeBaseYear(t-1)+this.getSolarDaysBeforeBaseMonth(t,r-1)+n,e-=a.SOLAR_LUNAR_DAY_DIFF},t.prototype.setSolarDateByLunarDate=function(a,t,r,n){var e,o=this.getLunarAbsDays(a,t,r,n),A=0,i=0;e=o<this.getSolarAbsDays(a+1,1,1)?a:a+1;for(var s=12;s>0;s--){var h=this.getSolarAbsDays(e,s,1);if(o>=h){A=s,i=o-h+1;break}}this.solarCalendar={year:e,month:A,day:i}},t.prototype.setLunarDateBySolarDate=function(a,t,r){var n,e=this.getSolarAbsDays(a,t,r),o=0,A=0,i=!1;n=e>=this.getLunarAbsDays(a,1,1,!1)?a:a-1;for(var s=12;s>0;s--){if(e>=this.getLunarAbsDays(n,s,1,!1)){o=s,this.getLunarIntercalationMonth(this.getLunarData(n))==s&&(i=e>=this.getLunarAbsDays(n,s,1,!0)),A=e-this.getLunarAbsDays(n,o,1,i)+1;break}}this.lunarCalendar={year:n,month:o,day:A,intercalation:i}},t.prototype.checkValidDate=function(t,r,n,e,o){var A=!1,i=1e4*n+100*e+o;if((t?a.KOREAN_LUNAR_MIN_VALUE:a.KOREAN_SOLAR_MIN_VALUE)<=i&&(t?a.KOREAN_LUNAR_MAX_VALUE:a.KOREAN_SOLAR_MAX_VALUE)>=i&&e>0&&e<13&&o>0){var s=t?this.getLunarDays2(n,e,r):this.getSolarDays2(n,e);if(!t&&1582==n&&10==e){if(o>4&&o<15)return!1;s+=10}o<=s&&(A=!0)}return A},t.prototype.setLunarDate=function(a,t,r,n){var e=!1;return this.checkValidDate(!0,n,a,t,r)&&(this.lunarCalendar={year:a,month:t,day:r,intercalation:n&&this.getLunarIntercalationMonth(this.getLunarData(a))==t},this.setSolarDateByLunarDate(a,t,r,n),e=!0),e},t.prototype.setSolarDate=function(a,t,r){var n=!1;return this.checkValidDate(!1,!1,a,t,r)&&(this.solarCalendar={year:a,month:t,day:r},this.setLunarDateBySolarDate(a,t,r),n=!0),n},t.prototype.setGapJa=function(){var t=this.getLunarAbsDays(this.lunarCalendar.year,this.lunarCalendar.month,this.lunarCalendar.day,!!this.lunarCalendar.intercalation);if(t>0){this.gapjaYearInx[0]=(this.lunarCalendar.year+6-a.KOREAN_LUNAR_BASE_YEAR)%a.KOREAN_CHEONGAN.length,this.gapjaYearInx[1]=(this.lunarCalendar.year+0-a.KOREAN_LUNAR_BASE_YEAR)%a.KOREAN_GANJI.length;var r=this.lunarCalendar.month;r+=12*(this.lunarCalendar.year-a.KOREAN_LUNAR_BASE_YEAR),this.gapjaMonthInx[0]=(r+3)%a.KOREAN_CHEONGAN.length,this.gapjaMonthInx[1]=(r+1)%a.KOREAN_GANJI.length,this.gapjaDayInx[0]=(t+4)%a.KOREAN_CHEONGAN.length,this.gapjaDayInx[1]=(t+2)%a.KOREAN_GANJI.length}},t.prototype.getGapJaIndex=function(){return this.setGapJa(),{cheongan:{year:this.gapjaYearInx[0],month:this.gapjaMonthInx[0],day:this.gapjaDayInx[0]},ganji:{year:this.gapjaYearInx[1],month:this.gapjaMonthInx[1],day:this.gapjaDayInx[1]}}},t.prototype.getGapja=function(t){var r=this.getGapJaIndex(),n=t?a.CHINESE_CHEONGAN:a.KOREAN_CHEONGAN,e=t?a.CHINESE_GANJI:a.KOREAN_GANJI,o=t?a.CHINESE_GAPJA_UNIT:a.KOREAN_GAPJA_UNIT,A=t?"".concat(a.INTERCALATION_STR[1]).concat(a.CHINESE_GAPJA_UNIT[1]):"".concat(a.INTERCALATION_STR[0]).concat(a.KOREAN_GAPJA_UNIT[1]);return{year:"".concat(n[r.cheongan.year]).concat(e[r.ganji.year]).concat(o[this.gapjaYearInx[2]]),month:"".concat(n[r.cheongan.month]).concat(e[r.ganji.month]).concat(o[this.gapjaMonthInx[2]]),day:"".concat(n[r.cheongan.day]).concat(e[r.ganji.day]).concat(o[this.gapjaDayInx[2]]),intercalation:this.lunarCalendar.intercalation?A:""}},t.prototype.getKoreanGapja=function(){return this.getGapja()},t.prototype.getChineseGapja=function(){return this.getGapja(!0)},t.prototype.getLunarCalendar=function(){return this.lunarCalendar},t.prototype.getSolarCalendar=function(){return this.solarCalendar},t}()}();
+
+// CORE DATA
+const _cal=new KoreanLunarCalendar();
+const tD={gender:'',calendar:'양력'};
+const stEl={'갑':'목','을':'목','병':'화','정':'화','무':'토','기':'토','경':'금','신':'금','임':'수','계':'수'};
+const elConq={'목':'토','화':'금','토':'수','금':'목','수':'화'};
+const elName={'수':'수(水)','목':'목(木)','화':'화(火)','토':'토(土)','금':'금(金)'};
+const elIcon={'수':'💧','목':'🌲','화':'🔥','토':'🏠','금':'🛡️'};
+const elColor={'수':'#60a5fa','목':'#4ade80','화':'#f87171','토':'#fbbf24','금':'#d1d5db'};
+const elBg={'수':'linear-gradient(135deg,#1e3a5f,#1e40af)','목':'linear-gradient(135deg,#14532d,#166534)','화':'linear-gradient(135deg,#7f1d1d,#dc2626)','토':'linear-gradient(135deg,#78350f,#92400e)','금':'linear-gradient(135deg,#374151,#6b7280)'};
+const myElDesc={'수':'유연하고 적응력이 뛰어나며 흐름을 중시합니다. 변화에 민감하고 다양한 가능성을 탐색합니다.','목':'꾸준하고 성장 지향적이며 인내심이 강합니다. 장기적 관점에서 계획적으로 행동합니다.','화':'적극적이고 열정적이며 빠른 의사결정을 선호합니다. 새로운 기회에 과감하게 도전합니다.','토':'안정적이고 신중하며 실용성을 중시합니다. 확실한 것을 선호하고 리스크를 최소화합니다.','금':'원칙적이고 보수적이며 안전성을 선호합니다. 체계적으로 관리하고 보호하는 데 능합니다.'};
+const wData={
+  '수':{fin:'돈을 벌다',nat:'물처럼 끊임없이 흘러야 합니다',desc:'현금흐름이 멈추면 혈관이 막히듯이 경제적 어려움을 겪게 됩니다. 주수입 외에 부수입 창출로 소득 파이프라인을 다각화하세요.',strategy:'CASH FLOW 관리가 핵심입니다. 주수입 외에 <span class="hl">부수입 창출, 투잡, 부업</span> 등을 통해 현금 흐름을 다각화하세요.',actions:['주수입 안정화','부수입 창출','현금흐름 관리','유동성 자산 확보']},
+  '목':{fin:'돈을 모으다',nat:'뿌리는 아래로, 줄기는 위로 성장합니다',desc:'나무가 뿌리를 바탕으로 하늘로 뻗어나가듯이, 저축이라는 뿌리를 통해 안정적인 기반을 만들고 시드머니를 마련하세요.',strategy:'<span class="hl">체계적인 저축</span>이 핵심입니다. 가로저축(목적별 통장 분리)과 강제저축(자동이체)으로 시드머니를 만드세요.',actions:['정기적금 가입','적립식 펀드','주택청약저축','저축 자동화']},
+  '화':{fin:'돈을 불리다',nat:'불처럼 사방으로 번져나갑니다',desc:'저축을 통해 모인 시드머니를 시간분산, 위험분산, 투자처분산, 공간분산으로 자산을 불려나가세요.',strategy:'<span class="hl">분산투자</span>가 핵심입니다. 시간·지역·자산군을 나누어 투자하고 ETF 적립식이 가장 효과적입니다.',actions:['주식 분산투자','해외 ETF','자산군 분산','정기 리밸런싱']},
+  '토':{fin:'돈을 굴리다',nat:'불이 타고 남은 재가 흙이 됩니다',desc:'축적된 자산을 부동산을 통해 월세를 받으면서 안정적으로 운용하세요. 임대수익으로 패시브 인컴을 만드세요.',strategy:'<span class="hl">부동산 투자와 자산관리</span>가 핵심입니다. 입지 좋은 수익형 부동산으로 안정적 월세 수익을 확보하세요.',actions:['수익형 부동산','월세 관리','REITs 투자','자산관리 서비스']},
+  '금':{fin:'돈을 지키다',nat:'쇠처럼 단단하게 지킵니다',desc:'아무리 잘 불려도 지키지 못하면 소용없습니다. 절세 전략과 보험으로 자산을 보호하세요.',strategy:'<span class="hl">자산 보호와 절세</span>가 최우선입니다. 연금저축·IRP·ISA 절세 3종 세트를 활용하세요.',actions:['보장성보험 점검','연금저축·IRP','상속증여 계획','절세 포트폴리오']}
+};
+
+// INIT
+(function(){const s=document.getElementById('bY');for(let y=2010;y>=1950;y--){const o=document.createElement('option');o.value=y;o.textContent=y+'년';s.appendChild(o);}const m=document.getElementById('bM');for(let i=1;i<=12;i++){const o=document.createElement('option');o.value=i;o.textContent=i+'월';m.appendChild(o);}updD();s.onchange=updD;m.onchange=updD;})();
+function updD(){const y=parseInt(document.getElementById('bY').value)||1980;const m=parseInt(document.getElementById('bM').value)||1;const mx=new Date(y,m,0).getDate();const d=document.getElementById('bD');const c=parseInt(d.value)||1;d.innerHTML='';for(let i=1;i<=mx;i++){const o=document.createElement('option');o.value=i;o.textContent=i+'일';d.appendChild(o);}d.value=Math.min(c,mx);}
+function sel(el,k,v){tD[k]=v;el.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+
+// MANSERYEOK - 라이브러리 기반
+function getOhaeng(y,m,d,isLunar){
+  if(isLunar){_cal.setLunarDate(y,m,d,false);const s=_cal.getSolarCalendar();_cal.setSolarDate(s.year,s.month,s.day);}
+  else{_cal.setSolarDate(y,m,d);}
+  const gj=_cal.getKoreanGapja();
+  const ds=gj.day.charAt(0);
+  return{dayStem:ds,myEl:stEl[ds],wealth:elConq[stEl[ds]],gapja:gj};
+}
+
+function analyze(){
+  const name=document.getElementById('userName').value;
+  const y=parseInt(document.getElementById('bY').value);
+  const m=parseInt(document.getElementById('bM').value);
+  const d=parseInt(document.getElementById('bD').value);
+  if(!name){alert('성함을 입력해주세요.');return;}
+  if(!y||!m||!d){alert('생년월일을 선택해주세요.');return;}
+  if(!tD.gender){alert('성별을 선택해주세요.');return;}
+  document.getElementById('heroSection').style.display='none';
+  document.getElementById('introSection').style.display='none';
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('loadingSection').classList.add('active');
+  setTimeout(()=>{
+    try{
+      const r=getOhaeng(y,m,d,tD.calendar==='음력');
+      document.getElementById('loadingSection').classList.remove('active');
+      showResult(name,r,y,m,d);
+    }catch(e){alert('만세력 계산 오류: '+e.message);document.getElementById('loadingSection').classList.remove('active');document.getElementById('formSection').style.display='block';}
+  },2000);
+}
+
+function showResult(name,r,y,m,d){
+  const me=r.myEl;const we=r.wealth;const w=wData[we];
+  // 표지: 나의 오행 (일간)
+  document.getElementById('rHeader').style.background=elBg[me];
+  document.getElementById('rIcon').textContent=elIcon[me];
+  document.getElementById('rTitle').textContent=elName[me];
+  document.getElementById('rTitle').style.color=elColor[me];
+  document.getElementById('rSub').textContent='일간: '+r.dayStem+' | '+r.gapja.day;
+  // 나의 오행 설명
+  document.getElementById('rMyEl').innerHTML='당신의 일간은 <span class="hl">'+r.dayStem+'('+elName[me]+')</span>입니다.<br>'+myElDesc[me];
+  // 재성 (금융오행)
+  document.getElementById('wIcon').textContent=elIcon[we];
+  document.getElementById('wName').textContent=elName[we]+' — '+w.fin;
+  document.getElementById('wDesc').textContent=me+'극'+we+' | '+w.nat;
+  // 전략
+  document.getElementById('rStrategy').innerHTML=w.desc+'<br><br>'+w.strategy;
+  let aHTML='';w.actions.forEach(a=>{aHTML+='<div class="a-tag">'+a+'</div>';});
+  document.getElementById('rActions').innerHTML='<div class="action-tags">'+aHTML+'</div>';
+  // 오행 링
+  const els=['수','목','화','토','금'];
+  let ring='';els.forEach(e=>{const act=e===we;ring+='<div class="oh-item '+(act?'active':'')+'" style="'+(act?'background:rgba(212,168,83,0.3);border-color:var(--gold)':'')+'"><div class="oe">'+elIcon[e]+'</div><div>'+elName[e]+'</div></div>';});
+  document.getElementById('oRing').innerHTML=ring;
+  document.getElementById('oNote').textContent='일간: '+r.dayStem+'('+elName[me]+') → 상극(재성): '+elName[we]+' ('+me+'극'+we+')';
+  document.getElementById('resultSection').classList.add('active');
+  window._r={name,r,y,m,d};
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showDB(){document.getElementById('resultSection').classList.remove('active');document.getElementById('dbSection').classList.add('active');const w=wData[window._r.r.wealth];document.getElementById('dbText').textContent=elName[window._r.r.wealth]+' '+w.fin+' 맞춤 금융오행 리포트를 보내드립니다';}
+
+function submitDB(){
+  const R=window._r;const phone=document.getElementById('dbPhone').value;const email=document.getElementById('dbEmail').value;
+  if(!phone){alert('전화번호를 입력해주세요.');return;}
+  const now=new Date();const ds=now.getFullYear()+'-'+(now.getMonth()+1).toString().padStart(2,'0')+'-'+now.getDate().toString().padStart(2,'0')+' '+now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  fetch('https://hook.eu1.make.com/gqxc1xxpz1x61pxfk996ollf00r0oiu9',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({이름:R.name,연락처:phone.replace(/-/g,''),이메일:email||'-',날짜:ds,나이:String(now.getFullYear()-R.y+1),유입경로:'금융오행',메모:'금융오행|일간:'+R.r.dayStem+'('+R.r.myEl+')|재성:'+R.r.wealth+'|'+wData[R.r.wealth].fin+'|'+R.y+'.'+R.m+'.'+R.d+'생|'+tD.gender})}).catch(e=>console.log(e));
+  document.getElementById('dbSection').classList.remove('active');document.getElementById('completeSection').classList.add('active');
+  document.getElementById('cName').textContent='감사합니다, '+R.name+'님!';
+  document.getElementById('rptLink').href='https://owant.netlify.app/fiveelements/report.html?type='+R.r.wealth+'&nickname='+encodeURIComponent(R.name)+'&stem='+R.r.dayStem+'&myel='+R.r.myEl;
+  const c=document.getElementById('cc');const cols=['#D4A853','#F59E0B','#60a5fa','#4ade80','#f87171'];for(let i=0;i<60;i++){const e=document.createElement('div');e.style.cssText='position:absolute;width:'+(5+Math.random()*8)+'px;height:'+(5+Math.random()*8)+'px;left:'+Math.random()*100+'%;background:'+cols[Math.floor(Math.random()*cols.length)]+';border-radius:'+(Math.random()>0.5?'50%':'0')+';opacity:0;animation:cf '+(1.5+Math.random()*2)+'s ease-out '+Math.random()*0.5+'s forwards';c.appendChild(e);}setTimeout(()=>c.innerHTML='',4000);
+}
+const _s=document.createElement('style');_s.textContent='@keyframes cf{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}';document.head.appendChild(_s);
+</script>
+</body>
+</html>
