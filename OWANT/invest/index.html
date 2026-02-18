@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>투자분석 | 오원트금융연구소</title>
+<meta property="og:title" content="내 부자지수는 몇 %일까?">
+<meta property="og:description" content="부자지수와 자산배분 전략으로 투자 방향을 잡으세요 — CFP 오상열">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#1e3a5f;--acc:#7c3aed;--teal:#0d9488;--gold:#d4a853;--bg:#f4f6f8;--card:#fff;--txt:#333;--sub:#888;--border:#e5e7eb;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.hero{background:linear-gradient(135deg,#4c1d95 0%,#6d28d9 50%,#5b21b6 100%);padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-30%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(250,204,21,0.12),transparent 70%);border-radius:50%;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);padding:6px 16px;border-radius:20px;font-size:12px;color:rgba(255,255,255,0.9);font-weight:600;margin-bottom:12px;}
+.hero h1{font-size:24px;font-weight:900;color:#fff;line-height:1.4;margin-bottom:8px;}
+.hero h1 em{font-style:normal;color:#fbbf24;}
+.hero p{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;}
+.hero-stat{display:flex;justify-content:center;gap:20px;margin-top:16px;}
+.hero-stat div{text-align:center;}
+.hero-stat .num{font-size:20px;font-weight:900;color:#fbbf24;}
+.hero-stat .lbl{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;}
+.progress-bar{background:#fff;padding:12px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
+.progress-inner{display:flex;align-items:center;gap:8px;}
+.progress-track{flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),#8b5cf6);border-radius:3px;transition:width 0.5s ease;}
+.progress-text{font-size:11px;font-weight:700;color:var(--acc);min-width:36px;text-align:right;}
+.section{padding:16px 20px;display:none;}.section.active{display:block;}
+.section-title{font-size:16px;font-weight:800;color:var(--txt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.section-desc{font-size:12px;color:var(--sub);margin-bottom:16px;}
+.input-card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);border:1px solid var(--border);}
+.input-card h3{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.field{margin-bottom:12px;}.field:last-child{margin-bottom:0;}
+.field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px;}
+.field-row{display:flex;gap:10px;}.field-row .field{flex:1;margin-bottom:0;}
+.input-wrap{position:relative;}
+.input-wrap input{width:100%;padding:12px 40px 12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;outline:none;transition:border 0.2s;}
+.input-wrap input:focus{border-color:var(--acc);}
+.input-wrap .suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--sub);}
+.result-card{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #c4b5fd;border-radius:14px;padding:16px;margin-bottom:12px;}
+.result-card.gold{background:linear-gradient(135deg,#fefce8,#fef9c3);border-color:#fde68a;}
+.result-card.green{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border-color:#bbf7d0;}
+.result-title{font-size:12px;font-weight:700;color:var(--acc);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.result-card.gold .result-title{color:#a16207;}
+.result-card.green .result-title{color:#16a34a;}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #c4b5fd;}
+.result-row:last-child{border-bottom:none;}
+.result-card.gold .result-row{border-color:#fde68a;}
+.result-card.green .result-row{border-color:#bbf7d0;}
+.rr-label{font-size:12px;color:#555;}.rr-value{font-size:14px;font-weight:700;color:var(--txt);}
+.rr-value.danger{color:#dc2626;}.rr-value.success{color:#16a34a;}.rr-value.highlight{color:var(--pri);font-size:16px;}.rr-value.purple{color:var(--acc);font-size:18px;}
+.insight{background:#f5f3ff;border-radius:10px;padding:12px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;}
+.insight-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.insight-text{font-size:12px;color:#4c1d95;line-height:1.6;}.insight-text b{font-weight:700;}
+/* 부자지수 시각화 */
+.rich-gauge{text-align:center;padding:20px 0;}
+.rich-score{font-size:48px;font-weight:900;color:var(--acc);}
+.rich-label{font-size:14px;color:var(--sub);margin-top:4px;}
+.rich-bar{height:24px;border-radius:12px;overflow:hidden;display:flex;margin:16px 0 8px;background:#f3f4f6;}
+.rich-bar div{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;}
+.rich-marker{position:relative;height:4px;margin:0 0 8px;}
+.rich-marker span{position:absolute;top:-24px;transform:translateX(-50%);font-size:18px;}
+.house-levels{display:flex;justify-content:space-between;font-size:10px;color:var(--sub);}
+.blur-wrap{position:relative;}
+.blur-content{filter:blur(6px);pointer-events:none;user-select:none;}
+.blur-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.7);border-radius:14px;z-index:2;}
+.blur-overlay p{font-size:14px;font-weight:700;color:var(--pri);margin-bottom:8px;}
+.blur-overlay .lock-icon{font-size:32px;margin-bottom:8px;}
+.db-form{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);border:1px solid var(--border);}
+.db-form h3{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.db-form .sub{font-size:11px;color:var(--sub);margin-bottom:14px;}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all 0.2s;}
+.btn-primary{background:linear-gradient(135deg,var(--acc),#8b5cf6);color:#fff;box-shadow:0 4px 12px rgba(124,58,237,0.3);}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-gold{background:linear-gradient(135deg,#d4a853,#c9952e);color:#fff;box-shadow:0 4px 12px rgba(212,168,83,0.3);}
+.btn-outline{background:#fff;color:var(--acc);border:1.5px solid var(--acc);}
+.btn-gray{background:#f3f4f6;color:#555;border:none;}
+.btn-teal{background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;box-shadow:0 4px 12px rgba(13,148,136,0.3);}
+.knowledge{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04);border:1px solid var(--border);}
+.knowledge h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.knowledge-item{padding:10px 0;border-bottom:1px solid #f3f4f6;}.knowledge-item:last-child{border-bottom:none;}
+.knowledge-item .ki-q{font-size:13px;font-weight:700;color:var(--pri);margin-bottom:4px;}
+.knowledge-item .ki-a{font-size:12px;color:#555;line-height:1.7;}
+.complete-section{text-align:center;padding:30px 20px;}
+.complete-icon{font-size:48px;margin-bottom:12px;}
+.complete-title{font-size:18px;font-weight:800;color:var(--pri);margin-bottom:6px;}
+.complete-desc{font-size:13px;color:var(--sub);margin-bottom:20px;line-height:1.6;}
+.cta-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.disclaimer{font-size:10px;color:#aaa;text-align:center;padding:12px 20px 30px;line-height:1.6;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn 0.4s ease forwards;}
+/* 포트폴리오 바 차트 */
+.port-bar{display:flex;gap:2px;height:28px;border-radius:8px;overflow:hidden;margin:12px 0 8px;}
+.port-bar div{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+.port-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+.port-legend span{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--sub);}
+.port-legend i{width:10px;height:10px;border-radius:2px;display:inline-block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="hero-badge">📈 3분 무료 투자분석</div>
+  <h1>내 <em>부자지수</em>는<br>몇 %일까?</h1>
+  <p>부자지수와 자산배분 전략으로<br>투자의 방향을 잡아드립니다</p>
+  <div class="hero-stat">
+    <div><div class="num">20년</div><div class="lbl">CFP 경력</div></div>
+    <div><div class="num">2,000+</div><div class="lbl">상담 실적</div></div>
+    <div><div class="num">3분</div><div class="lbl">소요시간</div></div>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:25%"></div></div>
+    <div class="progress-text" id="progText">1/4</div>
+  </div>
+</div>
+
+<!-- STEP 1 -->
+<div class="section active" id="step1">
+  <div class="section-title">📈 투자 정보 입력</div>
+  <div class="section-desc">부자지수 계산을 위한 기본 정보를 입력해주세요</div>
+  <div class="input-card">
+    <h3>👤 기본 정보</h3>
+    <div class="field-row">
+      <div class="field"><label>나이</label><div class="input-wrap"><input type="number" id="age" placeholder="37"><span class="suffix">세</span></div></div>
+      <div class="field"><label>월 소득 (세후)</label><div class="input-wrap"><input type="number" id="income" placeholder="520"><span class="suffix">만원</span></div></div>
+    </div>
+  </div>
+  <div class="input-card">
+    <h3>💰 자산·부채 현황</h3>
+    <div class="field-row">
+      <div class="field"><label>총 자산</label><div class="input-wrap"><input type="number" id="assets" placeholder="65000"><span class="suffix">만원</span></div></div>
+      <div class="field"><label>총 부채</label><div class="input-wrap"><input type="number" id="debt" placeholder="40000"><span class="suffix">만원</span></div></div>
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label>비상예비자금 (즉시 인출 가능)</label>
+      <div class="input-wrap"><input type="number" id="emergency" placeholder="1000"><span class="suffix">만원</span></div>
+    </div>
+  </div>
+  <button class="btn btn-primary" onclick="analyze()">📊 부자지수 분석하기</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="section" id="step2">
+  <div class="section-title">🏆 부자지수 분석 결과</div>
+  <div class="section-desc">나이와 소득 대비 순자산을 분석했습니다</div>
+  <div id="resultRich"></div>
+  <div id="resultEmergency"></div>
+  <div id="insightBasic"></div>
+  <div class="blur-wrap">
+    <div class="blur-overlay">
+      <div class="lock-icon">🔒</div>
+      <p>자산배분 포트폴리오 보기</p>
+      <button class="btn btn-primary" style="width:auto;padding:10px 24px;font-size:13px;" onclick="showStep(3)">무료로 확인하기 →</button>
+    </div>
+    <div class="blur-content">
+      <div class="result-card gold">
+        <div class="result-title">💼 권장 자산배분 포트폴리오</div>
+        <div class="result-row"><span class="rr-label">유동자산</span><span class="rr-value">20%</span></div>
+        <div class="result-row"><span class="rr-label">안전자산</span><span class="rr-value">50%</span></div>
+        <div class="result-row"><span class="rr-label">수익자산</span><span class="rr-value">20%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="section" id="step3">
+  <div class="section-title">📋 심화 분석 결과 받기</div>
+  <div class="section-desc">아래 정보를 입력하시면 자산배분 전략을 보여드립니다</div>
+  <div class="db-form">
+    <h3>📩 분석 결과 받을 정보</h3>
+    <div class="sub">이메일과 카카오톡으로 상세 리포트를 보내드립니다</div>
+    <div class="field"><label>이름</label><div class="input-wrap"><input type="text" id="userName" placeholder="홍길동"></div></div>
+    <div class="field"><label>성별</label>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline" id="gM" onclick="setGender('남')" style="flex:1;padding:10px;font-size:13px;">남성</button>
+        <button class="btn btn-outline" id="gF" onclick="setGender('여')" style="flex:1;padding:10px;font-size:13px;">여성</button>
+      </div>
+    </div>
+    <div class="field"><label>전화번호</label><div class="input-wrap"><input type="tel" id="userPhone" placeholder="010-1234-5678"></div></div>
+    <div class="field"><label>이메일</label><div class="input-wrap"><input type="email" id="userEmail" placeholder="example@email.com"></div></div>
+  </div>
+  <button class="btn btn-primary" onclick="submitDB()">🔓 자산배분 전략 보기</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="section" id="step4">
+  <div class="section-title">💼 자산배분 전략</div>
+  <div class="section-desc">CFP 오상열의 투자 포트폴리오 제안입니다</div>
+  <div id="resultPortfolio"></div>
+  <div id="resultAction"></div>
+  <div id="insightAI"></div>
+
+  <div class="knowledge">
+    <h3>📚 투자 설계 필수 지식</h3>
+    <div class="knowledge-item">
+      <div class="ki-q">Q. 부자지수란 무엇인가?</div>
+      <div class="ki-a">부자지수는 <토마스 스탠리> 박사의 「이웃집 백만장자」에서 소개된 재무건전성 지표입니다. (순자산 × 10) ÷ (나이 × 연소득) × 100으로 계산하며, 100% 이상이면 '기대 수준', 200% 이상이면 '부유층'으로 분류합니다.</div>
+    </div>
+    <div class="knowledge-item">
+      <div class="ki-q">Q. 자산배분은 왜 중요한가?</div>
+      <div class="ki-a">투자 수익의 90% 이상은 자산배분에 의해 결정됩니다(Brinson 연구). 개별 종목 선택보다 '주식:채권:현금'의 비율이 훨씬 중요합니다. 나이, 투자 기간, 리스크 허용도에 따라 배분을 조정해야 합니다.</div>
+    </div>
+    <div class="knowledge-item">
+      <div class="ki-q">Q. 비상예비자금은 투자 전 필수인가?</div>
+      <div class="ki-a">반드시 그렇습니다. 비상예비자금 없이 투자하면 급전이 필요할 때 손실 중인 투자를 청산하게 됩니다. 월 생활비의 3~6개월분을 CMA/MMF에 확보한 후 투자를 시작하세요. 이것이 금융집짓기의 '기초공사'입니다.</div>
+    </div>
+    <div class="knowledge-item">
+      <div class="ki-q">Q. 금융집짓기®의 투자 원칙은?</div>
+      <div class="ki-a">기초공사(보험+비상예비) → 기둥공사(저축+부채상환+은퇴) → 지붕공사(투자+세금+부동산) 순서를 지켜야 합니다. 기초가 없는 집은 무너집니다. 보험과 비상예비자금 없이 투자부터 하면 위기에 모든 것이 흔들립니다.</div>
+    </div>
+  </div>
+
+  <div class="complete-section">
+    <div class="complete-icon">✅</div>
+    <div class="complete-title">분석이 완료되었습니다!</div>
+    <div class="complete-desc">상세 리포트는 입력하신 이메일과<br>카카오톡으로 발송됩니다</div>
+    <div class="cta-cards">
+      <button class="btn btn-gold" onclick="window.open('https://moneya-frontend.vercel.app','_blank')">🤖 AI머니야 시작하기</button>
+      <button class="btn btn-teal" onclick="window.open('https://owant.netlify.app/diagnosis/','_blank')">📊 무료 재무진단 해보기</button>
+      <button class="btn btn-outline" onclick="window.open('https://ohwant-hub.netlify.app','_blank')">🔗 오상열 CFP 더 알아보기</button>
+      <button class="btn btn-gray" onclick="location.reload()">🔄 다시 분석하기</button>
+    </div>
+  </div>
+  <div class="disclaimer">※ 본 분석은 참고용이며, 실제 투자는 본인의 판단과 책임하에 진행하세요.<br>© 오원트금융연구소 · CFP 오상열</div>
+</div>
+
+</div>
+<script>
+let gender='',D={};
+function setGender(g){gender=g;document.getElementById('gM').style.background=g==='남'?'var(--acc)':'#fff';document.getElementById('gM').style.color=g==='남'?'#fff':'var(--acc)';document.getElementById('gF').style.background=g==='여'?'var(--acc)':'#fff';document.getElementById('gF').style.color=g==='여'?'#fff':'var(--acc)';}
+function showStep(n){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('step'+n).classList.add('active','fade-in');document.getElementById('progFill').style.width=[25,50,75,100][n-1]+'%';document.getElementById('progText').textContent=n+'/4';window.scrollTo({top:0,behavior:'smooth'});}
+function fmt(n){return n.toLocaleString();}
+
+function analyze(){
+  const age=parseFloat(document.getElementById('age').value)||0;
+  const income=parseFloat(document.getElementById('income').value)||0;
+  const assets=parseFloat(document.getElementById('assets').value)||0;
+  const debt=parseFloat(document.getElementById('debt').value)||0;
+  const emerg=parseFloat(document.getElementById('emergency').value)||0;
+  if(!age||!income){alert('나이와 월소득을 입력해주세요');return;}
+  if(!assets&&!debt){alert('자산 또는 부채를 입력해주세요');return;}
+
+  const netAsset=assets-debt;
+  const annualIncome=income*12;
+  const richIndex=annualIncome>0&&age>0?Math.round((netAsset*10)/(age*annualIncome)*100):0;
+  
+  // 등급
+  let level,house,emoji;
+  if(richIndex<=0){level=1;house='텐트';emoji='⛺';}
+  else if(richIndex<=50){level=2;house='초가집';emoji='🛖';}
+  else if(richIndex<=100){level=3;house='한옥';emoji='🏠';}
+  else if(richIndex<=200){level=4;house='고급양옥';emoji='🏡';}
+  else{level=5;house='궁전';emoji='🏰';}
+
+  // 비상예비
+  const recEmerg=income*3;
+  const recEmergMax=income*6;
+  const emergStatus=emerg>=recEmerg?'충분':'부족';
+
+  D={age,income,assets,debt,netAsset,annualIncome,richIndex,level,house,emoji,emerg,recEmerg,recEmergMax,emergStatus};
+
+  // 부자지수 게이지
+  const markerPos=Math.min(Math.max(richIndex,0),250)/250*100;
+  document.getElementById('resultRich').innerHTML=`
+    <div class="result-card">
+      <div class="rich-gauge">
+        <div class="rich-score">${richIndex}%</div>
+        <div class="rich-label">부자지수 — ${emoji} ${level}단계 ${house}</div>
+      </div>
+      <div class="rich-bar">
+        <div style="flex:1;background:#ef4444;">⛺</div>
+        <div style="flex:1;background:#f97316;">🛖</div>
+        <div style="flex:1;background:#eab308;">🏠</div>
+        <div style="flex:1;background:#22c55e;">🏡</div>
+        <div style="flex:1;background:#7c3aed;">🏰</div>
+      </div>
+      <div class="rich-marker"><span style="left:${markerPos}%">📍</span></div>
+      <div class="house-levels">
+        <span>0%</span><span>50%</span><span>100%</span><span>200%</span><span>250%+</span>
+      </div>
+    </div>
+    <div class="result-card">
+      <div class="result-title">📊 자산 현황</div>
+      <div class="result-row"><span class="rr-label">총 자산</span><span class="rr-value">${fmt(assets)}만원 (${(assets/10000).toFixed(1)}억)</span></div>
+      <div class="result-row"><span class="rr-label">총 부채</span><span class="rr-value danger">${fmt(debt)}만원</span></div>
+      <div class="result-row"><span class="rr-label">순자산</span><span class="rr-value ${netAsset>=0?'success':'danger'}">${fmt(netAsset)}만원 (${(netAsset/10000).toFixed(1)}억)</span></div>
+      <div class="result-row"><span class="rr-label">부자지수 공식</span><span class="rr-value" style="font-size:11px;">(${fmt(netAsset)}×10)÷(${age}×${fmt(annualIncome)})×100</span></div>
+    </div>
+  `;
+
+  document.getElementById('resultEmergency').innerHTML=`
+    <div class="result-card ${emergStatus==='충분'?'green':'gold'}">
+      <div class="result-title">🆘 비상예비자금 체크</div>
+      <div class="result-row"><span class="rr-label">현재 비상예비자금</span><span class="rr-value">${fmt(emerg)}만원</span></div>
+      <div class="result-row"><span class="rr-label">권장 (소득×3~6개월)</span><span class="rr-value">${fmt(recEmerg)}~${fmt(recEmergMax)}만원</span></div>
+      <div class="result-row"><span class="rr-label">상태</span><span class="rr-value ${emergStatus==='충분'?'success':'danger'}">${emergStatus==='충분'?'✅ 충분':'⚠️ '+fmt(recEmerg-emerg)+'만원 부족'}</span></div>
+    </div>
+  `;
+
+  let msg=richIndex>=200?`부자지수 ${richIndex}%! 궁전 수준의 재무 상태입니다. 자산 보전과 절세에 집중하세요.`:richIndex>=100?`부자지수 ${richIndex}%로 건전한 수준입니다. 다음 단계를 향해 투자 비중을 조금 높여보세요.`:richIndex>=50?`부자지수 ${richIndex}%로 성장 중입니다. 저축률을 높이고 부채를 줄이면 빠르게 상승합니다.`:`부자지수 ${richIndex}%로 개선이 필요합니다. 부채 상환을 최우선으로 하고, 비상예비자금부터 확보하세요.`;
+
+  document.getElementById('insightBasic').innerHTML=`<div class="insight"><span class="insight-icon">${richIndex>=100?'✅':'💡'}</span><span class="insight-text"><b>부자지수 진단:</b> ${msg}</span></div>`;
+
+  showStep(2);
+}
+
+function submitDB(){
+  const name=document.getElementById('userName').value.trim();
+  const phone=document.getElementById('userPhone').value.trim();
+  const email=document.getElementById('userEmail').value.trim();
+  if(!name){alert('이름을 입력해주세요');return;}
+  if(!phone){alert('전화번호를 입력해주세요');return;}
+  if(!email){alert('이메일을 입력해주세요');return;}
+
+  fetch('https://hook.eu1.make.com/gqxc1xxpz1x61pxfk996ollf00r0oiu9',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({유입경로:'투자분석',이름:name,성별:gender,전화번호:phone,이메일:email,나이:D.age+'세',월소득:D.income+'만원',총자산:D.assets+'만원',총부채:D.debt+'만원',순자산:D.netAsset+'만원',부자지수:D.richIndex+'%',비상예비자금:D.emerg+'만원',timestamp:new Date().toISOString()})
+  }).catch(()=>{});
+
+  // 자산배분 (나이 기반)
+  let liquid,safe,growth,high;
+  if(D.age<35){liquid=15;safe=30;growth=35;high=20;}
+  else if(D.age<50){liquid=20;safe=40;growth=30;high=10;}
+  else if(D.age<60){liquid=25;safe=50;growth=20;high=5;}
+  else{liquid=30;safe=50;growth=15;high=5;}
+
+  document.getElementById('resultPortfolio').innerHTML=`
+    <div class="result-card gold">
+      <div class="result-title">💼 권장 자산배분 포트폴리오 (${D.age}세)</div>
+      <div class="port-bar">
+        <div style="flex:${liquid};background:#3b82f6;">${liquid}%</div>
+        <div style="flex:${safe};background:#22c55e;">${safe}%</div>
+        <div style="flex:${growth};background:#eab308;">${growth}%</div>
+        <div style="flex:${high};background:#ef4444;">${high}%</div>
+      </div>
+      <div class="port-legend">
+        <span><i style="background:#3b82f6;"></i>유동 ${liquid}%</span>
+        <span><i style="background:#22c55e;"></i>안전 ${safe}%</span>
+        <span><i style="background:#eab308;"></i>수익 ${growth}%</span>
+        <span><i style="background:#ef4444;"></i>고수익 ${high}%</span>
+      </div>
+      <div class="result-row"><span class="rr-label">🔵 유동자산 (CMA/MMF)</span><span class="rr-value">${fmt(Math.round(D.netAsset*liquid/100))}만원</span></div>
+      <div class="result-row"><span class="rr-label">🟢 안전자산 (예금/채권)</span><span class="rr-value">${fmt(Math.round(D.netAsset*safe/100))}만원</span></div>
+      <div class="result-row"><span class="rr-label">🟡 수익자산 (혼합/ETF)</span><span class="rr-value">${fmt(Math.round(D.netAsset*growth/100))}만원</span></div>
+      <div class="result-row"><span class="rr-label">🔴 고수익자산 (주식)</span><span class="rr-value">${fmt(Math.round(D.netAsset*high/100))}만원</span></div>
+    </div>
+  `;
+
+  // 부자지수 개선 시뮬레이션
+  const monthSave30=Math.round(D.income*0.3);
+  const addedIn5=monthSave30*12*5;
+  const futureNet=D.netAsset+addedIn5;
+  const futureAge=D.age+5;
+  const futureRI=Math.round((futureNet*10)/(futureAge*D.annualIncome)*100);
+
+  document.getElementById('resultAction').innerHTML=`
+    <div class="result-card green">
+      <div class="result-title">🚀 5년 후 부자지수 시뮬레이션</div>
+      <div class="result-row"><span class="rr-label">월 30% 저축 시 (${fmt(monthSave30)}만원)</span><span class="rr-value">${fmt(addedIn5)}만원 추가</span></div>
+      <div class="result-row"><span class="rr-label">5년 후 순자산 (예상)</span><span class="rr-value success">${fmt(futureNet)}만원</span></div>
+      <div class="result-row"><span class="rr-label">5년 후 부자지수</span><span class="rr-value purple">${futureRI}%</span></div>
+      <div class="result-row"><span class="rr-label">현재 → 5년 후</span><span class="rr-value highlight">${D.richIndex}% → ${futureRI}% (+${futureRI-D.richIndex}%)</span></div>
+    </div>
+  `;
+
+  let ai=D.emergStatus==='부족'?`가장 먼저 비상예비자금 ${fmt(D.recEmerg-D.emerg)}만원을 확보하세요. 이것이 금융집짓기의 기초공사입니다. 그 이후 자산배분 전략을 실행하면 안정적으로 부자지수를 높일 수 있습니다.`:D.richIndex<100?`부채 비중이 높아 순자산이 적습니다. 고금리 부채 먼저 상환 → 비상예비자금 확보 → 적립식 투자 순서로 진행하세요. 5년간 꾸준히 30% 저축하면 부자지수가 ${futureRI}%까지 올라갑니다.`:`현재 좋은 상태입니다. 연 1회 포트폴리오 리밸런싱을 실행하고, 세제혜택 상품(연금저축/ISA)을 최대한 활용하세요. 소득 증가분의 50%를 투자에 추가 배분하면 궁전 레벨 달성이 가능합니다.`;
+
+  document.getElementById('insightAI').innerHTML=`<div class="insight"><span class="insight-icon">💡</span><span class="insight-text"><b>CFP 오상열 추천:</b> ${ai}</span></div>`;
+
+  showStep(4);
+}
+</script>
+</body>
+</html>
