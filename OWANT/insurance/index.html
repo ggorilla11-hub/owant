@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>보험분석 | 오원트금융연구소</title>
+<meta property="og:title" content="내 보험, 제대로 준비되어 있을까?">
+<meta property="og:description" content="8대 보장 분석으로 부족한 보장을 확인하세요 — CFP 오상열">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#1e3a5f;--acc:#7e22ce;--teal:#0d9488;--gold:#d4a853;--bg:#f4f6f8;--card:#fff;--txt:#333;--sub:#888;--border:#e5e7eb;}
+*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.hero{background:linear-gradient(135deg,#581c87 0%,#7e22ce 50%,#6b21a8 100%);padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-30%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(250,204,21,.12),transparent 70%);border-radius:50%;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);padding:6px 16px;border-radius:20px;font-size:12px;color:rgba(255,255,255,.9);font-weight:600;margin-bottom:12px;}
+.hero h1{font-size:24px;font-weight:900;color:#fff;line-height:1.4;margin-bottom:8px;}.hero h1 em{font-style:normal;color:#fbbf24;}
+.hero p{font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;}
+.hero-stat{display:flex;justify-content:center;gap:20px;margin-top:16px;}.hero-stat div{text-align:center;}.hero-stat .num{font-size:20px;font-weight:900;color:#fbbf24;}.hero-stat .lbl{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;}
+.progress-bar{background:#fff;padding:12px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}.progress-inner{display:flex;align-items:center;gap:8px;}.progress-track{flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;}.progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),#a855f7);border-radius:3px;transition:width .5s;}.progress-text{font-size:11px;font-weight:700;color:var(--acc);min-width:36px;text-align:right;}
+.section{padding:16px 20px;display:none;}.section.active{display:block;}.section-title{font-size:16px;font-weight:800;color:var(--txt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}.section-desc{font-size:12px;color:var(--sub);margin-bottom:16px;}
+.input-card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid var(--border);}.input-card h3{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.field{margin-bottom:12px;}.field:last-child{margin-bottom:0;}.field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px;}.field .hint{font-size:10px;color:#999;margin-top:2px;}.field-row{display:flex;gap:10px;}.field-row .field{flex:1;margin-bottom:0;}
+.input-wrap{position:relative;}.input-wrap input{width:100%;padding:12px 40px 12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;outline:none;transition:border .2s;}.input-wrap input:focus{border-color:var(--acc);}.input-wrap .suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--sub);}
+.ins-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;}.ins-table th{background:#f3e8ff;padding:8px 6px;border:1px solid #e9d5ff;font-weight:700;color:#6b21a8;text-align:center;}.ins-table td{padding:8px 6px;border:1px solid #e9d5ff;text-align:center;background:#fff;}.ins-table .lack{color:#dc2626;font-weight:700;}.ins-table .ok{color:#16a34a;font-weight:700;}
+.result-card{background:linear-gradient(135deg,#faf5ff,#f3e8ff);border:1px solid #d8b4fe;border-radius:14px;padding:16px;margin-bottom:12px;}.result-card.red{background:linear-gradient(135deg,#fef2f2,#fff1f2);border-color:#fecaca;}.result-card.green{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border-color:#bbf7d0;}
+.result-title{font-size:12px;font-weight:700;color:var(--acc);margin-bottom:10px;display:flex;align-items:center;gap:5px;}.result-card.red .result-title{color:#dc2626;}.result-card.green .result-title{color:#16a34a;}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #d8b4fe;}.result-row:last-child{border-bottom:none;}.result-card.red .result-row{border-color:#fecaca;}.result-card.green .result-row{border-color:#bbf7d0;}
+.rr-label{font-size:12px;color:#555;}.rr-value{font-size:14px;font-weight:700;color:var(--txt);}.rr-value.danger{color:#dc2626;}.rr-value.success{color:#16a34a;}.rr-value.highlight{color:var(--pri);font-size:16px;}
+.insight{background:#faf5ff;border-radius:10px;padding:12px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;}.insight-icon{font-size:16px;flex-shrink:0;margin-top:1px;}.insight-text{font-size:12px;color:#581c87;line-height:1.6;}.insight-text b{font-weight:700;}
+.blur-wrap{position:relative;}.blur-content{filter:blur(6px);pointer-events:none;user-select:none;}.blur-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.7);border-radius:14px;z-index:2;}.blur-overlay p{font-size:14px;font-weight:700;color:var(--pri);margin-bottom:8px;}.blur-overlay .lock-icon{font-size:32px;margin-bottom:8px;}
+.db-form{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid var(--border);}.db-form h3{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}.db-form .sub{font-size:11px;color:var(--sub);margin-bottom:14px;}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;}.btn-primary{background:linear-gradient(135deg,var(--acc),#a855f7);color:#fff;box-shadow:0 4px 12px rgba(126,34,206,.3);}.btn-primary:hover{transform:translateY(-1px);}.btn-gold{background:linear-gradient(135deg,#d4a853,#c9952e);color:#fff;}.btn-outline{background:#fff;color:var(--acc);border:1.5px solid var(--acc);}.btn-gray{background:#f3f4f6;color:#555;border:none;}.btn-teal{background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;}
+.knowledge{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid var(--border);}.knowledge h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}.knowledge-item{padding:10px 0;border-bottom:1px solid #f3f4f6;}.knowledge-item:last-child{border-bottom:none;}.knowledge-item .ki-q{font-size:13px;font-weight:700;color:var(--pri);margin-bottom:4px;}.knowledge-item .ki-a{font-size:12px;color:#555;line-height:1.7;}
+.complete-section{text-align:center;padding:30px 20px;}.complete-icon{font-size:48px;margin-bottom:12px;}.complete-title{font-size:18px;font-weight:800;color:var(--pri);margin-bottom:6px;}.complete-desc{font-size:13px;color:var(--sub);margin-bottom:20px;line-height:1.6;}.cta-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.disclaimer{font-size:10px;color:#aaa;text-align:center;padding:12px 20px 30px;line-height:1.6;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}.fade-in{animation:fadeIn .4s ease forwards;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+  <div class="hero-badge">🛡️ 3분 무료 보험분석</div>
+  <h1>내 보험,<br><em>제대로 준비</em>되어 있을까?</h1>
+  <p>8대 보장 분석으로<br>부족한 보장을 지금 바로 확인하세요</p>
+  <div class="hero-stat"><div><div class="num">20년</div><div class="lbl">CFP 경력</div></div><div><div class="num">2,000+</div><div class="lbl">상담 실적</div></div><div><div class="num">3분</div><div class="lbl">소요시간</div></div></div>
+</div>
+<div class="progress-bar"><div class="progress-inner"><div class="progress-track"><div class="progress-fill" id="progFill" style="width:25%"></div></div><div class="progress-text" id="progText">1/4</div></div></div>
+
+<!-- STEP 1 -->
+<div class="section active" id="step1">
+  <div class="section-title">🛡️ 보험 분석 정보 입력</div>
+  <div class="section-desc">연봉과 부채 정보로 필요 보장을 계산합니다</div>
+  <div class="input-card">
+    <h3>💰 기본 정보</h3>
+    <div class="field-row">
+      <div class="field"><label>연봉 (세전)</label><div class="input-wrap"><input type="number" id="salary" placeholder="6240"><span class="suffix">만원</span></div></div>
+      <div class="field"><label>총 부채</label><div class="input-wrap"><input type="number" id="debt" placeholder="40000"><span class="suffix">만원</span></div></div>
+    </div>
+  </div>
+  <div class="input-card">
+    <h3>🛡️ 현재 보험 가입 현황</h3>
+    <div class="field-row">
+      <div class="field"><label>사망보장</label><div class="input-wrap"><input type="number" id="haveDeath" placeholder="20000"><span class="suffix">만원</span></div></div>
+      <div class="field"><label>장해보장</label><div class="input-wrap"><input type="number" id="haveDisab" placeholder="10000"><span class="suffix">만원</span></div></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>암진단금</label><div class="input-wrap"><input type="number" id="haveCancer" placeholder="5000"><span class="suffix">만원</span></div></div>
+      <div class="field"><label>뇌질환 진단금</label><div class="input-wrap"><input type="number" id="haveBrain" placeholder="3000"><span class="suffix">만원</span></div></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>심질환 진단금</label><div class="input-wrap"><input type="number" id="haveHeart" placeholder="3000"><span class="suffix">만원</span></div></div>
+      <div class="field"><label>실비보험 한도</label><div class="input-wrap"><input type="number" id="haveReal" placeholder="5000"><span class="suffix">만원</span></div></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>입원보험</label>
+        <div style="display:flex;gap:6px;"><button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="setToggle('hosp',true,this)">가입</button><button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="setToggle('hosp',false,this)">미가입</button></div>
+      </div>
+      <div class="field"><label>치매보험</label>
+        <div style="display:flex;gap:6px;"><button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="setToggle('demen',true,this)">가입</button><button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="setToggle('demen',false,this)">미가입</button></div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" onclick="analyze()">📊 보험 분석하기</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="section" id="step2">
+  <div class="section-title">📊 8대 보장 분석 결과</div>
+  <div class="section-desc">필요보장 대비 현재 준비 현황입니다</div>
+  <div id="resultTable"></div>
+  <div id="resultSummary"></div>
+  <div id="insightBasic"></div>
+  <div class="blur-wrap"><div class="blur-overlay"><div class="lock-icon">🔒</div><p>보장 개선 전략 보기</p><button class="btn btn-primary" style="width:auto;padding:10px 24px;font-size:13px;" onclick="showStep(3)">무료로 확인하기 →</button></div>
+    <div class="blur-content"><div class="result-card green"><div class="result-title">🎯 보장 개선 우선순위</div><div class="result-row"><span class="rr-label">1순위</span><span class="rr-value">장해 (4.9억 부족)</span></div></div></div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="section" id="step3">
+  <div class="section-title">📋 심화 분석 결과 받기</div>
+  <div class="section-desc">아래 정보를 입력하시면 보장 개선 전략을 보여드립니다</div>
+  <div class="db-form">
+    <h3>📩 분석 결과 받을 정보</h3><div class="sub">이메일과 카카오톡으로 상세 리포트를 보내드립니다</div>
+    <div class="field"><label>이름</label><div class="input-wrap"><input type="text" id="userName" placeholder="홍길동"></div></div>
+    <div class="field"><label>성별</label><div style="display:flex;gap:8px;"><button class="btn btn-outline" id="gM" onclick="setGender('남')" style="flex:1;padding:10px;font-size:13px;">남성</button><button class="btn btn-outline" id="gF" onclick="setGender('여')" style="flex:1;padding:10px;font-size:13px;">여성</button></div></div>
+    <div class="field"><label>전화번호</label><div class="input-wrap"><input type="tel" id="userPhone" placeholder="010-1234-5678"></div></div>
+    <div class="field"><label>이메일</label><div class="input-wrap"><input type="email" id="userEmail" placeholder="example@email.com"></div></div>
+  </div>
+  <button class="btn btn-primary" onclick="submitDB()">🔓 보장 개선 전략 보기</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="section" id="step4">
+  <div class="section-title">🎯 보장 개선 전략</div>
+  <div class="section-desc">CFP 오상열의 보험 전략 제안입니다</div>
+  <div id="resultPriority"></div>
+  <div id="insightAI"></div>
+  <div class="knowledge">
+    <h3>📚 보험 필수 지식</h3>
+    <div class="knowledge-item"><div class="ki-q">Q. 보험 필요자금은 어떻게 계산하나?</div><div class="ki-a">사망/장해 필요자금 = 연봉×3 + 총부채입니다. 가족의 3년치 생활비와 부채를 커버할 수 있어야 합니다. 암진단금은 연봉×2, 뇌/심 진단금은 연봉×1이 기준입니다. 실비는 5천만원이 최소 권장 한도입니다.</div></div>
+    <div class="knowledge-item"><div class="ki-q">Q. 실손보험은 왜 필수인가?</div><div class="ki-a">실손보험은 실제 치료비를 보장하는 '보험의 꽃'입니다. 4세대 실손보험은 급여 90%, 비급여 80%를 보장합니다. 실비 없이 큰 병에 걸리면 수천만원 자비 부담이 생길 수 있으니, 반드시 유지하세요.</div></div>
+    <div class="knowledge-item"><div class="ki-q">Q. 치매보험은 꼭 가입해야 하나?</div><div class="ki-a">65세 이상 10명 중 1명이 치매에 걸립니다. 치매 간병비는 월 200~400만원으로 가족의 재정을 완전히 무너뜨릴 수 있습니다. 젊을 때 가입하면 보험료가 저렴하므로 지금 가입하는 것이 현명합니다.</div></div>
+    <div class="knowledge-item"><div class="ki-q">Q. 보험료는 소득의 몇 %가 적정한가?</div><div class="ki-a">월 소득의 7~10%가 적정 보험료입니다. 이를 초과하면 저축·투자에 부정적 영향을 주고, 미달하면 보장이 부족합니다. 보장성 보험 위주로 가입하고, 저축성 보험은 세제혜택이 있는 경우에만 고려하세요.</div></div>
+  </div>
+  <div class="complete-section">
+    <div class="complete-icon">✅</div><div class="complete-title">분석이 완료되었습니다!</div><div class="complete-desc">상세 리포트는 입력하신 이메일과<br>카카오톡으로 발송됩니다</div>
+    <div class="cta-cards">
+      <button class="btn btn-gold" onclick="window.open('https://moneya-frontend.vercel.app','_blank')">🤖 AI머니야 시작하기</button>
+      <button class="btn btn-teal" onclick="window.open('https://owant.netlify.app/diagnosis/','_blank')">📊 무료 재무진단 해보기</button>
+      <button class="btn btn-outline" onclick="window.open('https://ohwant-hub.netlify.app','_blank')">🔗 오상열 CFP 더 알아보기</button>
+      <button class="btn btn-gray" onclick="location.reload()">🔄 다시 분석하기</button>
+    </div>
+  </div>
+  <div class="disclaimer">※ 본 분석은 참고용이며, 정확한 보험 분석은 전문 설계사 상담을 권장합니다.<br>© 오원트금융연구소 · CFP 오상열</div>
+</div>
+</div>
+<script>
+let gender='',toggles={hosp:null,demen:null},D={},items=[];
+function setGender(g){gender=g;document.getElementById('gM').style.background=g==='남'?'var(--acc)':'#fff';document.getElementById('gM').style.color=g==='남'?'#fff':'var(--acc)';document.getElementById('gF').style.background=g==='여'?'var(--acc)':'#fff';document.getElementById('gF').style.color=g==='여'?'#fff':'var(--acc)';}
+function setToggle(k,v,el){toggles[k]=v;el.parentElement.querySelectorAll('button').forEach(b=>{b.style.background='#fff';b.style.color='var(--acc)';});el.style.background='var(--acc)';el.style.color='#fff';}
+function showStep(n){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('step'+n).classList.add('active','fade-in');document.getElementById('progFill').style.width=[25,50,75,100][n-1]+'%';document.getElementById('progText').textContent=n+'/4';window.scrollTo({top:0,behavior:'smooth'});}
+function fmt(n){return n>=10000?(n/10000).toFixed(1)+'억':n.toLocaleString()+'만';}
+
+function analyze(){
+  const sal=parseFloat(document.getElementById('salary').value)||0;
+  const debt=parseFloat(document.getElementById('debt').value)||0;
+  if(!sal){alert('연봉을 입력해주세요');return;}
+
+  const hD=parseFloat(document.getElementById('haveDeath').value)||0;
+  const hDi=parseFloat(document.getElementById('haveDisab').value)||0;
+  const hC=parseFloat(document.getElementById('haveCancer').value)||0;
+  const hB=parseFloat(document.getElementById('haveBrain').value)||0;
+  const hH=parseFloat(document.getElementById('haveHeart').value)||0;
+  const hR=parseFloat(document.getElementById('haveReal').value)||0;
+
+  // 필요자금 계산 (앱 로직 기반)
+  const deathNeed=sal*3+debt; // 연봉×3+부채
+  const disabNeed=sal*3+debt;
+  const cancerNeed=sal*2; // 연봉×2
+  const brainNeed=sal; // 연봉×1
+  const heartNeed=sal;
+  const realNeed=5000; // 5천만원
+
+  items=[
+    {name:'사망',emoji:'⚰️',need:deathNeed,have:hD,lack:Math.max(0,deathNeed-hD)},
+    {name:'장해',emoji:'🦽',need:disabNeed,have:hDi,lack:Math.max(0,disabNeed-hDi)},
+    {name:'암진단',emoji:'🏥',need:cancerNeed,have:hC,lack:Math.max(0,cancerNeed-hC)},
+    {name:'뇌질환',emoji:'🧠',need:brainNeed,have:hB,lack:Math.max(0,brainNeed-hB)},
+    {name:'심질환',emoji:'❤️',need:heartNeed,have:hH,lack:Math.max(0,heartNeed-hH)},
+    {name:'실비',emoji:'💊',need:realNeed,have:hR,lack:Math.max(0,realNeed-hR)},
+    {name:'입원',emoji:'🏨',need:'가입',have:toggles.hosp===true?'O':'X',lack:toggles.hosp===true?'-':'미가입',isToggle:true,ok:toggles.hosp===true},
+    {name:'치매',emoji:'🧓',need:'가입',have:toggles.demen===true?'O':'X',lack:toggles.demen===true?'-':'미가입',isToggle:true,ok:toggles.demen===true},
+  ];
+
+  D={sal,debt,items};
+  const lackCount=items.filter(i=>i.isToggle?!i.ok:i.lack>0).length;
+  const mostUrgent=items.filter(i=>!i.isToggle&&i.lack>0).sort((a,b)=>b.lack-a.lack)[0];
+
+  let tableRows=items.map(i=>`<tr><td>${i.emoji} ${i.name}</td><td>${i.isToggle?i.need:fmt(i.need)+'원'}</td><td style="color:#16a34a">${i.isToggle?i.have:fmt(i.have)+'원'}</td><td class="${(i.isToggle?!i.ok:i.lack>0)?'lack':'ok'}">${i.isToggle?i.lack:(i.lack>0?fmt(i.lack)+'원':'✅')}</td></tr>`).join('');
+
+  document.getElementById('resultTable').innerHTML=`<div class="input-card" style="padding:12px;"><table class="ins-table"><thead><tr><th>담보</th><th>필요</th><th>준비</th><th>부족</th></tr></thead><tbody>${tableRows}</tbody></table>
+    <div style="margin-top:8px;padding:8px;background:#f3e8ff;border-radius:8px;font-size:10px;color:#6b21a8;"><b>📋 필요자금 기준:</b> 사망/장해 = 연봉×3+부채, 암 = 연봉×2, 뇌/심 = 연봉×1, 실비 = 5천만원</div></div>`;
+
+  document.getElementById('resultSummary').innerHTML=`<div class="result-card ${lackCount>3?'red':''}"><div class="result-title">📊 보험 분석 요약</div>
+    <div class="result-row"><span class="rr-label">총 부족 보장</span><span class="rr-value ${lackCount>0?'danger':'success'}">${lackCount}개 항목</span></div>
+    ${mostUrgent?`<div class="result-row"><span class="rr-label">가장 시급한 보장</span><span class="rr-value danger">${mostUrgent.name} (${fmt(mostUrgent.lack)}원 부족)</span></div>`:''}
+    <div class="result-row"><span class="rr-label">치매 특약</span><span class="rr-value ${toggles.demen?'success':'danger'}">${toggles.demen?'가입 완료':'미가입 (추가 권장)'}</span></div>
+  </div>`;
+
+  document.getElementById('insightBasic').innerHTML=`<div class="insight"><span class="insight-icon">${lackCount<=2?'✅':'⚠️'}</span><span class="insight-text"><b>보장 진단:</b> ${lackCount}개 항목에서 보장이 부족합니다. ${mostUrgent?mostUrgent.name+' 보장이 '+fmt(mostUrgent.lack)+'원 부족하여 가장 시급합니다.':''}</span></div>`;
+
+  showStep(2);
+}
+
+function submitDB(){
+  const name=document.getElementById('userName').value.trim();const phone=document.getElementById('userPhone').value.trim();const email=document.getElementById('userEmail').value.trim();
+  if(!name||!phone||!email){alert('모든 정보를 입력해주세요');return;}
+  const payload={유입경로:'보험분석',이름:name,성별:gender,전화번호:phone,이메일:email,연봉:D.sal+'만원',총부채:D.debt+'만원',timestamp:new Date().toISOString()};
+  items.forEach(i=>{payload[i.name+'_필요']=i.isToggle?i.need:i.need+'만원';payload[i.name+'_준비']=i.isToggle?i.have:i.have+'만원';});
+  fetch('https://hook.eu1.make.com/gqxc1xxpz1x61pxfk996ollf00r0oiu9',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+
+  // 우선순위 정렬
+  const priorities=items.filter(i=>!i.isToggle&&i.lack>0).sort((a,b)=>b.lack-a.lack);
+  const toggleLacks=items.filter(i=>i.isToggle&&!i.ok);
+  let priHTML=priorities.map((p,i)=>`<div class="result-row"><span class="rr-label">${i+1}순위: ${p.emoji} ${p.name}</span><span class="rr-value danger">${fmt(p.lack)}원 부족</span></div>`).join('');
+  priHTML+=toggleLacks.map((t,i)=>`<div class="result-row"><span class="rr-label">${priorities.length+i+1}순위: ${t.emoji} ${t.name}</span><span class="rr-value danger">미가입</span></div>`).join('');
+
+  document.getElementById('resultPriority').innerHTML=`
+    <div class="result-card red"><div class="result-title">🎯 보장 개선 우선순위</div>${priHTML||'<div class="result-row"><span class="rr-label">모든 보장 충족!</span><span class="rr-value success">✅</span></div>'}</div>
+    <div class="result-card green"><div class="result-title">💰 적정 보험료 가이드</div>
+      <div class="result-row"><span class="rr-label">월 소득 (세후 추정)</span><span class="rr-value">${Math.round(D.sal/12*0.8).toLocaleString()}만원</span></div>
+      <div class="result-row"><span class="rr-label">적정 보험료 (7~10%)</span><span class="rr-value highlight">월 ${Math.round(D.sal/12*0.8*0.07).toLocaleString()}~${Math.round(D.sal/12*0.8*0.1).toLocaleString()}만원</span></div>
+    </div>`;
+
+  let ai=priorities.length>0?`가장 시급한 ${priorities[0].name} 보장(${fmt(priorities[0].lack)}원 부족)부터 보완하세요. `:'모든 금액 보장이 충족되어 있습니다! ';
+  if(!toggles.demen) ai+='치매보험은 젊을 때 가입할수록 보험료가 저렴합니다. 지금 가입을 권장합니다. ';
+  ai+='보장성 보험 위주로 가입하고, 보험료가 소득의 10%를 초과하지 않도록 관리하세요.';
+
+  document.getElementById('insightAI').innerHTML=`<div class="insight"><span class="insight-icon">💡</span><span class="insight-text"><b>CFP 오상열 추천:</b> ${ai}</span></div>`;
+  showStep(4);
+}
+</script>
+</body>
+</html>
