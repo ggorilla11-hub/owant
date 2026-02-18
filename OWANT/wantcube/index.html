@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>원트큐브 | 당신의 최우선 재무목표는?</title>
+<meta property="og:title" content="딱 6번 클릭! 나의 최우선 재무목표 찾기">
+<meta property="og:description" content="729가지 조합 중 당신에게 딱 맞는 재무목표를 AI가 분석합니다">
+<meta property="og:url" content="https://owant.netlify.app/wantcube/">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0F2B4C;
+  --blue: #1B6CB0;
+  --gold: #D4A853;
+  --gold-light: #FFF9E6;
+  --red: #E74C3C;
+  --green: #27AE60;
+  --purple: #6C3CE1;
+  --light: #F5F7FA;
+  --white: #FFFFFF;
+  --gray: #8896A7;
+  --dark: #1A1A2E;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--dark); color:#fff; -webkit-font-smoothing:antialiased; }
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 60px 20px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(212,168,83,0.06) 0%, transparent 60%);
+}
+.hero-badge {
+  display:inline-block; background:rgba(212,168,83,0.15); border:1px solid rgba(212,168,83,0.3);
+  color:var(--gold); padding:5px 14px; border-radius:20px; font-size:12px; font-weight:500;
+  margin-bottom:16px; position:relative;
+}
+.hero h1 { font-family:'Black Han Sans'; font-size:28px; line-height:1.4; margin-bottom:10px; position:relative; }
+.hero h1 span { color:var(--gold); }
+.hero p { font-size:14px; opacity:.7; line-height:1.6; margin-bottom:24px; position:relative; }
+.hero-stats { display:flex; justify-content:center; gap:28px; position:relative; margin-bottom:24px; }
+.hero-stat .num { font-size:22px; font-weight:900; color:var(--gold); }
+.hero-stat .label { font-size:11px; opacity:.7; margin-top:2px; }
+
+.btn-start {
+  display:inline-block; background:linear-gradient(135deg, var(--gold), #c4993d); color:var(--dark);
+  padding:14px 40px; border-radius:30px; font-size:16px; font-weight:700; border:none; cursor:pointer;
+  text-decoration:none; position:relative; transition:transform .2s;
+}
+.btn-start:hover { transform:scale(1.05); }
+
+/* ===== 3D CUBE ===== */
+.cube-section {
+  padding:20px; display:none; min-height:100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+.cube-section.active { display:block; }
+
+.step-progress { display:flex; justify-content:center; gap:6px; margin-bottom:20px; padding-top:20px; }
+.step-dot { width:36px; height:4px; border-radius:2px; background:rgba(255,255,255,0.15); transition:all .3s; }
+.step-dot.done { background:var(--gold); }
+.step-dot.current { background:var(--gold); width:50px; }
+
+.step-label { text-align:center; font-size:12px; color:var(--gray); margin-bottom:6px; }
+.step-question {
+  text-align:center; font-family:'Black Han Sans'; font-size:22px; margin-bottom:24px;
+  line-height:1.4;
+}
+
+/* 큐브 3D */
+.cube-wrapper {
+  perspective:800px; display:flex; justify-content:center; margin-bottom:30px;
+}
+.cube-3d {
+  width:200px; height:200px; position:relative; transform-style:preserve-3d;
+  transform:rotateX(-15deg) rotateY(25deg); transition:transform 1s ease;
+}
+.cube-face {
+  position:absolute; width:200px; height:200px; border:2px solid rgba(255,255,255,0.1);
+  display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); gap:2px;
+  padding:4px; backface-visibility:visible;
+}
+.cube-face.front  { transform:translateZ(100px); background:rgba(27,108,176,0.3); }
+.cube-face.back   { transform:rotateY(180deg) translateZ(100px); background:rgba(27,108,176,0.2); }
+.cube-face.right  { transform:rotateY(90deg) translateZ(100px); background:rgba(231,76,60,0.3); }
+.cube-face.left   { transform:rotateY(-90deg) translateZ(100px); background:rgba(108,60,225,0.3); }
+.cube-face.top    { transform:rotateX(90deg) translateZ(100px); background:rgba(212,168,83,0.3); }
+.cube-face.bottom { transform:rotateX(-90deg) translateZ(100px); background:rgba(39,174,96,0.3); }
+
+.cube-cell {
+  background:rgba(255,255,255,0.08); border-radius:3px; display:flex; align-items:center;
+  justify-content:center; font-size:9px; color:rgba(255,255,255,0.5); transition:all .5s;
+}
+.cube-cell.highlight {
+  background:var(--gold); color:var(--dark); font-weight:700;
+  box-shadow:0 0 15px rgba(212,168,83,0.6); animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse { 0%,100%{box-shadow:0 0 15px rgba(212,168,83,0.4)} 50%{box-shadow:0 0 25px rgba(212,168,83,0.8)} }
+
+/* 선택지 */
+.choices { display:flex; flex-direction:column; gap:10px; max-width:400px; margin:0 auto; padding:0 20px; }
+.choice-btn {
+  background:rgba(255,255,255,0.06); border:2px solid rgba(255,255,255,0.12); border-radius:14px;
+  padding:14px 20px; color:#fff; font-size:15px; font-weight:500; cursor:pointer; transition:all .3s;
+  text-align:left; display:flex; align-items:center; gap:12px;
+}
+.choice-btn:hover { border-color:var(--gold); background:rgba(212,168,83,0.1); }
+.choice-btn.selected { border-color:var(--gold); background:rgba(212,168,83,0.15); }
+.choice-icon { font-size:24px; }
+
+/* ===== ANALYZING ===== */
+.analyzing-section { display:none; min-height:100vh; background:linear-gradient(135deg,#1a1a2e,#16213e); }
+.analyzing-section.active { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.analyzing-text { font-family:'Black Han Sans'; font-size:24px; margin-top:30px; }
+.analyzing-sub { font-size:13px; color:var(--gray); margin-top:8px; }
+.analyzing-cube {
+  width:150px; height:150px; position:relative; transform-style:preserve-3d;
+  animation:spin 2s linear infinite;
+}
+@keyframes spin { 0%{transform:rotateX(0) rotateY(0)} 100%{transform:rotateX(360deg) rotateY(360deg)} }
+.analyzing-face {
+  position:absolute; width:150px; height:150px; border:2px solid rgba(212,168,83,0.4);
+  background:rgba(212,168,83,0.1);
+}
+.analyzing-face.a-front  { transform:translateZ(75px); }
+.analyzing-face.a-back   { transform:rotateY(180deg) translateZ(75px); }
+.analyzing-face.a-right  { transform:rotateY(90deg) translateZ(75px); }
+.analyzing-face.a-left   { transform:rotateY(-90deg) translateZ(75px); }
+.analyzing-face.a-top    { transform:rotateX(90deg) translateZ(75px); }
+.analyzing-face.a-bottom { transform:rotateX(-90deg) translateZ(75px); }
+
+/* ===== RESULT ===== */
+.result-section { display:none; background:linear-gradient(135deg,#1a1a2e,#16213e); min-height:100vh; padding:40px 20px; }
+.result-section.active { display:block; }
+
+.result-card {
+  max-width:440px; margin:0 auto; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px; padding:32px 24px; text-align:center;
+}
+.result-emoji { font-size:64px; margin-bottom:12px; }
+.result-label { font-size:13px; color:var(--gold); font-weight:500; margin-bottom:4px; }
+.result-title { font-family:'Black Han Sans'; font-size:32px; margin-bottom:6px; }
+.result-subtitle { font-size:14px; color:var(--gray); margin-bottom:20px; line-height:1.6; }
+
+.result-insights { text-align:left; margin-bottom:24px; }
+.insight-item {
+  display:flex; gap:10px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.06);
+  font-size:13px; line-height:1.6; color:rgba(255,255,255,0.8);
+}
+.insight-num { color:var(--gold); font-weight:700; font-size:14px; min-width:20px; }
+
+.result-stat {
+  display:flex; justify-content:center; gap:20px; margin-bottom:24px;
+  background:rgba(212,168,83,0.08); border-radius:12px; padding:16px;
+}
+.stat-item { text-align:center; }
+.stat-val { font-size:20px; font-weight:900; color:var(--gold); }
+.stat-lbl { font-size:11px; color:var(--gray); margin-top:2px; }
+
+.btn-share {
+  display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.15); padding:10px 24px; border-radius:25px;
+  color:#fff; font-size:13px; cursor:pointer; margin-bottom:16px; transition:all .3s;
+}
+.btn-share:hover { background:rgba(255,255,255,0.2); }
+
+.btn-cta {
+  display:block; width:100%; background:linear-gradient(135deg, var(--gold), #c4993d);
+  color:var(--dark); padding:16px; border-radius:14px; font-size:16px; font-weight:700;
+  border:none; cursor:pointer; margin-top:12px; transition:transform .2s;
+}
+.btn-cta:hover { transform:scale(1.02); }
+
+/* ===== DB SECTION ===== */
+.db-section { display:none; background:linear-gradient(135deg,#1a1a2e,#16213e); min-height:100vh; padding:40px 20px; }
+.db-section.active { display:block; }
+
+.db-card {
+  max-width:440px; margin:0 auto; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px; padding:32px 24px;
+}
+.db-title { font-family:'Black Han Sans'; font-size:22px; text-align:center; margin-bottom:6px; }
+.db-sub { font-size:13px; color:var(--gray); text-align:center; margin-bottom:24px; line-height:1.6; }
+.db-benefit {
+  background:rgba(212,168,83,0.08); border:1px solid rgba(212,168,83,0.2); border-radius:12px;
+  padding:14px; margin-bottom:20px; font-size:13px; color:var(--gold); text-align:center; line-height:1.6;
+}
+
+.form-group { margin-bottom:14px; }
+.form-label { display:block; font-size:12px; color:var(--gray); margin-bottom:6px; }
+.form-input {
+  width:100%; padding:12px 14px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px; color:#fff; font-size:14px; outline:none; transition:border .3s;
+}
+.form-input:focus { border-color:var(--gold); }
+.form-input::placeholder { color:rgba(255,255,255,0.3); }
+
+.consent-box { margin:16px 0; }
+.consent-label {
+  display:flex; align-items:flex-start; gap:8px; font-size:12px; color:rgba(255,255,255,0.6);
+  cursor:pointer; line-height:1.5;
+}
+.consent-label input { margin-top:3px; accent-color:var(--gold); }
+.consent-link { color:var(--gold); text-decoration:underline; cursor:pointer; }
+
+.btn-submit {
+  display:block; width:100%; background:linear-gradient(135deg, var(--gold), #c4993d);
+  color:var(--dark); padding:16px; border-radius:14px; font-size:16px; font-weight:700;
+  border:none; cursor:pointer; transition:all .3s;
+}
+.btn-submit:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-submit:not(:disabled):hover { transform:scale(1.02); }
+
+/* ===== COMPLETE ===== */
+.complete-section { display:none; background:linear-gradient(135deg,#1a1a2e,#16213e); min-height:100vh; padding:40px 20px; }
+.complete-section.active { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.complete-card {
+  max-width:440px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px; padding:40px 24px; text-align:center;
+}
+.complete-emoji { font-size:64px; margin-bottom:16px; }
+.complete-title { font-family:'Black Han Sans'; font-size:24px; margin-bottom:8px; }
+.complete-msg { font-size:13px; color:var(--gray); line-height:1.7; margin-bottom:24px; }
+.btn-app {
+  display:block; width:100%; padding:14px; border-radius:12px; font-size:14px; font-weight:600;
+  border:none; cursor:pointer; margin-bottom:10px; transition:transform .2s;
+}
+.btn-app:hover { transform:scale(1.02); }
+.btn-app.primary { background:var(--gold); color:var(--dark); }
+.btn-app.secondary { background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.15); }
+
+/* ===== TRUST BAR ===== */
+.trust-bar {
+  max-width:440px; margin:20px auto 0; display:flex; justify-content:center; gap:16px;
+  font-size:11px; color:var(--gray);
+}
+.trust-item { display:flex; align-items:center; gap:4px; }
+
+/* ===== CONFETTI ===== */
+.confetti-container { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
+.confetti-piece {
+  position:absolute; top:-10px; width:10px; height:10px; opacity:0.8;
+  animation:confettiFall 3s ease-in forwards;
+}
+@keyframes confettiFall {
+  0%{transform:translateY(0) rotate(0); opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg); opacity:0}
+}
+
+/* responsive */
+@media(max-width:480px) {
+  .hero h1 { font-size:24px; }
+  .cube-3d { width:160px; height:160px; }
+  .cube-face { width:160px; height:160px; }
+  .cube-face.front  { transform:translateZ(80px); }
+  .cube-face.back   { transform:rotateY(180deg) translateZ(80px); }
+  .cube-face.right  { transform:rotateY(90deg) translateZ(80px); }
+  .cube-face.left   { transform:rotateY(-90deg) translateZ(80px); }
+  .cube-face.top    { transform:rotateX(90deg) translateZ(80px); }
+  .cube-face.bottom { transform:rotateX(-90deg) translateZ(80px); }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <div class="hero-badge">⏱️ 딱 6번 클릭 · 30초 완성</div>
+  <h1>당신이 지금<br>가장 먼저 해야 할<br><span>재무목표</span>는?</h1>
+  <p>729가지 조합 중 당신에게 딱 맞는<br>최우선 재무목표를 찾아드립니다</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">2,000+</div><div class="label">상담 데이터</div></div>
+    <div class="hero-stat"><div class="num">20년</div><div class="label">CFP 경험</div></div>
+    <div class="hero-stat"><div class="num">729</div><div class="label">분석 조합</div></div>
+  </div>
+  <button class="btn-start" onclick="startCube()">내 재무목표 찾기 →</button>
+</div>
+
+<!-- CUBE STEPS -->
+<div class="cube-section" id="cubeSection">
+  <div class="step-progress" id="stepProgress"></div>
+  <div class="step-label" id="stepLabel"></div>
+  <div class="step-question" id="stepQuestion"></div>
+  
+  <div class="cube-wrapper">
+    <div class="cube-3d" id="cube3d">
+      <div class="cube-face front" id="faceFront"></div>
+      <div class="cube-face back" id="faceBack"></div>
+      <div class="cube-face right" id="faceRight"></div>
+      <div class="cube-face left" id="faceLeft"></div>
+      <div class="cube-face top" id="faceTop"></div>
+      <div class="cube-face bottom" id="faceBottom"></div>
+    </div>
+  </div>
+  
+  <div class="choices" id="choices"></div>
+</div>
+
+<!-- ANALYZING -->
+<div class="analyzing-section" id="analyzingSection">
+  <div style="perspective:600px">
+    <div class="analyzing-cube">
+      <div class="analyzing-face a-front"></div>
+      <div class="analyzing-face a-back"></div>
+      <div class="analyzing-face a-right"></div>
+      <div class="analyzing-face a-left"></div>
+      <div class="analyzing-face a-top"></div>
+      <div class="analyzing-face a-bottom"></div>
+    </div>
+  </div>
+  <div class="analyzing-text">원트큐브 분석 중...</div>
+  <div class="analyzing-sub">729가지 조합에서 최적 매칭 중</div>
+</div>
+
+<!-- RESULT -->
+<div class="result-section" id="resultSection">
+  <div class="result-card">
+    <div class="result-emoji" id="resultEmoji"></div>
+    <div class="result-label">당신의 최우선 재무목표</div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-subtitle" id="resultSubtitle"></div>
+    
+    <div class="result-stat" id="resultStat"></div>
+    
+    <div class="result-insights" id="resultInsights"></div>
+    
+    <button class="btn-share" onclick="shareResult()">📤 결과 공유하기</button>
+    <button class="btn-cta" onclick="showDB()">🔍 맞춤 재무 리포트 받기 (무료)</button>
+  </div>
+  <div class="trust-bar">
+    <div class="trust-item">🔒 개인정보 보호</div>
+    <div class="trust-item">📊 2,000명 데이터 기반</div>
+    <div class="trust-item">🏆 CFP 20년</div>
+  </div>
+</div>
+
+<!-- DB COLLECTION -->
+<div class="db-section" id="dbSection">
+  <div class="db-card" id="dbCard">
+    <div class="db-title">맞춤 재무 리포트를<br>보내드릴게요!</div>
+    <div class="db-sub" id="dbGoalText"></div>
+    <div class="db-benefit">🎁 지금 신청하면<br>AI머니야 프리미엄 14일 무료 + 세미나 초대</div>
+    
+    <div class="form-group">
+      <label class="form-label">이름 *</label>
+      <input type="text" class="form-input" id="dbName" placeholder="이름을 입력해주세요">
+    </div>
+    <div class="form-group">
+      <label class="form-label">전화번호 *</label>
+      <input type="tel" class="form-input" id="dbPhone" placeholder="010-0000-0000">
+    </div>
+    <div class="form-group">
+      <label class="form-label">이메일</label>
+      <input type="email" class="form-input" id="dbEmail" placeholder="example@email.com">
+    </div>
+    
+    <div class="consent-box">
+      <label class="consent-label">
+        <input type="checkbox" id="consentCheck" onchange="toggleSubmit()">
+        <span><span class="consent-link" onclick="event.preventDefault();alert('수집항목: 이름, 전화번호, 이메일\n수집목적: 맞춤 재무 리포트 발송, 서비스 안내\n보유기간: 수집일로부터 1년\n동의 거부 시 리포트 발송이 불가합니다.')">개인정보 수집·이용</span>에 동의합니다</span>
+      </label>
+    </div>
+    
+    <button class="btn-submit" id="submitBtn" disabled onclick="submitDB()">무료 리포트 신청하기</button>
+  </div>
+</div>
+
+<!-- COMPLETE -->
+<div class="complete-section" id="completeSection">
+  <div class="complete-card">
+    <div class="complete-emoji">🎉</div>
+    <div class="complete-title" id="completeName"></div>
+    <div class="complete-msg">
+      맞춤 재무 리포트를 곧 보내드리겠습니다.<br>
+      카카오톡과 이메일을 확인해주세요!<br><br>
+      AI머니야에서 매일 금융집을 키워보세요!
+    </div>
+    <button class="btn-app primary" onclick="window.open('https://moneya-frontend.vercel.app','_blank')">📱 AI머니야 시작하기</button>
+    <button class="btn-app secondary" onclick="window.open('https://owant.netlify.app/diagnosis/','_blank')">🏠 무료 재무진단 해보기</button>
+    <button class="btn-app secondary" onclick="window.open('https://owant.netlify.app/','_blank')">💰 무료 통합연금분석 해보기</button>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const steps = [
+  { label:'인적정보 1/3', q:'나이가 어떻게 되시나요?', face:'left',
+    options:[
+      {icon:'🧑', text:'20~30대', val:'young'},
+      {icon:'👨', text:'40~50대', val:'mid'},
+      {icon:'👴', text:'60대 이상', val:'senior'}
+    ]},
+  { label:'인적정보 2/3', q:'현재 직업은 무엇인가요?', face:'left',
+    options:[
+      {icon:'💼', text:'직장인', val:'worker'},
+      {icon:'🏢', text:'사업가/자영업', val:'business'},
+      {icon:'🌅', text:'은퇴자/주부', val:'retired'}
+    ]},
+  { label:'인적정보 3/3', q:'자녀가 있으신가요?', face:'left',
+    options:[
+      {icon:'👤', text:'없음', val:'none'},
+      {icon:'👶', text:'1명', val:'one'},
+      {icon:'👨‍👩‍👧‍👦', text:'2명 이상', val:'many'}
+    ]},
+  { label:'재무정보 1/3', q:'월 소득은 얼마인가요?', face:'right',
+    options:[
+      {icon:'💵', text:'500만원 이하', val:'low'},
+      {icon:'💰', text:'500~1,000만원', val:'mid'},
+      {icon:'💎', text:'1,000만원 초과', val:'high'}
+    ]},
+  { label:'재무정보 2/3', q:'총 자산은 얼마인가요?', face:'right',
+    options:[
+      {icon:'🏦', text:'5억 이하', val:'low'},
+      {icon:'🏛️', text:'5~10억', val:'mid'},
+      {icon:'🏰', text:'10억 초과', val:'high'}
+    ]},
+  { label:'재무정보 3/3', q:'주택을 보유하고 계신가요?', face:'right',
+    options:[
+      {icon:'🏚️', text:'무주택', val:'none'},
+      {icon:'🏠', text:'1주택', val:'one'},
+      {icon:'🏘️', text:'2주택 이상/건물', val:'many'}
+    ]}
+];
+
+const results = {
+  seed:     { emoji:'🌱', title:'목돈마련', sub:'종잣돈이 최우선! 저축 구조를 먼저 만들어야 합니다', insights:['같은 연령대의 68%가 종잣돈 부족을 느낍니다','월 소득의 30% 이상 저축하면 3년 안에 1억 가능','금융집짓기의 \'기초(저축)\' 설계가 시급합니다']},
+  invest:   { emoji:'📈', title:'투자전략', sub:'자산을 키울 투자 포트폴리오가 필요합니다', insights:['현재 자산 수준에서 연 7% 수익이면 10년 후 2배','분산투자로 리스크를 줄이면서 수익을 극대화','금융집짓기의 \'기둥(투자)\' 설계를 시작하세요']},
+  retire:   { emoji:'🌅', title:'노후준비', sub:'연금 갭을 메우는 것이 가장 급합니다', insights:['국민연금만으로는 희망생활비의 30%만 충당 가능','지금 시작하면 월 50만원으로 노후 격차 해소 가능','금융집짓기의 \'지붕(연금)\' 설계를 서두르세요']},
+  debt:     { emoji:'⚖️', title:'대출관리', sub:'부채 구조를 먼저 정리해야 자산이 늘어납니다', insights:['대출 이자만 줄여도 연 100~300만원 절약 가능','부채비율 40% 이하가 건강한 재무의 기준','금융집짓기의 \'기초(부채)\' 정리가 최우선입니다']},
+  insurance:{ emoji:'🛡️', title:'보험정비', sub:'보장 구조를 점검해야 큰 돈이 새지 않습니다', insights:['보험 5개 이상이면 중복보장 확률 80%','불필요한 보험료만 줄여도 월 20~30만원 절약','금융집짓기의 \'땅(보험)\' 기초공사를 점검하세요']},
+  tax:      { emoji:'🧾', title:'세금절세', sub:'절세 전략이 수익률보다 확실한 수익입니다', insights:['연말정산 최적화만으로 연 66만원 환급 가능','사업소득 절세 구조를 만들면 실질소득 10%↑','금융집짓기의 \'세금\' 설계로 새는 돈을 막으세요']},
+  realestate:{ emoji:'🏠', title:'부동산전략', sub:'자산 중 부동산 비중을 조정해야 합니다', insights:['자산의 80% 이상이 부동산이면 유동성 위험','부동산+금융자산 균형이 안정적 자산 성장의 핵심','금융집짓기의 \'주택\' 설계를 재점검하세요']},
+  inherit:  { emoji:'👨‍👩‍👧', title:'상속증여', sub:'자산 이전 설계를 시작해야 할 때입니다', insights:['사전 증여는 10년 단위, 일찍 시작할수록 유리','상속세 절세 구조를 미리 만들면 수억 절약 가능','금융집짓기의 \'자산이전\' 설계가 시급합니다']},
+  saving:   { emoji:'💰', title:'재테크시작', sub:'체계적인 재테크 습관을 만들어야 합니다', insights:['20~30대 재테크 시작이 40대 시작보다 2배 유리','적금→펀드→ETF 단계적 전환이 최적 경로','금융집짓기의 \'기둥(저축→투자)\' 로드맵을 세우세요']}
+};
+
+// ===== ALGORITHM =====
+function calcResult(answers) {
+  const scores = { seed:0, invest:0, retire:0, debt:0, insurance:0, tax:0, realestate:0, inherit:0, saving:0 };
+  const [age, job, child, income, asset, house] = answers;
+  
+  // 나이 기반
+  if(age==='young') { scores.seed+=3; scores.saving+=3; scores.invest+=1; }
+  else if(age==='mid') { scores.retire+=3; scores.invest+=2; scores.tax+=1; scores.insurance+=1; }
+  else { scores.retire+=3; scores.inherit+=3; scores.insurance+=1; }
+  
+  // 직업 기반
+  if(job==='worker') { scores.retire+=2; scores.saving+=1; }
+  else if(job==='business') { scores.tax+=3; scores.invest+=1; }
+  else { scores.retire+=2; scores.inherit+=2; scores.insurance+=1; }
+  
+  // 자녀 기반
+  if(child==='none') { scores.seed+=1; scores.invest+=1; }
+  else if(child==='one') { scores.insurance+=1; scores.saving+=1; }
+  else { scores.insurance+=2; scores.inherit+=1; }
+  
+  // 소득 기반
+  if(income==='low') { scores.seed+=2; scores.debt+=1; }
+  else if(income==='mid') { scores.invest+=2; scores.tax+=1; }
+  else { scores.tax+=3; scores.invest+=2; scores.inherit+=1; }
+  
+  // 자산 기반
+  if(asset==='low') { scores.seed+=2; scores.saving+=2; }
+  else if(asset==='mid') { scores.invest+=2; scores.realestate+=1; }
+  else { scores.inherit+=3; scores.tax+=2; scores.realestate+=2; }
+  
+  // 주택 기반
+  if(house==='none') { scores.seed+=2; scores.realestate+=1; }
+  else if(house==='one') { scores.retire+=1; scores.invest+=1; }
+  else { scores.realestate+=3; scores.inherit+=2; scores.tax+=1; }
+  
+  // 최고점 찾기
+  let maxKey='seed', maxVal=0;
+  for(const [k,v] of Object.entries(scores)) {
+    if(v > maxVal) { maxVal=v; maxKey=k; }
+  }
+  return maxKey;
+}
+
+// ===== STATE =====
+let currentStep = 0;
+let answers = [];
+let resultKey = '';
+
+// ===== CUBE CELLS =====
+const topLabels = ['목돈','재테크','대출','투자','노후','보험','세금','부동산','상속'];
+function initCube() {
+  ['faceFront','faceBack','faceRight','faceLeft','faceTop','faceBottom'].forEach(id => {
+    const face = document.getElementById(id);
+    face.innerHTML = '';
+    const labels = id==='faceTop' ? topLabels : Array(9).fill('');
+    labels.forEach(l => {
+      const cell = document.createElement('div');
+      cell.className = 'cube-cell';
+      cell.textContent = l;
+      face.appendChild(cell);
+    });
+  });
+}
+
+function rotateCube(face) {
+  const cube = document.getElementById('cube3d');
+  const rotations = {
+    left:  'rotateX(-15deg) rotateY(70deg)',
+    right: 'rotateX(-15deg) rotateY(-40deg)',
+    top:   'rotateX(-50deg) rotateY(25deg)',
+    front: 'rotateX(-15deg) rotateY(25deg)'
+  };
+  cube.style.transform = rotations[face] || rotations.front;
+}
+
+// ===== FLOW =====
+function startCube() {
+  document.getElementById('heroSection').style.display = 'none';
+  document.getElementById('cubeSection').classList.add('active');
+  currentStep = 0;
+  answers = [];
+  initCube();
+  renderStep();
+}
+
+function renderStep() {
+  const step = steps[currentStep];
+  
+  // Progress
+  const prog = document.getElementById('stepProgress');
+  prog.innerHTML = '';
+  for(let i=0; i<6; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'step-dot' + (i<currentStep?' done':'') + (i===currentStep?' current':'');
+    prog.appendChild(dot);
+  }
+  
+  document.getElementById('stepLabel').textContent = step.label;
+  document.getElementById('stepQuestion').textContent = step.q;
+  rotateCube(step.face);
+  
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  step.options.forEach((opt, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-icon">${opt.icon}</span><span>${opt.text}</span>`;
+    btn.onclick = () => selectChoice(opt.val, i);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectChoice(val, idx) {
+  answers.push(val);
+  
+  // Highlight cube cells
+  const step = steps[currentStep];
+  const faceId = step.face === 'left' ? 'faceLeft' : 'faceRight';
+  const cells = document.getElementById(faceId).querySelectorAll('.cube-cell');
+  const row = currentStep % 3;
+  cells[row*3 + idx].classList.add('highlight');
+  
+  currentStep++;
+  if(currentStep < 6) {
+    setTimeout(renderStep, 300);
+  } else {
+    showAnalyzing();
+  }
+}
+
+function showAnalyzing() {
+  document.getElementById('cubeSection').classList.remove('active');
+  document.getElementById('analyzingSection').classList.add('active');
+  
+  setTimeout(() => {
+    resultKey = calcResult(answers);
+    showResult();
+  }, 3000);
+}
+
+function showResult() {
+  document.getElementById('analyzingSection').classList.remove('active');
+  document.getElementById('resultSection').classList.add('active');
+  
+  const r = results[resultKey];
+  document.getElementById('resultEmoji').textContent = r.emoji;
+  document.getElementById('resultTitle').textContent = r.title;
+  document.getElementById('resultSubtitle').textContent = r.sub;
+  
+  // Stats
+  const statEl = document.getElementById('resultStat');
+  const ageLabel = answers[0]==='young'?'20~30대':answers[0]==='mid'?'40~50대':'60대+';
+  const jobLabel = answers[1]==='worker'?'직장인':answers[1]==='business'?'사업가':'은퇴자';
+  statEl.innerHTML = `
+    <div class="stat-item"><div class="stat-val">${ageLabel}</div><div class="stat-lbl">연령대</div></div>
+    <div class="stat-item"><div class="stat-val">${jobLabel}</div><div class="stat-lbl">직업</div></div>
+    <div class="stat-item"><div class="stat-val">${r.title}</div><div class="stat-lbl">최우선목표</div></div>
+  `;
+  
+  // Insights
+  const insEl = document.getElementById('resultInsights');
+  insEl.innerHTML = r.insights.map((ins,i) => `
+    <div class="insight-item"><span class="insight-num">${i+1}</span><span>${ins}</span></div>
+  `).join('');
+  
+  // Confetti
+  launchConfetti();
+}
+
+function launchConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const colors = ['#D4A853','#E74C3C','#27AE60','#1B6CB0','#6C3CE1','#FF6B6B'];
+  for(let i=0; i<50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-delay:${Math.random()*2}s;border-radius:${Math.random()>.5?'50%':'2px'};
+      width:${6+Math.random()*8}px;height:${6+Math.random()*8}px`;
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 5000);
+}
+
+function shareResult() {
+  const r = results[resultKey];
+  const text = `원트큐브 분석 결과, 내 최우선 재무목표는 "${r.title}"! 너는 뭐 나왔어? 👉 https://owant.netlify.app/wantcube/`;
+  if(navigator.share) {
+    navigator.share({title:'원트큐브 결과', text:text}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(() => alert('결과가 복사되었습니다! SNS에 붙여넣기 해보세요.'));
+  }
+}
+
+function showDB() {
+  document.getElementById('resultSection').classList.remove('active');
+  document.getElementById('dbSection').classList.add('active');
+  const r = results[resultKey];
+  document.getElementById('dbGoalText').textContent = `"${r.title}" 맞춤 전략 리포트를\n이메일과 카카오톡으로 보내드립니다`;
+}
+
+function toggleSubmit() {
+  document.getElementById('submitBtn').disabled = !document.getElementById('consentCheck').checked;
+}
+
+function submitDB() {
+  const name = document.getElementById('dbName').value;
+  const phone = document.getElementById('dbPhone').value;
+  const email = document.getElementById('dbEmail').value;
+  
+  if(!name || !phone) { alert('이름과 전화번호를 입력해주세요.'); return; }
+  
+  const r = results[resultKey];
+  const now = new Date();
+  const dateStr = now.getFullYear()+'-'+(now.getMonth()+1).toString().padStart(2,'0')+'-'+now.getDate().toString().padStart(2,'0')+' '+now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  const data = {
+    이름: name,
+    연락처: phone.replace(/-/g,''),
+    이메일: email || '-',
+    날짜: dateStr,
+    나이: answers[0]==='young'?'30':answers[0]==='mid'?'45':'65',
+    유입경로: '원트큐브',
+    메모: '원트큐브|'+r.title+'|'+[answers[0]==='young'?'20~30대':answers[0]==='mid'?'40~50대':'60대+', answers[1]==='worker'?'직장인':answers[1]==='business'?'사업가':'은퇴자', answers[2]==='none'?'자녀없음':answers[2]==='one'?'자녀1명':'자녀2명+'].join('|')
+  };
+  
+  // Make.com Webhook
+  fetch('https://hook.eu1.make.com/gqxc1xxpz1x61pxfk996ollf00r0oiu9', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  }).catch(err => console.log('Webhook:', err));
+  
+  // Show complete
+  document.getElementById('dbSection').classList.remove('active');
+  document.getElementById('completeSection').classList.add('active');
+  document.getElementById('completeName').textContent = `감사합니다, ${name}님!`;
+  launchConfetti();
+}
+</script>
+</body>
+</html>
