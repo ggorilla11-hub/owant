@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>부동산분석 | 오원트금융연구소</title>
+<meta property="og:title" content="내 부동산, 노후를 지켜줄 수 있을까?">
+<meta property="og:description" content="부동산 현황과 주택연금 시뮬레이션 — CFP 오상열">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#1e3a5f;--acc:#b45309;--teal:#0d9488;--gold:#d4a853;--bg:#f4f6f8;--card:#fff;--txt:#333;--sub:#888;--border:#e5e7eb;}
+*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;}
+.hero{background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#7c2d12 100%);padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-30%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(250,204,21,0.12),transparent 70%);border-radius:50%;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);padding:6px 16px;border-radius:20px;font-size:12px;color:rgba(255,255,255,0.9);font-weight:600;margin-bottom:12px;}
+.hero h1{font-size:24px;font-weight:900;color:#fff;line-height:1.4;margin-bottom:8px;}.hero h1 em{font-style:normal;color:#fbbf24;}
+.hero p{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;}
+.hero-stat{display:flex;justify-content:center;gap:20px;margin-top:16px;}.hero-stat div{text-align:center;}.hero-stat .num{font-size:20px;font-weight:900;color:#fbbf24;}.hero-stat .lbl{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;}
+.progress-bar{background:#fff;padding:12px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}.progress-inner{display:flex;align-items:center;gap:8px;}.progress-track{flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;}.progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),#d97706);border-radius:3px;transition:width .5s;}.progress-text{font-size:11px;font-weight:700;color:var(--acc);min-width:36px;text-align:right;}
+.section{padding:16px 20px;display:none;}.section.active{display:block;}.section-title{font-size:16px;font-weight:800;color:var(--txt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}.section-desc{font-size:12px;color:var(--sub);margin-bottom:16px;}
+.input-card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid var(--border);}.input-card h3{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.field{margin-bottom:12px;}.field:last-child{margin-bottom:0;}.field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px;}.field .hint{font-size:10px;color:#999;margin-top:2px;}.field-row{display:flex;gap:10px;}.field-row .field{flex:1;margin-bottom:0;}
+.input-wrap{position:relative;}.input-wrap input{width:100%;padding:12px 40px 12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;outline:none;transition:border .2s;}.input-wrap input:focus{border-color:var(--acc);}.input-wrap .suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--sub);}
+.toggle-row{display:flex;gap:8px;}.toggle-btn{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-family:inherit;font-weight:600;color:#555;cursor:pointer;text-align:center;transition:all .2s;}.toggle-btn.selected{border-color:var(--acc);background:#fffbeb;color:#92400e;font-weight:700;}
+.result-card{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:14px;padding:16px;margin-bottom:12px;}.result-card.green{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border-color:#bbf7d0;}.result-card.blue{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#93c5fd;}
+.result-title{font-size:12px;font-weight:700;color:var(--acc);margin-bottom:10px;display:flex;align-items:center;gap:5px;}.result-card.green .result-title{color:#16a34a;}.result-card.blue .result-title{color:#2563eb;}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #fde68a;}.result-row:last-child{border-bottom:none;}.result-card.green .result-row{border-color:#bbf7d0;}.result-card.blue .result-row{border-color:#93c5fd;}
+.rr-label{font-size:12px;color:#555;}.rr-value{font-size:14px;font-weight:700;color:var(--txt);}.rr-value.danger{color:#dc2626;}.rr-value.success{color:#16a34a;}.rr-value.highlight{color:var(--pri);font-size:16px;}.rr-value.amber{color:var(--acc);}
+.insight{background:#fffbeb;border-radius:10px;padding:12px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;}.insight-icon{font-size:16px;flex-shrink:0;margin-top:1px;}.insight-text{font-size:12px;color:#78350f;line-height:1.6;}.insight-text b{font-weight:700;}
+.blur-wrap{position:relative;}.blur-content{filter:blur(6px);pointer-events:none;user-select:none;}.blur-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.7);border-radius:14px;z-index:2;}.blur-overlay p{font-size:14px;font-weight:700;color:var(--pri);margin-bottom:8px;}.blur-overlay .lock-icon{font-size:32px;margin-bottom:8px;}
+.db-form{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid var(--border);}.db-form h3{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:4px;display:flex;align-items:center;gap:6px;}.db-form .sub{font-size:11px;color:var(--sub);margin-bottom:14px;}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;}.btn-primary{background:linear-gradient(135deg,var(--acc),#d97706);color:#fff;box-shadow:0 4px 12px rgba(180,83,9,.3);}.btn-primary:hover{transform:translateY(-1px);}.btn-gold{background:linear-gradient(135deg,#d4a853,#c9952e);color:#fff;}.btn-outline{background:#fff;color:var(--acc);border:1.5px solid var(--acc);}.btn-gray{background:#f3f4f6;color:#555;border:none;}.btn-teal{background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;}
+.knowledge{background:var(--card);border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);border:1px solid var(--border);}.knowledge h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}.knowledge-item{padding:10px 0;border-bottom:1px solid #f3f4f6;}.knowledge-item:last-child{border-bottom:none;}.knowledge-item .ki-q{font-size:13px;font-weight:700;color:var(--pri);margin-bottom:4px;}.knowledge-item .ki-a{font-size:12px;color:#555;line-height:1.7;}
+.complete-section{text-align:center;padding:30px 20px;}.complete-icon{font-size:48px;margin-bottom:12px;}.complete-title{font-size:18px;font-weight:800;color:var(--pri);margin-bottom:6px;}.complete-desc{font-size:13px;color:var(--sub);margin-bottom:20px;line-height:1.6;}.cta-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.disclaimer{font-size:10px;color:#aaa;text-align:center;padding:12px 20px 30px;line-height:1.6;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}.fade-in{animation:fadeIn .4s ease forwards;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+  <div class="hero-badge">🏠 3분 무료 부동산분석</div>
+  <h1>내 부동산,<br><em>노후를 지켜줄</em> 수 있을까?</h1>
+  <p>부동산 현황 분석과 주택연금 시뮬레이션으로<br>은퇴 후 현금흐름을 확인하세요</p>
+  <div class="hero-stat"><div><div class="num">20년</div><div class="lbl">CFP 경력</div></div><div><div class="num">2,000+</div><div class="lbl">상담 실적</div></div><div><div class="num">3분</div><div class="lbl">소요시간</div></div></div>
+</div>
+<div class="progress-bar"><div class="progress-inner"><div class="progress-track"><div class="progress-fill" id="progFill" style="width:25%"></div></div><div class="progress-text" id="progText">1/4</div></div></div>
+
+<!-- STEP 1 -->
+<div class="section active" id="step1">
+  <div class="section-title">🏠 부동산 정보 입력</div>
+  <div class="section-desc">현재 부동산 현황을 입력해주세요</div>
+  <div class="input-card">
+    <h3>👤 기본 정보</h3>
+    <div class="field-row">
+      <div class="field"><label>현재 나이</label><div class="input-wrap"><input type="number" id="age" placeholder="37"><span class="suffix">세</span></div></div>
+      <div class="field"><label>월 소득 (세후)</label><div class="input-wrap"><input type="number" id="income" placeholder="520"><span class="suffix">만원</span></div></div>
+    </div>
+  </div>
+  <div class="input-card">
+    <h3>🏠 주택 보유 여부</h3>
+    <div class="toggle-row">
+      <button class="toggle-btn" onclick="setHouse(true,this)">🏠 보유</button>
+      <button class="toggle-btn" onclick="setHouse(false,this)">❌ 미보유</button>
+    </div>
+  </div>
+  <div class="input-card" id="houseDetail" style="display:none;">
+    <h3>🏘️ 부동산 현황</h3>
+    <div class="field-row">
+      <div class="field"><label>거주용 부동산 시가</label><div class="input-wrap"><input type="number" id="homeVal" placeholder="40000"><span class="suffix">만원</span></div></div>
+      <div class="field"><label>투자용 부동산 시가</label><div class="input-wrap"><input type="number" id="investVal" placeholder="10000"><span class="suffix">만원</span></div></div>
+    </div>
+    <div class="field"><label>주택담보대출 잔액</label><div class="input-wrap"><input type="number" id="mortBal" placeholder="25000"><span class="suffix">만원</span></div></div>
+  </div>
+  <div class="input-card" id="noHouseDetail" style="display:none;">
+    <h3>🎯 내집마련 목표</h3>
+    <div class="field-row">
+      <div class="field"><label>목표 주택 가격</label><div class="input-wrap"><input type="number" id="targetPrice" placeholder="50000"><span class="suffix">만원</span></div></div>
+      <div class="field"><label>현재 종잣돈</label><div class="input-wrap"><input type="number" id="seedMoney" placeholder="10000"><span class="suffix">만원</span></div></div>
+    </div>
+  </div>
+  <button class="btn btn-primary" onclick="analyze()">📊 부동산 분석하기</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="section" id="step2">
+  <div class="section-title">📊 부동산 분석 결과</div>
+  <div class="section-desc">현재 부동산 현황을 분석했습니다</div>
+  <div id="resultBasic"></div>
+  <div id="insightBasic"></div>
+  <div class="blur-wrap"><div class="blur-overlay"><div class="lock-icon">🔒</div><p>주택연금/내집마련 전략 보기</p><button class="btn btn-primary" style="width:auto;padding:10px 24px;font-size:13px;" onclick="showStep(3)">무료로 확인하기 →</button></div>
+    <div class="blur-content"><div class="result-card blue"><div class="result-title">🏖️ 주택연금 예상</div><div class="result-row"><span class="rr-label">65세 가입 시 월수령</span><span class="rr-value">약 100만원</span></div></div></div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="section" id="step3">
+  <div class="section-title">📋 심화 분석 결과 받기</div>
+  <div class="section-desc">아래 정보를 입력하시면 상세 전략을 보여드립니다</div>
+  <div class="db-form">
+    <h3>📩 분석 결과 받을 정보</h3><div class="sub">이메일과 카카오톡으로 상세 리포트를 보내드립니다</div>
+    <div class="field"><label>이름</label><div class="input-wrap"><input type="text" id="userName" placeholder="홍길동"></div></div>
+    <div class="field"><label>성별</label><div style="display:flex;gap:8px;"><button class="btn btn-outline" id="gM" onclick="setGender('남')" style="flex:1;padding:10px;font-size:13px;">남성</button><button class="btn btn-outline" id="gF" onclick="setGender('여')" style="flex:1;padding:10px;font-size:13px;">여성</button></div></div>
+    <div class="field"><label>전화번호</label><div class="input-wrap"><input type="tel" id="userPhone" placeholder="010-1234-5678"></div></div>
+    <div class="field"><label>이메일</label><div class="input-wrap"><input type="email" id="userEmail" placeholder="example@email.com"></div></div>
+  </div>
+  <button class="btn btn-primary" onclick="submitDB()">🔓 상세 전략 보기</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="section" id="step4">
+  <div class="section-title">🏠 부동산 전략 분석</div>
+  <div class="section-desc">CFP 오상열의 부동산 전략 제안입니다</div>
+  <div id="resultStrategy"></div>
+  <div id="insightAI"></div>
+  <div class="knowledge">
+    <h3>📚 부동산 필수 지식</h3>
+    <div class="knowledge-item"><div class="ki-q">Q. 주택연금이란?</div><div class="ki-a">만 55세 이상, 공시가격 9억원 이하 주택 소유자가 가입할 수 있는 역모기지 상품입니다. 집에 살면서 매월 연금을 받고, 사망 후 주택으로 정산합니다. 부부 모두 사망 시까지 보장되며, 집값이 하락해도 연금액은 줄지 않습니다.</div></div>
+    <div class="knowledge-item"><div class="ki-q">Q. LTV·DTI·DSR, 대출 받을 때 꼭 알아야 할 것은?</div><div class="ki-a">LTV(담보인정비율)는 주택가격 대비 대출 한도, DTI(총부채상환비율)는 소득 대비 주택대출 원리금, DSR은 소득 대비 모든 대출 원리금 비율입니다. 규제지역은 LTV 40~50%, DSR 40%가 적용됩니다.</div></div>
+    <div class="knowledge-item"><div class="ki-q">Q. 내집마련, 얼마를 모아야 할까?</div><div class="ki-a">일반적으로 주택가격의 30~40%를 자기자본으로 준비해야 합니다. 취득세(1~3%), 중개수수료, 이사비용 등 부대비용도 주택가격의 3~5%를 추가로 준비하세요. 주택청약저축은 소득공제 혜택도 있으니 반드시 가입하세요.</div></div>
+    <div class="knowledge-item"><div class="ki-q">Q. 1주택자 양도세 비과세 요건은?</div><div class="ki-a">1세대 1주택으로 2년 이상 보유(조정대상지역은 2년 거주 포함)하면 양도차익 12억원까지 비과세입니다. 일시적 2주택은 종전 주택을 3년 내 처분하면 비과세 적용됩니다.</div></div>
+  </div>
+  <div class="complete-section">
+    <div class="complete-icon">✅</div><div class="complete-title">분석이 완료되었습니다!</div><div class="complete-desc">상세 리포트는 입력하신 이메일과<br>카카오톡으로 발송됩니다</div>
+    <div class="cta-cards">
+      <button class="btn btn-gold" onclick="window.open('https://moneya-frontend.vercel.app','_blank')">🤖 AI머니야 시작하기</button>
+      <button class="btn btn-teal" onclick="window.open('https://owant.netlify.app/diagnosis/','_blank')">📊 무료 재무진단 해보기</button>
+      <button class="btn btn-outline" onclick="window.open('https://ohwant-hub.netlify.app','_blank')">🔗 오상열 CFP 더 알아보기</button>
+      <button class="btn btn-gray" onclick="location.reload()">🔄 다시 분석하기</button>
+    </div>
+  </div>
+  <div class="disclaimer">※ 본 분석은 참고용이며, 실제 부동산 의사결정은 전문가 상담을 권장합니다.<br>© 오원트금융연구소 · CFP 오상열</div>
+</div>
+</div>
+<script>
+let gender='',hasHouse=null,D={};
+function setGender(g){gender=g;document.getElementById('gM').style.background=g==='남'?'var(--acc)':'#fff';document.getElementById('gM').style.color=g==='남'?'#fff':'var(--acc)';document.getElementById('gF').style.background=g==='여'?'var(--acc)':'#fff';document.getElementById('gF').style.color=g==='여'?'#fff':'var(--acc)';}
+function setHouse(v,el){hasHouse=v;document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');document.getElementById('houseDetail').style.display=v?'block':'none';document.getElementById('noHouseDetail').style.display=v?'none':'block';}
+function showStep(n){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('step'+n).classList.add('active','fade-in');document.getElementById('progFill').style.width=[25,50,75,100][n-1]+'%';document.getElementById('progText').textContent=n+'/4';window.scrollTo({top:0,behavior:'smooth'});}
+function fmt(n){return n.toLocaleString();}
+
+function analyze(){
+  const age=parseFloat(document.getElementById('age').value)||0;
+  const income=parseFloat(document.getElementById('income').value)||0;
+  if(!age){alert('나이를 입력해주세요');return;}
+  if(hasHouse===null){alert('주택 보유 여부를 선택해주세요');return;}
+
+  if(hasHouse){
+    const hv=parseFloat(document.getElementById('homeVal').value)||0;
+    const iv=parseFloat(document.getElementById('investVal').value)||0;
+    const mort=parseFloat(document.getElementById('mortBal').value)||0;
+    const totalEstate=hv+iv;
+    const netEstate=totalEstate-mort;
+    const ltv=hv>0?Math.round(mort/hv*100):0;
+    // 주택연금 예상 (65세 기준, 4억 주택 약 100만원)
+    const pensionAge=65;
+    const canApply=age>=55;
+    const yearsToApply=Math.max(0,55-age);
+    const estMonthly=Math.round(hv/40000*100);// 대략적 계산
+
+    D={age,income,hasHouse:true,hv,iv,totalEstate,mort,netEstate,ltv,pensionAge,canApply,yearsToApply,estMonthly};
+
+    document.getElementById('resultBasic').innerHTML=`
+      <div class="result-card"><div class="result-title">🏠 부동산 현황</div>
+        <div class="result-row"><span class="rr-label">거주용 부동산</span><span class="rr-value">${fmt(hv)}만원 (${(hv/10000).toFixed(1)}억)</span></div>
+        <div class="result-row"><span class="rr-label">투자용 부동산</span><span class="rr-value">${fmt(iv)}만원</span></div>
+        <div class="result-row"><span class="rr-label">총 부동산 자산</span><span class="rr-value highlight">${fmt(totalEstate)}만원 (${(totalEstate/10000).toFixed(1)}억)</span></div>
+        <div class="result-row"><span class="rr-label">주택담보대출</span><span class="rr-value danger">${fmt(mort)}만원</span></div>
+        <div class="result-row"><span class="rr-label">순 부동산 자산</span><span class="rr-value success">${fmt(netEstate)}만원 (${(netEstate/10000).toFixed(1)}억)</span></div>
+        <div class="result-row"><span class="rr-label">LTV (담보인정비율)</span><span class="rr-value ${ltv>60?'danger':ltv>40?'amber':'success'}">${ltv}%</span></div>
+      </div>`;
+
+    let msg=ltv>60?`LTV ${ltv}%로 대출 비중이 높습니다. 추가 대출이 어려울 수 있으며, 금리 상승 시 부담이 커집니다.`:ltv>40?`LTV ${ltv}%로 적정 수준이지만 주의가 필요합니다.`:`LTV ${ltv}%로 건전한 수준입니다.`;
+    document.getElementById('insightBasic').innerHTML=`<div class="insight"><span class="insight-icon">💡</span><span class="insight-text"><b>부동산 진단:</b> ${msg} 총 부동산 자산 ${(totalEstate/10000).toFixed(1)}억 중 순자산은 ${(netEstate/10000).toFixed(1)}억입니다.</span></div>`;
+  } else {
+    const tp=parseFloat(document.getElementById('targetPrice').value)||0;
+    const sm=parseFloat(document.getElementById('seedMoney').value)||0;
+    const needed=Math.round(tp*0.35);
+    const gap=Math.max(0,needed-sm);
+    const monthSave=income>0?Math.round(income*0.3):0;
+    const yearsToGoal=monthSave>0?Math.round(gap/(monthSave*12)*10)/10:0;
+
+    D={age,income,hasHouse:false,tp,sm,needed,gap,monthSave,yearsToGoal};
+
+    document.getElementById('resultBasic').innerHTML=`
+      <div class="result-card"><div class="result-title">🎯 내집마련 분석</div>
+        <div class="result-row"><span class="rr-label">목표 주택 가격</span><span class="rr-value">${fmt(tp)}만원 (${(tp/10000).toFixed(1)}억)</span></div>
+        <div class="result-row"><span class="rr-label">필요 자기자본 (35%)</span><span class="rr-value">${fmt(needed)}만원</span></div>
+        <div class="result-row"><span class="rr-label">현재 종잣돈</span><span class="rr-value">${fmt(sm)}만원</span></div>
+        <div class="result-row"><span class="rr-label">추가 필요 금액</span><span class="rr-value ${gap>0?'danger':'success'}">${gap>0?fmt(gap)+'만원':'달성!'}</span></div>
+        ${gap>0?`<div class="result-row"><span class="rr-label">월 30% 저축 시 달성 기간</span><span class="rr-value highlight">약 ${yearsToGoal}년</span></div>`:''}
+      </div>`;
+    document.getElementById('insightBasic').innerHTML=`<div class="insight"><span class="insight-icon">💡</span><span class="insight-text"><b>내집마련 진단:</b> ${gap>0?`종잣돈 ${fmt(gap)}만원이 더 필요합니다. 월 ${fmt(monthSave)}만원 저축 시 약 ${yearsToGoal}년이 걸립니다.`:'자기자본이 충분합니다! 대출 조건을 비교하고 매수 타이밍을 검토하세요.'}</span></div>`;
+  }
+  showStep(2);
+}
+
+function submitDB(){
+  const name=document.getElementById('userName').value.trim();const phone=document.getElementById('userPhone').value.trim();const email=document.getElementById('userEmail').value.trim();
+  if(!name){alert('이름을 입력해주세요');return;}if(!phone){alert('전화번호를 입력해주세요');return;}if(!email){alert('이메일을 입력해주세요');return;}
+  const payload={유입경로:'부동산분석',이름:name,성별:gender,전화번호:phone,이메일:email,나이:D.age+'세',주택보유:D.hasHouse?'보유':'미보유',timestamp:new Date().toISOString()};
+  if(D.hasHouse){payload.거주용부동산=D.hv+'만원';payload.투자용부동산=D.iv+'만원';payload.담보대출=D.mort+'만원';}else{payload.목표주택가격=D.tp+'만원';payload.종잣돈=D.sm+'만원';}
+  fetch('https://hook.eu1.make.com/gqxc1xxpz1x61pxfk996ollf00r0oiu9',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+
+  if(D.hasHouse){
+    const canApply9=D.hv<=90000;
+    document.getElementById('resultStrategy').innerHTML=`
+      <div class="result-card blue"><div class="result-title">🏖️ 주택연금 시뮬레이션</div>
+        <div class="result-row"><span class="rr-label">가입 조건</span><span class="rr-value">만 55세 이상, 공시가 9억 이하</span></div>
+        <div class="result-row"><span class="rr-label">현재 나이</span><span class="rr-value">${D.age}세 ${D.age>=55?'(가입 가능)':'('+D.yearsToApply+'년 후 가입 가능)'}</span></div>
+        <div class="result-row"><span class="rr-label">주택가격 조건</span><span class="rr-value ${canApply9?'success':'danger'}">${(D.hv/10000).toFixed(1)}억 ${canApply9?'✅ 충족':'❌ 초과'}</span></div>
+        <div class="result-row"><span class="rr-label">65세 가입 시 예상 월수령</span><span class="rr-value highlight">약 ${D.estMonthly}만원</span></div>
+        <div class="result-row"><span class="rr-label">70세 가입 시 예상 월수령</span><span class="rr-value">약 ${Math.round(D.estMonthly*1.3)}만원</span></div>
+      </div>
+      <div class="result-card green"><div class="result-title">📋 부동산 전략 체크리스트</div>
+        <div class="result-row"><span class="rr-label">✅ 주택담보대출 금리 인하 요구</span><span class="rr-value">검토</span></div>
+        <div class="result-row"><span class="rr-label">✅ 대환대출 가능 여부 확인</span><span class="rr-value">검토</span></div>
+        <div class="result-row"><span class="rr-label">✅ 1주택 장기보유 특별공제 확인</span><span class="rr-value">검토</span></div>
+        <div class="result-row"><span class="rr-label">✅ 주택연금 가입 시기 계획</span><span class="rr-value">검토</span></div>
+      </div>`;
+    document.getElementById('insightAI').innerHTML=`<div class="insight"><span class="insight-icon">💡</span><span class="insight-text"><b>CFP 오상열 추천:</b> ${D.ltv>50?'대출 비중이 높으므로 금리 인하 요구권을 반드시 행사하세요. 연 0.3~0.5%p 인하 가능합니다. ':''}주택연금은 65세에 가입하면 월 약 ${D.estMonthly}만원을 받을 수 있어 국민연금과 합산하면 노후 기본 생활이 가능합니다. 부동산은 보유 자체가 자산이므로 무리한 투자보다 현재 집을 잘 관리하는 것이 핵심입니다.</span></div>`;
+  } else {
+    document.getElementById('resultStrategy').innerHTML=`
+      <div class="result-card blue"><div class="result-title">🎯 내집마련 로드맵</div>
+        <div class="result-row"><span class="rr-label">Step 1: 종잣돈 모으기</span><span class="rr-value">${fmt(D.needed)}만원 목표</span></div>
+        <div class="result-row"><span class="rr-label">Step 2: 주택청약 가입/유지</span><span class="rr-value">소득공제+당첨 기회</span></div>
+        <div class="result-row"><span class="rr-label">Step 3: 대출 조건 사전 확인</span><span class="rr-value">LTV/DSR 계산</span></div>
+        <div class="result-row"><span class="rr-label">Step 4: 매수 실행</span><span class="rr-value">약 ${D.yearsToGoal}년 후 목표</span></div>
+      </div>
+      <div class="result-card green"><div class="result-title">💰 대출 가능 금액 예상</div>
+        <div class="result-row"><span class="rr-label">LTV 50% 기준 대출</span><span class="rr-value">${fmt(Math.round(D.tp*0.5))}만원</span></div>
+        <div class="result-row"><span class="rr-label">LTV 70% 기준 대출</span><span class="rr-value">${fmt(Math.round(D.tp*0.7))}만원</span></div>
+        <div class="result-row"><span class="rr-label">필요 자기자본 (30%)</span><span class="rr-value highlight">${fmt(Math.round(D.tp*0.3))}만원</span></div>
+      </div>`;
+    document.getElementById('insightAI').innerHTML=`<div class="insight"><span class="insight-icon">💡</span><span class="insight-text"><b>CFP 오상열 추천:</b> 종잣돈을 빠르게 모으려면 저축률 30% 이상 유지가 필수입니다. 주택청약저축(월 10만원)은 소득공제도 받으면서 당첨 기회도 얻으니 반드시 가입하세요. 부대비용(취득세+중개수수료+이사비) ${fmt(Math.round(D.tp*0.04))}만원도 별도로 준비하세요.</span></div>`;
+  }
+  showStep(4);
+}
+</script>
+</body>
+</html>
