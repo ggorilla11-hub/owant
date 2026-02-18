@@ -263,10 +263,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--dark);color:#fff;-we
     <div class="complete-icon">🎉</div>
     <div class="complete-title" id="completeName"></div>
     <div class="complete-desc">맞춤 DESIRE 전략 리포트를<br>이메일과 카카오톡으로도 보내드리겠습니다!</div>
-    <div style="margin-top:24px;">
-      <a id="reportLink" href="#" onclick="window.open(this.href);return false;" style="display:inline-block;padding:16px 32px;background:linear-gradient(135deg,var(--gold),#F59E0B);color:#fff;border-radius:14px;font-size:17px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(212,168,83,0.4);">📋 내 DESIRE 리포트 보기</a>
-    </div>
-    <div style="margin-top:12px;font-size:12px;opacity:.5;">오원트금융연구소 | CFP 오상열 대표</div>
+    <div style="margin-top:24px;font-size:14px;opacity:.7;line-height:1.8;">📩 이메일로 상세 리포트를 보내드립니다<br>💬 카카오톡으로도 안내해드립니다<br><br>잠시만 기다려주세요!</div>
+    <div style="margin-top:20px;font-size:12px;opacity:.5;">오원트금융연구소 | CFP 오상열 대표</div>
   </div>
 </div>
 <div class="confetti-container" id="confettiContainer"></div>
@@ -420,7 +418,7 @@ function submitDB(){
   document.getElementById('dbSection').classList.remove('active');
   document.getElementById('completeSection').classList.add('active');
   document.getElementById('completeName').textContent='감사합니다, '+name+'님!';
-  document.getElementById('reportLink').href='https://owant.netlify.app/desire/report.html?type=stage'+window.currentStage+'&nickname='+encodeURIComponent(name)+'&age='+document.getElementById('age').value;
+  // 리포트는 이메일/카톡으로 발송
   launchConfetti();
 }
 
