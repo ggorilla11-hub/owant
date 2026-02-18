@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DESIRE 금융레벨테스트 | 나의 재정 단계는?</title>
+<meta property="og:title" content="DESIRE 금융레벨테스트 - 나의 재정 단계 확인">
+<meta property="og:description" content="간단한 정보 입력으로 DESIRE 6단계 중 나의 현재 위치를 확인하세요">
+<meta property="og:url" content="https://owant.netlify.app/desire/">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0F2B4C; --teal:#0891B2; --teal-dark:#155E75; --gold:#D4A853; --gold-light:#FFF9E6;
+  --red:#dc2626; --orange:#f59e0b; --yellow:#eab308; --blue:#2563eb; --purple:#7c3aed; --green:#16a34a;
+  --light:#F5F7FA; --white:#FFFFFF; --gray:#8896A7; --dark:#1A1A2E;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--dark);color:#fff;-webkit-font-smoothing:antialiased;}
+.hero{background:linear-gradient(135deg,#155E75 0%,#0891B2 50%,#06B6D4 100%);padding:50px 20px 35px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(212,168,83,0.08) 0%,transparent 60%);}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:14px;position:relative;}
+.hero h1{font-family:'Black Han Sans';font-size:26px;line-height:1.4;margin-bottom:10px;position:relative;}
+.hero h1 span{color:var(--gold);}
+.hero p{font-size:14px;opacity:.8;line-height:1.6;margin-bottom:20px;position:relative;}
+.hero-stats{display:flex;justify-content:center;gap:24px;position:relative;}
+.hero-stat .num{font-size:20px;font-weight:900;color:var(--gold);}
+.hero-stat .label{font-size:11px;opacity:.7;margin-top:2px;}
+.progress-bar-wrap{background:rgba(0,0,0,0.2);padding:16px 20px;text-align:center;}
+.progress-label{font-size:13px;opacity:.7;margin-bottom:8px;}
+.progress-track{height:6px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#F59E0B);border-radius:3px;transition:width 0.5s;width:0%;}
+.form-section{background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%);padding:0 20px 30px;}
+.form-group-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--gold);padding:20px 0 12px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:16px;}
+.form-row{margin-bottom:14px;}
+.form-label{font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:5px;display:block;}
+.form-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:15px;outline:none;transition:border 0.3s;}
+.form-input:focus{border-color:var(--gold);}
+.form-input::placeholder{color:rgba(255,255,255,0.3);}
+.form-hint{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.toggle-group{display:flex;gap:8px;flex-wrap:wrap;}
+.toggle-btn{flex:1;min-width:70px;padding:10px 8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:rgba(255,255,255,0.6);font-size:13px;font-weight:500;text-align:center;cursor:pointer;transition:all 0.3s;}
+.toggle-btn.active{background:rgba(212,168,83,0.2);border-color:var(--gold);color:var(--gold);font-weight:700;}
+.auto-calc{background:rgba(212,168,83,0.08);border:1px dashed rgba(212,168,83,0.3);border-radius:10px;padding:12px 14px;color:var(--gold);font-size:14px;font-weight:600;}
+.auto-hint{font-size:11px;color:rgba(212,168,83,0.6);margin-top:6px;}
+.btn-cta{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#F59E0B);border:none;border-radius:14px;color:#fff;font-size:17px;font-weight:800;cursor:pointer;margin-top:24px;box-shadow:0 6px 20px rgba(212,168,83,0.3);transition:transform 0.2s;}
+.btn-cta:active{transform:scale(0.97);}
+
+.result-section{display:none;padding:0;}
+.result-section.active{display:block;}
+.result-header{background:linear-gradient(135deg,#155E75 0%,#0891B2 100%);padding:40px 20px 30px;text-align:center;}
+.result-stage-label{font-size:14px;opacity:.7;margin-bottom:8px;}
+.result-stage-name{font-family:'Black Han Sans';font-size:32px;color:var(--gold);margin-bottom:4px;}
+.result-stage-desc{font-size:15px;opacity:.9;}
+
+.desire-progress{background:#16213e;padding:30px 20px;}
+.desire-progress-title{font-size:14px;opacity:.7;text-align:center;margin-bottom:20px;}
+.desire-steps{display:flex;align-items:center;justify-content:center;gap:0;position:relative;z-index:2;}
+.desire-step{display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;flex:1;}
+.desire-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;transition:all 0.5s;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);}
+.desire-circle.completed{background:var(--green);border-color:var(--green);color:#fff;}
+.desire-circle.current{width:52px;height:52px;font-size:20px;background:linear-gradient(135deg,var(--gold),#F59E0B);border-color:var(--gold);color:#fff;box-shadow:0 0 20px rgba(212,168,83,0.5);animation:pulse-glow 2s infinite;}
+.desire-circle.future{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.25);}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(212,168,83,0.3);}50%{box-shadow:0 0 30px rgba(212,168,83,0.6);}}
+.desire-letter{font-size:11px;font-weight:700;margin-top:6px;opacity:.6;}
+.desire-letter.current{color:var(--gold);opacity:1;font-size:12px;}
+.desire-letter.completed{color:var(--green);opacity:.8;}
+.desire-name{font-size:9px;margin-top:2px;opacity:.4;text-align:center;line-height:1.2;}
+.desire-name.current{opacity:.9;color:var(--gold);font-size:10px;}
+.desire-name.completed{opacity:.6;}
+.desire-line{position:absolute;top:18px;left:10%;right:10%;height:3px;background:rgba(255,255,255,0.08);z-index:1;border-radius:2px;}
+.desire-line-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:2px;transition:width 0.8s;}
+.desire-percent{text-align:center;margin-top:16px;font-size:13px;opacity:.6;}
+.desire-percent span{color:var(--gold);font-weight:800;font-size:18px;opacity:1;}
+
+.result-detail{background:#1a1a2e;padding:24px 20px;}
+.result-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;margin-bottom:16px;}
+.result-card-title{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:10px;}
+.result-card p{font-size:13px;line-height:1.7;opacity:.8;}
+.result-card .highlight{color:var(--gold);font-weight:600;}
+
+.db-section{display:none;}
+.db-section.active{display:block;}
+.db-card{background:linear-gradient(180deg,#16213e 0%,#1a1a2e 100%);padding:40px 20px;text-align:center;}
+.db-title{font-family:'Black Han Sans';font-size:24px;line-height:1.4;margin-bottom:10px;}
+.db-sub{font-size:14px;opacity:.7;margin-bottom:16px;line-height:1.5;}
+.db-benefit{background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.25);border-radius:12px;padding:14px;font-size:13px;color:var(--gold);margin-bottom:24px;line-height:1.5;}
+.db-form-group{margin-bottom:14px;text-align:left;}
+.db-form-label{font-size:13px;opacity:.7;margin-bottom:5px;display:block;}
+.db-form-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;font-size:15px;outline:none;}
+.db-form-input:focus{border-color:var(--gold);}
+.consent-box{margin:16px 0;text-align:left;}
+.consent-label{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.7;cursor:pointer;}
+.consent-label input{width:18px;height:18px;accent-color:var(--gold);}
+.consent-link{text-decoration:underline;cursor:pointer;}
+.btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),#F59E0B);border:none;border-radius:14px;color:#fff;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(212,168,83,0.3);}
+.btn-submit:disabled{opacity:0.4;cursor:not-allowed;}
+.complete-section{display:none;}
+.complete-section.active{display:block;}
+.complete-card{background:linear-gradient(135deg,#155E75,#0891B2);padding:60px 20px;text-align:center;min-height:100vh;}
+.complete-icon{font-size:60px;margin-bottom:16px;}
+.complete-title{font-family:'Black Han Sans';font-size:24px;margin-bottom:10px;}
+.complete-desc{font-size:14px;opacity:.8;line-height:1.6;}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <div class="hero-badge">📊 전문가 검증 • 무료 진단</div>
+  <h1>나의 <span>금융레벨</span>은<br>어느 단계일까?</h1>
+  <p>DESIRE 6단계 분석으로<br>당신의 재정 현재 위치와 다음 목표를 확인하세요</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">6단계</div><div class="label">DESIRE 분석</div></div>
+    <div class="hero-stat"><div class="num">3분</div><div class="label">소요 시간</div></div>
+    <div class="hero-stat"><div class="num">무료</div><div class="label">진단 비용</div></div>
+  </div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-label">진행률: <strong id="progressText">0%</strong></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<!-- FORM -->
+<div class="form-section" id="formSection">
+
+  <div class="form-group-title">🎯 기본 정보</div>
+  <div class="form-row">
+    <div class="form-label">현재 나이</div>
+    <input type="number" class="form-input" id="age" placeholder="예: 40" oninput="updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">가족 수 (본인 포함)</div>
+    <input type="number" class="form-input" id="familyCount" placeholder="예: 4" value="1" oninput="updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">맞벌이 여부</div>
+    <div class="toggle-group">
+      <div class="toggle-btn" onclick="selectToggle(this,'dualIncome','맞벌이')">맞벌이</div>
+      <div class="toggle-btn" onclick="selectToggle(this,'dualIncome','외벌이')">외벌이</div>
+    </div>
+  </div>
+
+  <div class="form-group-title">💰 수입/지출 정보 <span style="font-size:11px;opacity:.5;font-weight:400;">(단위: 만원)</span></div>
+  <div class="form-row">
+    <div class="form-label">월수입 (실수령액)</div>
+    <input type="number" class="form-input" id="monthlyIncome" placeholder="만원" oninput="calcLiving();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">저축/투자</div>
+    <input type="number" class="form-input" id="savings" placeholder="만원" oninput="calcLiving();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">노후연금</div>
+    <input type="number" class="form-input" id="pension" placeholder="만원" oninput="calcLiving();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">보장성보험</div>
+    <input type="number" class="form-input" id="insurance" placeholder="만원" oninput="calcLiving();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">대출원리금</div>
+    <input type="number" class="form-input" id="loanPayment" placeholder="만원" oninput="calcLiving();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">잉여자금</div>
+    <input type="number" class="form-input" id="surplus" placeholder="만원" oninput="calcLiving();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">생활비</div>
+    <div class="auto-calc" id="livingExpense">0 만원</div>
+    <div class="auto-hint">✨ 생활비 = 월수입 - (저축+연금+보험+대출+잉여)</div>
+  </div>
+
+  <div class="form-group-title">🏦 자산/부채 정보 <span style="font-size:11px;opacity:.5;font-weight:400;">(단위: 만원)</span></div>
+  <div class="form-row">
+    <div class="form-label">부동산자산</div>
+    <input type="number" class="form-input" id="realEstate" placeholder="만원" oninput="calcTotals();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">금융자산</div>
+    <input type="number" class="form-input" id="financialAsset" placeholder="만원" oninput="calcTotals();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">비상예비자금</div>
+    <input type="number" class="form-input" id="emergencyFund" placeholder="만원" oninput="calcTotals();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">총 자산</div>
+    <div class="auto-calc" id="totalAsset">0 만원</div>
+  </div>
+  <div class="form-row">
+    <div class="form-label">주택담보대출</div>
+    <input type="number" class="form-input" id="mortgage" placeholder="만원" oninput="calcTotals();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">신용대출</div>
+    <input type="number" class="form-input" id="creditLoan" placeholder="만원" oninput="calcTotals();updateProgress()">
+  </div>
+  <div class="form-row">
+    <div class="form-label">총 부채</div>
+    <div class="auto-calc" id="totalDebt">0 만원</div>
+    <div class="auto-hint">✨ 총자산과 총부채는 자동 계산됩니다</div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:6px;">🚀 나의 금융레벨을 확인해보세요!</div>
+    <div style="font-size:12px;opacity:.6;margin-bottom:16px;">전문가가 개발한 DESIRE 진단으로 당신의 재정 단계를 정확히 분석해드립니다</div>
+  </div>
+  <button class="btn-cta" onclick="analyzeDesire()">💰 금융레벨 확인하기</button>
+</div>
+
+<!-- RESULT -->
+<div class="result-section" id="resultSection">
+  <div class="result-header">
+    <div class="result-stage-label">당신의 현재 금융레벨</div>
+    <div class="result-stage-name" id="resultStageName"></div>
+    <div class="result-stage-desc" id="resultStageDesc"></div>
+  </div>
+  <div class="desire-progress">
+    <div class="desire-progress-title">DESIRE 6단계 로드맵</div>
+    <div style="position:relative;">
+      <div class="desire-line"><div class="desire-line-fill" id="desireLineFill"></div></div>
+      <div class="desire-steps" id="desireSteps"></div>
+    </div>
+    <div class="desire-percent" id="desirePercent"></div>
+  </div>
+  <div class="result-detail">
+    <div class="result-card"><div class="result-card-title">📍 현재 단계 분석</div><p id="resultAnalysis"></p></div>
+    <div class="result-card"><div class="result-card-title">🎯 지금 집중해야 할 것</div><p id="resultFocus"></p></div>
+    <div class="result-card"><div class="result-card-title">🚀 다음 단계로 가려면</div><p id="resultNext"></p></div>
+    <div class="result-card"><div class="result-card-title">💡 전문가 실전 팁</div><p id="resultTip"></p></div>
+  </div>
+  <div style="padding:0 20px 30px;background:#1a1a2e;">
+    <button class="btn-cta" onclick="showDB()">📋 맞춤 DESIRE 전략 리포트 받기</button>
+  </div>
+</div>
+
+<!-- DB -->
+<div class="db-section" id="dbSection">
+  <div class="db-card">
+    <div class="db-title">맞춤 DESIRE 전략을<br>보내드릴게요!</div>
+    <div class="db-sub" id="dbStageText"></div>
+    <div class="db-benefit">🎁 지금 신청하면<br>AI머니야 프리미엄 14일 무료 + 세미나 초대</div>
+    <div class="db-form-group"><div class="db-form-label">이름 *</div><input type="text" class="db-form-input" id="dbName" placeholder="이름을 입력해주세요"></div>
+    <div class="db-form-group"><div class="db-form-label">전화번호 *</div><input type="tel" class="db-form-input" id="dbPhone" placeholder="010-0000-0000"></div>
+    <div class="db-form-group"><div class="db-form-label">이메일</div><input type="email" class="db-form-input" id="dbEmail" placeholder="example@email.com"></div>
+    <div class="consent-box">
+      <label class="consent-label">
+        <input type="checkbox" id="consentCheck" onchange="toggleSubmit()">
+        <span><span class="consent-link" onclick="event.preventDefault();alert('수집항목: 이름, 전화번호, 이메일\n수집목적: 맞춤 DESIRE 전략 리포트 발송\n보유기간: 수집일로부터 1년\n동의 거부 시 리포트 발송이 불가합니다.')">개인정보 수집·이용</span>에 동의합니다</span>
+      </label>
+    </div>
+    <button class="btn-submit" id="submitBtn" disabled onclick="submitDB()">무료 DESIRE 리포트 신청하기</button>
+  </div>
+</div>
+
+<!-- COMPLETE -->
+<div class="complete-section" id="completeSection">
+  <div class="complete-card">
+    <div class="complete-icon">🎉</div>
+    <div class="complete-title" id="completeName"></div>
+    <div class="complete-desc">맞춤 DESIRE 전략 리포트를<br>이메일과 카카오톡으로 보내드리겠습니다!<br><br>오원트금융연구소<br>CFP 오상열 대표 드림</div>
+  </div>
+</div>
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+const toggleData = {dualIncome:''};
+
+const stages = [
+  {num:1,letter:'D',name:'Debt Free',label:'신용대출 상환',desc:'소액부터 갚아 스노우볼 효과!',color:'#dc2626',icon:'💳',
+   analysis:'신용대출이 남아있어 이자가 자산을 갉아먹고 있습니다. 금리가 높은 신용대출은 재정 건강의 가장 큰 적입니다.',
+   focus:'신용대출을 <span class="highlight">소액부터 순서대로(Smallest to Largest)</span> 상환하세요. 작은 빚을 먼저 갚으면 심리적 성취감이 생기고, 갚은 금액을 다음 대출 상환에 합치는 <span class="highlight">스노우볼 전략</span>이 핵심입니다.',
+   next:'모든 신용대출을 상환하면 2단계(Emergency Fund)로 진입합니다. 대출 갚던 금액을 그대로 비상예비자금으로 돌리세요!',
+   tip:'① 신용대출 목록을 잔액 작은 순으로 정렬하세요<br>② 최소상환액만 내고 여유자금은 가장 작은 대출에 집중<br>③ 하나 갚으면 그 금액을 다음 대출에 합치세요<br>④ 대출 상환 중 추가 대출은 절대 금지!'},
+  {num:2,letter:'E',name:'Emergency Fund',label:'비상예비자금',desc:'갑작스런 위기에 대비!',color:'#f59e0b',icon:'🛡️',
+   analysis:'신용대출은 정리되었지만 비상예비자금이 부족합니다. 갑작스러운 실직, 질병, 사고 시 가계가 흔들릴 수 있습니다.',
+   focus:'<span class="highlight">맞벌이는 월수입의 3개월치, 외벌이는 6개월치</span>를 현금 또는 CMA 등 유동성 자산으로 확보하세요. 이 자금은 절대 투자하지 마세요!',
+   next:'비상예비자금이 확보되면 3단계(Savings)로 진입합니다. 이제 본격적으로 저축과 투자를 시작할 수 있습니다!',
+   tip:'① CMA 통장 개설 → 자동이체 설정하세요<br>② 급여일 다음날 자동이체로 강제저축<br>③ 비상자금은 생활비 통장과 분리하세요<br>④ 이 돈은 진짜 비상시에만! 여행·쇼핑은 NO'},
+  {num:3,letter:'S',name:'Savings',label:'적립식 저축투자',desc:'월급의 일정비율을 저축!',color:'#eab308',icon:'💰',
+   analysis:'비상자금은 확보되었지만 수입 대비 저축·투자와 노후연금 비율이 부족합니다. 목적자금과 은퇴준비를 동시에 시작해야 합니다.',
+   focus:'월수입 대비 <span class="highlight">저축/투자 + 노후연금</span>의 비율을 높이세요. 수입의 최소 20% 이상을 저축하는 것을 목표로, 예산을 수립하고 지출을 통제하세요.',
+   next:'저축/투자 + 노후연금 비율이 수입 대비 충분해지면 4단계(Investment)로 진입합니다!',
+   tip:'① AI머니야 앱으로 수입지출 예산을 세우세요<br>② 가로저축(여러 목적별 통장), 강제저축(자동이체) 활용<br>③ 연금저축펀드(ETF) + IRP로 세액공제도 받으세요<br>④ 비정기수입(보너스)도 저축 목표에 포함'},
+  {num:4,letter:'I',name:'Investment',label:'10억 목돈마련',desc:'금융자산 10억 달성!',color:'#2563eb',icon:'📈',
+   analysis:'저축 습관은 잡혔습니다! 이제 금융자산을 10억원까지 키워야 합니다. 포트폴리오를 체계적으로 관리해야 할 때입니다.',
+   focus:'<span class="highlight">금융자산 10억원</span>을 목표로 포트폴리오를 구성하세요. 안전자산 70%(유동성 CMA 20% + 예금·채권·연금 50%) + 위험자산 30%(ETF 20% + 개별주식 10%)의 <span class="highlight">100-나이 법칙</span>을 적용하세요.',
+   next:'금융자산이 10억원을 넘으면 5단계(Retirement)로 진입합니다!',
+   tip:'① 100-나이 법칙으로 위험자산 비중을 결정하세요<br>② ETF 적립식 투자로 시간분산 효과를 누리세요<br>③ 연 1회 리밸런싱으로 포트폴리오를 관리<br>④ 절대 한 곳에 몰빵하지 마세요!'},
+  {num:5,letter:'R',name:'Retirement',label:'담보대출 상환',desc:'은퇴 전 부채 제로!',color:'#7c3aed',icon:'🏠',
+   analysis:'금융자산 10억을 넘겼습니다! 이제 담보대출을 상환하고 은퇴를 준비해야 합니다.',
+   focus:'<span class="highlight">담보대출을 완전히 상환</span>하세요. 은퇴 후에는 소득이 줄어들기 때문에 부채가 없어야 합니다.',
+   next:'담보대출까지 상환하면 최종 6단계(Enjoy)! 경제적 자립을 달성합니다!',
+   tip:'① 은퇴 5단계: 은퇴나이→예상수명→은퇴생활비→현재준비자금→월부족자금<br>② 주택연금 활용 검토하세요<br>③ 다운사이징으로 여유자금 확보<br>④ 상속·증여 계획도 이 시점에 시작'},
+  {num:6,letter:'E',name:'Enjoy',label:'경제적 자립',desc:'재무적 자유 달성!',color:'#16a34a',icon:'🏆',
+   analysis:'축하합니다! 신용대출 없음, 비상자금 확보, 충분한 저축, 금융자산 10억 이상, 담보대출 없음 — 모든 조건을 달성했습니다!',
+   focus:'<span class="highlight">경제적 자유</span>를 누리세요! 자산을 지키면서 인생을 즐기는 단계입니다.',
+   next:'이 단계를 유지하면서 <span class="highlight">사전증여 연금저축펀드(ETF)</span>와 <span class="highlight">상속세 절세 보장성보험</span>으로 다음 세대를 준비하세요.',
+   tip:'① 자산배분을 보수적으로 조정 (안전자산 비중 확대)<br>② 사전증여를 통해 상속세 절세하세요<br>③ 건강보험·간병보험을 점검하세요<br>④ 버킷리스트를 실행하세요! 당신은 해냈습니다!'}
+];
+
+function selectToggle(el,key,value){toggleData[key]=value;el.parentElement.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');updateProgress();}
+
+function calcLiving(){
+  const i=Number(document.getElementById('monthlyIncome').value)||0;
+  const s=Number(document.getElementById('savings').value)||0;
+  const p=Number(document.getElementById('pension').value)||0;
+  const ins=Number(document.getElementById('insurance').value)||0;
+  const l=Number(document.getElementById('loanPayment').value)||0;
+  const su=Number(document.getElementById('surplus').value)||0;
+  document.getElementById('livingExpense').textContent=Math.max(0,i-s-p-ins-l-su).toLocaleString()+' 만원';
+}
+
+function calcTotals(){
+  const re=Number(document.getElementById('realEstate').value)||0;
+  const fa=Number(document.getElementById('financialAsset').value)||0;
+  const ef=Number(document.getElementById('emergencyFund').value)||0;
+  document.getElementById('totalAsset').textContent=(re+fa+ef).toLocaleString()+' 만원';
+  const m=Number(document.getElementById('mortgage').value)||0;
+  const c=Number(document.getElementById('creditLoan').value)||0;
+  document.getElementById('totalDebt').textContent=(m+c).toLocaleString()+' 만원';
+}
+
+function updateProgress(){
+  const fields=['age','monthlyIncome','financialAsset','emergencyFund','creditLoan'];
+  let filled=0;
+  fields.forEach(f=>{if(document.getElementById(f).value)filled++;});
+  if(toggleData.dualIncome)filled++;
+  const pct=Math.round(filled/(fields.length+1)*100);
+  document.getElementById('progressText').textContent=pct+'%';
+  document.getElementById('progressFill').style.width=pct+'%';
+}
+
+function analyzeDesire(){
+  const income=Number(document.getElementById('monthlyIncome').value)||0;
+  const creditLoan=Number(document.getElementById('creditLoan').value)||0;
+  const emergencyFund=Number(document.getElementById('emergencyFund').value)||0;
+  const savings=Number(document.getElementById('savings').value)||0;
+  const pension=Number(document.getElementById('pension').value)||0;
+  const financialAsset=Number(document.getElementById('financialAsset').value)||0;
+  const mortgage=Number(document.getElementById('mortgage').value)||0;
+  const dualIncome=toggleData.dualIncome;
+  const age=Number(document.getElementById('age').value)||0;
+  if(!age||!income){alert('나이와 월수입을 입력해주세요.');return;}
+  if(!dualIncome){alert('맞벌이 여부를 선택해주세요.');return;}
+
+  let stage=6;
+  if(creditLoan>0){stage=1;}
+  else{
+    const req=dualIncome==='맞벌이'?income*3:income*6;
+    if(emergencyFund<req){stage=2;}
+    else{
+      const ratio=income>0?(savings+pension)/income:0;
+      if(ratio<0.2){stage=3;}
+      else if(financialAsset<100000){stage=4;}
+      else if(mortgage>0){stage=5;}
+    }
+  }
+  showResult(stage);
+}
+
+function showResult(stage){
+  const s=stages[stage-1];
+  document.getElementById('formSection').style.display='none';
+  document.getElementById('heroSection').style.display='none';
+  document.querySelector('.progress-bar-wrap').style.display='none';
+  document.getElementById('resultSection').classList.add('active');
+  document.getElementById('resultStageName').textContent=s.icon+' '+stage+'단계: '+s.label;
+  document.getElementById('resultStageDesc').textContent=s.desc;
+
+  let html='';
+  stages.forEach((st,i)=>{
+    let cls='future',lc='',nc='';
+    if(i+1<stage){cls='completed';lc='completed';nc='completed';}
+    else if(i+1===stage){cls='current';lc='current';nc='current';}
+    html+=`<div class="desire-step"><div class="desire-circle ${cls}">${i+1}</div><div class="desire-letter ${lc}">${st.letter}</div><div class="desire-name ${nc}">${st.label}</div></div>`;
+  });
+  document.getElementById('desireSteps').innerHTML=html;
+  document.getElementById('desireLineFill').style.width=((stage-1)/5*100)+'%';
+  document.getElementById('desirePercent').innerHTML='DESIRE 달성률 <span>'+Math.round((stage-1)/6*100)+'%</span>';
+  document.getElementById('resultAnalysis').innerHTML=s.analysis;
+  document.getElementById('resultFocus').innerHTML=s.focus;
+  document.getElementById('resultNext').innerHTML=s.next;
+  document.getElementById('resultTip').innerHTML=s.tip;
+  window.currentStage=stage;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showDB(){
+  document.getElementById('resultSection').classList.remove('active');
+  document.getElementById('dbSection').classList.add('active');
+  const s=stages[window.currentStage-1];
+  document.getElementById('dbStageText').textContent=window.currentStage+'단계: '+s.label+' 맞춤 DESIRE 전략 리포트를 이메일과 카카오톡으로 보내드립니다';
+}
+function toggleSubmit(){document.getElementById('submitBtn').disabled=!document.getElementById('consentCheck').checked;}
+
+function submitDB(){
+  const name=document.getElementById('dbName').value;
+  const phone=document.getElementById('dbPhone').value;
+  const email=document.getElementById('dbEmail').value;
+  if(!name||!phone){alert('이름과 전화번호를 입력해주세요.');return;}
+  const s=stages[window.currentStage-1];
+  const now=new Date();
+  const ds=now.getFullYear()+'-'+(now.getMonth()+1).toString().padStart(2,'0')+'-'+now.getDate().toString().padStart(2,'0')+' '+now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  const data={
+    이름:name, 연락처:phone.replace(/-/g,''), 이메일:email||'-', 날짜:ds,
+    나이:document.getElementById('age').value,
+    유입경로:'금융레벨테스트',
+    메모:'DESIRE|'+window.currentStage+'단계|'+s.label+'|'+toggleData.dualIncome+'|월수입'+document.getElementById('monthlyIncome').value+'만원|금융자산'+document.getElementById('financialAsset').value+'만원'
+  };
+  fetch('https://hook.eu1.make.com/gqxc1xxpz1x61pxfk996ollf00r0oiu9',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(e=>console.log('Webhook:',e));
+  document.getElementById('dbSection').classList.remove('active');
+  document.getElementById('completeSection').classList.add('active');
+  document.getElementById('completeName').textContent='감사합니다, '+name+'님!';
+  launchConfetti();
+}
+
+function launchConfetti(){
+  const c=document.getElementById('confettiContainer');
+  const cols=['#D4A853','#F59E0B','#06B6D4','#16a34a','#7c3aed','#dc2626'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');d.className='confetti';
+    d.style.left=Math.random()*100+'%';d.style.background=cols[Math.floor(Math.random()*cols.length)];
+    d.style.borderRadius=Math.random()>0.5?'50%':'0';d.style.width=(5+Math.random()*8)+'px';d.style.height=(5+Math.random()*8)+'px';
+    d.style.animation='confetti-fall '+(1.5+Math.random()*2)+'s ease-out '+Math.random()*0.5+'s forwards';
+    c.appendChild(d);
+  }
+  setTimeout(()=>c.innerHTML='',4000);
+}
+const st=document.createElement('style');st.textContent='@keyframes confetti-fall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}';document.head.appendChild(st);
+</script>
+</body>
+</html>

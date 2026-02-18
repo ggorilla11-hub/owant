@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DESIRE 금융레벨 리포트 | 금융집짓기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0F2B4C;--blue:#1B6CB0;--gold:#D4A853;--gold-light:#FFF9E6;--red:#dc2626;--orange:#f59e0b;--green:#16a34a;--purple:#7c3aed;--dark:#1A1A2E;--gray:#8896A7;--white:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;min-height:100vh;}
+.report{max-width:480px;margin:0 auto;padding:24px 16px;}
+.report-header{text-align:center;padding:32px 0 24px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:24px;}
+.report-badge{display:inline-block;background:rgba(212,168,83,0.15);border:1px solid rgba(212,168,83,0.3);color:var(--gold);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:500;margin-bottom:12px;}
+.report-emoji{font-size:56px;margin-bottom:8px;}
+.report-label{font-size:12px;color:var(--gray);margin-bottom:4px;}
+.report-title{font-family:'Black Han Sans';font-size:28px;margin-bottom:6px;}
+.report-sub{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;}
+.report-name{color:var(--gold);font-weight:700;}
+.user-info{display:flex;justify-content:center;gap:16px;background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;margin-bottom:24px;}
+.user-tag{font-size:12px;color:var(--gray);background:rgba(255,255,255,0.06);padding:4px 10px;border-radius:8px;}
+
+/* DESIRE PROGRESS */
+.desire-visual{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center;margin-bottom:24px;}
+.desire-label{font-size:12px;color:var(--gray);margin-bottom:14px;}
+.desire-steps{display:flex;align-items:center;justify-content:center;gap:0;position:relative;}
+.desire-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;z-index:2;}
+.desire-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);}
+.desire-circle.done{background:var(--green);border-color:var(--green);color:#fff;}
+.desire-circle.now{width:48px;height:48px;font-size:18px;background:linear-gradient(135deg,var(--gold),#F59E0B);border-color:var(--gold);color:#fff;box-shadow:0 0 16px rgba(212,168,83,0.5);animation:glow 2s infinite;}
+.desire-circle.wait{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.2);}
+@keyframes glow{0%,100%{box-shadow:0 0 16px rgba(212,168,83,0.3);}50%{box-shadow:0 0 24px rgba(212,168,83,0.6);}}
+.desire-letter{font-size:10px;font-weight:700;margin-top:5px;opacity:.5;}
+.desire-letter.now-l{color:var(--gold);opacity:1;}
+.desire-letter.done-l{color:var(--green);opacity:.7;}
+.desire-sname{font-size:8px;margin-top:2px;opacity:.3;text-align:center;line-height:1.2;}
+.desire-sname.now-n{opacity:.9;color:var(--gold);font-size:9px;}
+.desire-sname.done-n{opacity:.5;}
+.desire-line-bg{position:absolute;top:16px;left:10%;right:10%;height:3px;background:rgba(255,255,255,0.06);z-index:1;border-radius:2px;}
+.desire-line-fg{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:2px;}
+.desire-note{font-size:11px;color:var(--gray);margin-top:12px;line-height:1.5;}
+
+.section{margin-bottom:24px;}
+.section-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid rgba(212,168,83,0.3);}
+.insight-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;}
+.insight-num{background:var(--gold);color:var(--dark);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.insight-text{font-size:14px;line-height:1.7;color:rgba(255,255,255,0.85);}
+.insight-text strong{color:var(--gold);}
+.tip-card{background:rgba(212,168,83,0.06);border:1px solid rgba(212,168,83,0.15);border-radius:14px;padding:16px;margin-bottom:10px;}
+.tip-label{font-size:11px;color:var(--gold);font-weight:700;margin-bottom:8px;}
+.tip-items{list-style:none;padding:0;}
+.tip-items li{font-size:13px;line-height:1.8;color:rgba(255,255,255,0.8);padding-left:16px;position:relative;}
+.tip-items li::before{content:'✓';position:absolute;left:0;color:var(--gold);}
+.story-card{background:linear-gradient(135deg,rgba(27,108,176,0.15),rgba(108,60,225,0.1));border:1px solid rgba(27,108,176,0.2);border-radius:16px;padding:20px;margin-bottom:10px;}
+.story-quote{font-size:14px;line-height:1.8;color:rgba(255,255,255,0.8);font-style:italic;margin-bottom:12px;}
+.story-quote::before{content:'"';font-size:28px;color:var(--gold);font-family:Georgia;line-height:0;vertical-align:-8px;margin-right:4px;}
+.story-profile{display:flex;align-items:center;gap:10px;}
+.story-avatar{width:36px;height:36px;border-radius:50%;background:rgba(212,168,83,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.story-name{font-size:13px;font-weight:600;}
+.story-desc{font-size:11px;color:var(--gray);}
+.action-card{background:linear-gradient(135deg,rgba(212,168,83,0.12),rgba(212,168,83,0.05));border:2px solid rgba(212,168,83,0.3);border-radius:16px;padding:20px;text-align:center;}
+.action-badge{display:inline-block;background:var(--gold);color:var(--dark);padding:4px 12px;border-radius:12px;font-size:11px;font-weight:700;margin-bottom:10px;}
+.action-title{font-family:'Black Han Sans';font-size:20px;margin-bottom:8px;}
+.action-desc{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:4px;}
+.action-highlight{font-size:15px;font-weight:700;color:var(--gold);margin-top:8px;}
+.cta-section{text-align:center;padding:24px 0;border-top:1px solid rgba(255,255,255,0.08);margin-top:8px;}
+.cta-text{font-size:13px;color:var(--gray);margin-bottom:14px;line-height:1.6;}
+.btn-app{display:block;width:100%;padding:15px;border-radius:14px;font-size:15px;font-weight:700;border:none;cursor:pointer;margin-bottom:10px;text-decoration:none;text-align:center;}
+.btn-primary{background:linear-gradient(135deg,var(--gold),#c4993d);color:var(--dark);}
+.btn-secondary{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.12);}
+.report-footer{text-align:center;padding:20px 0;font-size:11px;color:rgba(255,255,255,0.3);line-height:1.6;}
+.no-result{text-align:center;padding:60px 20px;}
+.no-result h2{font-family:'Black Han Sans';font-size:24px;margin-bottom:12px;}
+.no-result p{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px;}
+</style>
+</head>
+<body>
+<div class="report" id="reportContainer"></div>
+<script>
+const stageNames = ['D','E','S','I','R','E'];
+const stageLabels = ['신용대출상환','비상예비자금','적립식저축','10억목돈','담보대출상환','경제적자립'];
+
+const reportData = {
+  stage1: {
+    emoji:'💳',title:'1단계: 신용대출 상환 (Debt Free)',sub:'스노우볼 전략으로 신용대출부터 정리해야 합니다',stageNum:1,
+    insights:[
+      {text:'신용대출 이자는 연 <strong>5~15%</strong>입니다. 이 금리로 돈을 빌리면서 투자하는 것은 밑 빠진 독에 물 붓기입니다.'},
+      {text:'<strong>스노우볼 전략</strong>: 금액이 가장 작은 대출부터 먼저 갚으세요. 작은 성공이 쌓이면 눈덩이처럼 상환 속도가 빨라집니다.'},
+      {text:'금융집짓기에서 신용대출 상환은 <strong>기초공사</strong> 이전 단계입니다. 부채가 있으면 집을 짓기 시작조차 할 수 없습니다.'}
+    ],
+    tips:['신용대출 목록을 잔액 작은 순으로 정렬하세요','최소상환액만 내고 여유자금은 가장 작은 대출에 집중','하나 갚으면 그 금액을 다음 대출에 합치세요 (스노우볼!)','대출 상환 중 추가 대출은 절대 금지'],
+    stories:[
+      {emoji:'👨',name:'정○○님 (38세, 직장인)',desc:'신용대출 3건 총 4,500만원 정리',quote:'카드론 200만원부터 먼저 갚기 시작했어요. 작은 빚이 사라지니 자신감이 붙어서 2년 만에 4,500만원 전부 상환했습니다.'},
+      {emoji:'👩',name:'한○○님 (33세, 프리랜서)',desc:'마이너스통장 포함 3건 정리',quote:'마이너스통장 100만원부터 끊었더니 심리적으로 달라졌어요. 스노우볼 전략 덕분에 1년 반 만에 빚에서 해방됐습니다.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'모든 신용대출을 잔액순으로 정리하세요',detail:'대출명 / 잔액 / 금리 / 월상환액\n가장 작은 것에 ★표시\n그것부터 집중 상환 시작!',highlight:'👉 AI머니야에서 대출 최적화 분석을 받아보세요'}
+  },
+  stage2: {
+    emoji:'🛡️',title:'2단계: 비상예비자금 (Emergency Fund)',sub:'예상치 못한 위기에 흔들리지 않는 안전망을 만드세요',stageNum:2,
+    insights:[
+      {text:'한국 직장인의 <strong>67%</strong>가 갑작스러운 실직 시 3개월도 버틸 수 없다고 응답했습니다. 비상자금이 곧 생존입니다.'},
+      {text:'<strong>맞벌이는 월수입 3개월치, 외벌이는 6개월치</strong>를 현금·CMA로 확보하세요. 이 돈은 절대 투자하지 마세요!'},
+      {text:'금융집짓기에서 비상예비자금은 <strong>기초공사</strong>입니다. 기초가 없으면 아무리 좋은 기둥도 무너집니다.'}
+    ],
+    tips:['CMA 통장을 개설하고 자동이체 설정하세요','급여일 다음날 자동이체로 강제저축하세요','비상자금은 생활비 통장과 반드시 분리하세요','진짜 비상시에만 사용! 여행·쇼핑은 NO'],
+    stories:[
+      {emoji:'👩',name:'김○○님 (29세, 직장인)',desc:'외벌이 6개월분 1,800만원 확보',quote:'코로나 때 회사가 갑자기 구조조정했어요. 비상자금 덕분에 3개월간 여유있게 이직 준비할 수 있었습니다.'},
+      {emoji:'👨',name:'이○○님 (35세, 맞벌이)',desc:'맞벌이 3개월분 1,500만원 확보',quote:'아이가 갑자기 입원했을 때 비상자금이 있어서 당황하지 않았어요. CMA에 넣어두니 이자도 챙기고 안심도 되고.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'CMA 통장 개설 + 자동이체 설정',detail:'1. 증권사 CMA 통장 개설\n2. 급여일 다음날 자동이체\n3. 목표금액 달성까지 손대지 않기',highlight:'👉 AI머니야에서 비상자금 목표를 설정해보세요'}
+  },
+  stage3: {
+    emoji:'💰',title:'3단계: 적립식 저축투자 (Savings)',sub:'월수입의 20% 이상을 체계적으로 저축하는 습관이 필요합니다',stageNum:3,
+    insights:[
+      {text:'<strong>20~30대</strong>에 저축 습관을 잡으면 40대에 시작하는 것보다 <strong>2배 이상</strong> 유리합니다. 복리의 마법은 시간이 만듭니다.'},
+      {text:'월수입 대비 <strong>저축/투자 + 노후연금</strong> 비율이 최소 <strong>20%</strong> 이상이어야 합니다. 예산을 먼저 세우고 지출을 통제하세요.'},
+      {text:'금융집짓기에서 저축은 <strong>기둥공사</strong>입니다. 기둥이 튼튼해야 지붕(투자)을 올릴 수 있습니다.'}
+    ],
+    tips:['AI머니야 앱으로 수입지출 예산을 먼저 세우세요','가로저축: 목적별로 통장을 나눠 동시에 저축하세요','연금저축펀드(ETF) + IRP로 세액공제도 받으세요','비정기수입(보너스, 상여)도 저축 목표에 포함하세요'],
+    stories:[
+      {emoji:'👩',name:'박○○님 (31세, 직장인)',desc:'월 300만원 중 80만원 저축',quote:'가로저축으로 여행통장, 결혼통장, 연금통장을 나눠서 시작했어요. 목적이 있으니 저축이 즐거워지고 1년 만에 960만원을 모았습니다.'},
+      {emoji:'👨',name:'최○○님 (28세, 사업가)',desc:'불규칙 소득에서 20% 저축 달성',quote:'소득이 들쑥날쑥해서 포기할 뻔했는데, 강제저축 자동이체를 걸어놓으니 어느새 연금저축 600만원 세액공제까지 받았어요.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'수입의 20% 이상 자동이체 설정',detail:'1. 급여의 20%를 자동이체 설정\n2. 연금저축펀드 월 50만원 + IRP 시작\n3. AI머니야로 예산관리 시작',highlight:'👉 AI머니야에서 나만의 저축 구조를 설계해보세요'}
+  },
+  stage4: {
+    emoji:'📈',title:'4단계: 10억 목돈마련 (Investment)',sub:'포트폴리오를 체계적으로 관리해 금융자산 10억을 달성하세요',stageNum:4,
+    insights:[
+      {text:'금융자산 <strong>10억원</strong>은 경제적 자립의 기준선입니다. 연 5% 수익률이면 연 5,000만원의 패시브 인컴이 발생합니다.'},
+      {text:'<strong>100-나이 법칙</strong>: 나이가 40이면 위험자산 60%, 안전자산 40%로 포트폴리오를 구성하세요.'},
+      {text:'안전자산 70% = 유동성 CMA 20% + 예금·채권·연금 50% / 위험자산 30% = ETF 20% + 개별주식 10%'}
+    ],
+    tips:['100-나이 법칙으로 위험자산 비중을 결정하세요','ETF 적립식 투자로 시간분산 효과를 누리세요','연 1회 리밸런싱으로 포트폴리오를 관리하세요','절대 한 곳에 몰빵하지 마세요!'],
+    stories:[
+      {emoji:'👨',name:'강○○님 (45세, 임원)',desc:'금융자산 3억에서 10억 달성',quote:'ETF 적립식 + 연금저축 + 리밸런싱을 7년간 꾸준히 했더니 어느새 10억을 넘겼습니다. 복리와 시간이 답이었어요.'},
+      {emoji:'👩',name:'윤○○님 (42세, 맞벌이)',desc:'부부 합산 금융자산 12억 달성',quote:'부부 각자 연금저축 + IRP + ETF를 운영하고 매년 리밸런싱했어요. 합산 10억 넘는 데 5년 걸렸습니다.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'포트폴리오 리밸런싱을 하세요',detail:'1. 현재 자산을 유형별로 분류\n2. 100-나이 법칙으로 목표비율 설정\n3. 벗어난 비율을 조정 (연 1회)',highlight:'👉 AI머니야에서 자산배분 분석을 받아보세요'}
+  },
+  stage5: {
+    emoji:'🏠',title:'5단계: 담보대출 상환 (Retirement)',sub:'은퇴 전 담보대출을 완전히 상환하고 부채 제로를 달성하세요',stageNum:5,
+    insights:[
+      {text:'은퇴 후 소득은 <strong>현역 시절의 50~60%</strong>로 줄어듭니다. 부채가 남아있으면 생활이 급격히 어려워집니다.'},
+      {text:'은퇴설계 5단계: <strong>은퇴나이 → 예상수명 → 은퇴생활비 → 현재 준비자금 → 월 부족자금</strong>을 점검하세요.'},
+      {text:'주택연금, 다운사이징을 적극 검토하세요. 내 집이 곧 연금이 될 수 있습니다.'}
+    ],
+    tips:['은퇴 5단계 점검을 반드시 하세요','주택연금 활용을 검토하세요','다운사이징으로 여유자금 확보를 고려하세요','상속·증여 계획도 이 시점에 시작하세요'],
+    stories:[
+      {emoji:'👨',name:'임○○님 (55세, 퇴직 준비)',desc:'담보대출 1.5억 완전 상환',quote:'퇴직금과 금융자산 일부로 담보대출을 완전히 갚았습니다. 부채 없이 은퇴하니 마음이 완전히 달라지더라고요.'},
+      {emoji:'👩',name:'서○○님 (58세, 자영업)',desc:'다운사이징 + 주택연금 결합',quote:'넓은 집에서 작은 집으로 옮기면서 차액 2억이 생겼고, 나머지는 주택연금으로 월 120만원씩 받고 있어요.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'은퇴설계 5단계를 점검하세요',detail:'1. 은퇴 나이: ___세\n2. 예상 수명: ___세\n3. 은퇴 월생활비: ___만원\n4. 현재 준비자금: ___만원\n5. 월 부족자금: ___만원',highlight:'👉 AI머니야에서 은퇴설계 시뮬레이션을 해보세요'}
+  },
+  stage6: {
+    emoji:'🏆',title:'6단계: 경제적 자립 (Enjoy)',sub:'축하합니다! 재무적 자유를 달성했습니다',stageNum:6,
+    insights:[
+      {text:'<strong>DESIRE 6단계 완주!</strong> 신용대출 없음, 비상자금 확보, 충분한 저축, 금융자산 10억+, 담보대출 없음 — 모든 조건 달성!'},
+      {text:'이제 자산을 <strong>지키면서 즐기는</strong> 단계입니다. 보수적 자산배분으로 전환하고, 다음 세대를 준비하세요.'},
+      {text:'<strong>사전증여 연금저축펀드(ETF)</strong>와 <strong>상속세 절세 보장성보험</strong>으로 효율적인 자산 이전을 계획하세요.'}
+    ],
+    tips:['자산배분을 보수적으로 조정하세요 (안전자산 비중 확대)','사전증여를 통해 상속세를 절세하세요','건강보험·간병보험·치매보험을 점검하세요','버킷리스트를 실행하세요! 당신은 해냈습니다!'],
+    stories:[
+      {emoji:'👨',name:'배○○님 (60세, 은퇴)',desc:'DESIRE 완주 후 경제적 자유',quote:'30대에 시작한 금융집짓기가 60세에 열매를 맺었습니다. 매달 연금과 배당으로 생활하며 여행을 즐기고 있어요.'},
+      {emoji:'👩',name:'조○○님 (57세, 조기은퇴)',desc:'자산 15억으로 55세 조기은퇴',quote:'DESIRE 로드맵을 따라 20년 동안 꾸준히 했더니 55세에 은퇴할 수 있었어요. 사전증여로 자녀 연금저축도 시작했습니다.'}
+    ],
+    action:{title:'이번 달 안에 해야 할 1가지',desc:'자산배분을 보수적으로 리밸런싱하세요',detail:'1. 안전자산 비중을 80% 이상으로\n2. 사전증여 계획 수립\n3. 상속세 절세 보장성보험 검토',highlight:'👉 AI머니야에서 은퇴 후 자산관리를 시작하세요'}
+  }
+};
+
+function getParam(name){return new URLSearchParams(window.location.search).get(name);}
+
+function renderReport(){
+  const type = getParam('type') || 'stage1';
+  const nickname = getParam('nickname') || '';
+  const age = getParam('age') || '';
+  const r = reportData[type];
+  
+  if(!r){
+    document.getElementById('reportContainer').innerHTML = `
+      <div class="no-result">
+        <h2>리포트를 찾을 수 없습니다</h2>
+        <p>올바른 링크로 다시 접속해주세요.</p>
+        <a href="https://owant.netlify.app/desire/" class="btn-app btn-primary">DESIRE 테스트 하러 가기</a>
+      </div>`;
+    return;
+  }
+
+  const stg = r.stageNum;
+  let desireHTML = '<div class="desire-visual"><div class="desire-label">DESIRE 6단계 — 현재 위치</div><div style="position:relative;"><div class="desire-line-bg"><div class="desire-line-fg" style="width:'+((stg-1)/5*100)+'%"></div></div><div class="desire-steps">';
+  for(let i=0;i<6;i++){
+    let cc='wait',lc='',nc='';
+    if(i+1<stg){cc='done';lc='done-l';nc='done-n';}
+    else if(i+1===stg){cc='now';lc='now-l';nc='now-n';}
+    desireHTML+=`<div class="desire-step"><div class="desire-circle ${cc}">${i+1}</div><div class="desire-letter ${lc}">${stageNames[i]}</div><div class="desire-sname ${nc}">${stageLabels[i]}</div></div>`;
+  }
+  desireHTML+='</div></div><div class="desire-note">DESIRE 달성률: <strong style="color:var(--gold)">'+Math.round((stg-1)/6*100)+'%</strong></div></div>';
+
+  let insHTML = r.insights.map((ins,i)=>`<div class="insight-card"><div class="insight-num">${i+1}</div><div class="insight-text">${ins.text}</div></div>`).join('');
+  let tipHTML = r.tips.map(t=>`<li>${t}</li>`).join('');
+  let storyHTML = r.stories.map(s=>`<div class="story-card"><div class="story-quote">${s.quote}</div><div class="story-profile"><div class="story-avatar">${s.emoji}</div><div><div class="story-name">${s.name}</div><div class="story-desc">${s.desc}</div></div></div></div>`).join('');
+  
+  document.getElementById('reportContainer').innerHTML = `
+    <div class="report-header">
+      <div class="report-badge">DESIRE 금융레벨 리포트</div>
+      <div class="report-emoji">${r.emoji}</div>
+      <div class="report-label">당신의 DESIRE 분석 결과</div>
+      <div class="report-title">${r.title}</div>
+      <div class="report-sub">${r.sub}</div>
+    </div>
+    ${nickname||age?`<div class="user-info">${nickname?`<span class="user-tag">👤 ${nickname}님`:''}${age?`<span class="user-tag">🎂 ${age}세</span>`:''}</div>`:''}
+    
+    ${desireHTML}
+    
+    <div class="section">
+      <div class="section-title"><span>📊</span> 핵심 인사이트</div>
+      ${insHTML}
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span>💡</span> CFP 오상열 대표의 실전 팁</div>
+      <div class="tip-card">
+        <div class="tip-label">🏆 20년 경력 CFP의 핵심 전략</div>
+        <ul class="tip-items">${tipHTML}</ul>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span>👥</span> 같은 단계 사람들의 이야기</div>
+      ${storyHTML}
+    </div>
+    
+    <div class="section">
+      <div class="section-title"><span>🎯</span> 지금 바로 실행하세요</div>
+      <div class="action-card">
+        <div class="action-badge">ACTION PLAN</div>
+        <div class="action-title">${r.action.title}</div>
+        <div class="action-desc">${r.action.desc}</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;margin:10px 0;white-space:pre-line;">${r.action.detail}</div>
+        <div class="action-highlight">${r.action.highlight}</div>
+      </div>
+    </div>
+    
+    <div class="cta-section">
+      <div class="cta-text">더 정확한 맞춤 전략이 필요하다면<br>AI머니야에서 확인하세요</div>
+      <a href="https://moneya-frontend.vercel.app" class="btn-app btn-primary">🤖 AI머니야 앱 바로가기</a>
+      <a href="https://owant.netlify.app/desire/" class="btn-app btn-secondary">🔄 DESIRE 다시 측정하기</a>
+      <a href="https://owant.netlify.app/" class="btn-app btn-secondary">📊 무료 통합연금분석 받기</a>
+    </div>
+    
+    <div class="report-footer">
+      © 2025 오원트금융연구소 | CFP 오상열<br>
+      금융집짓기® 는 오원트금융연구소의 등록상표입니다
+    </div>`;
+}
+renderReport();
+</script>
+</body>
+</html>
