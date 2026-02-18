@@ -160,8 +160,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--dark);color:#fff;-we
   <div style="font-size:60px;margin-bottom:16px;">🎉</div>
   <div style="font-family:'Black Han Sans';font-size:24px;margin-bottom:10px;" id="cName"></div>
   <div style="font-size:14px;opacity:.8;line-height:1.6;">맞춤 금융오행 전략 리포트를<br>이메일과 카카오톡으로 보내드리겠습니다!</div>
-  <div style="margin-top:24px;"><a id="rptLink" href="#" onclick="window.open(this.href);return false;" style="display:inline-block;padding:16px 32px;background:linear-gradient(135deg,var(--gold),#F59E0B);color:#fff;border-radius:14px;font-size:17px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(212,168,83,0.4);">📋 내 금융오행 리포트 보기</a></div>
-  <div style="margin-top:12px;font-size:12px;opacity:.5;">오원트금융연구소 | CFP 오상열 대표</div>
+  <div style="margin-top:24px;font-size:14px;opacity:.7;line-height:1.8;">📩 이메일로 상세 리포트를 보내드립니다<br>💬 카카오톡으로도 안내해드립니다<br><br>잠시만 기다려주세요!</div>
+  <div style="margin-top:20px;font-size:12px;opacity:.5;">오원트금융연구소 | CFP 오상열 대표</div>
 </div></div>
 <div class="confetti-container" id="cc"></div>
 
@@ -258,7 +258,7 @@ function submitDB(){
   fetch('https://hook.eu1.make.com/gqxc1xxpz1x61pxfk996ollf00r0oiu9',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({이름:R.name,연락처:phone.replace(/-/g,''),이메일:email||'-',날짜:ds,나이:String(now.getFullYear()-R.y+1),유입경로:'금융오행',메모:'금융오행|일간:'+R.r.dayStem+'('+R.r.myEl+')|재성:'+R.r.wealth+'|'+wData[R.r.wealth].fin+'|'+R.y+'.'+R.m+'.'+R.d+'생|'+tD.gender})}).catch(e=>console.log(e));
   document.getElementById('dbSection').classList.remove('active');document.getElementById('completeSection').classList.add('active');
   document.getElementById('cName').textContent='감사합니다, '+R.name+'님!';
-  document.getElementById('rptLink').href='https://owant.netlify.app/fiveelements/report.html?type='+R.r.wealth+'&nickname='+encodeURIComponent(R.name)+'&stem='+R.r.dayStem+'&myel='+R.r.myEl;
+  // 리포트는 이메일/카톡으로 발송
   const c=document.getElementById('cc');const cols=['#D4A853','#F59E0B','#60a5fa','#4ade80','#f87171'];for(let i=0;i<60;i++){const e=document.createElement('div');e.style.cssText='position:absolute;width:'+(5+Math.random()*8)+'px;height:'+(5+Math.random()*8)+'px;left:'+Math.random()*100+'%;background:'+cols[Math.floor(Math.random()*cols.length)]+';border-radius:'+(Math.random()>0.5?'50%':'0')+';opacity:0;animation:cf '+(1.5+Math.random()*2)+'s ease-out '+Math.random()*0.5+'s forwards';c.appendChild(e);}setTimeout(()=>c.innerHTML='',4000);
 }
 const _s=document.createElement('style');_s.textContent='@keyframes cf{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}';document.head.appendChild(_s);
